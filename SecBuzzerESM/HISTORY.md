@@ -1,4 +1,7 @@
 # Release History
+## V0.3.4
+- 增加 Suricata Updater 延時
+
 ## V0.3.3
 - ES 改為 OSS 版
 - ES 改為單節點
