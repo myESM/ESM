@@ -1,0 +1,21 @@
+version: '2'
+
+services:
+  suricata:
+    image: "cstichenghanlin/secbuzzer-suricata:latest"
+    container_name: suricata
+    restart: always
+    environment:
+    # For ET Pro ruleset replace "OPEN" with your OINKCODE
+     - OINKCODE=OPEN
+     - IFNAME=$IF_NAME
+    network_mode: "host"
+    cap_add:
+     - NET_ADMIN
+     - SYS_NICE
+     - NET_RAW
+    volumes:
+      - $SURICATA_LOG_PATH:/var/log/suricata
+      - ./suricata/rules:/var/lib/suricata/rules
+      - ./suricata/dist/suricata.yaml:/etc/suricata/suricata.yaml
+      - "/usr/share/zoneinfo/ROC:/etc/localtime:ro" 

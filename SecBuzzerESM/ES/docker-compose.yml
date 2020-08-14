@@ -1,0 +1,152 @@
+version: '2.1'
+services:
+    elasticsearch-head:
+        image: dtagdevsec/head:1903
+        container_name: elasticsearchHead
+        ports:
+        - 19100:9100
+        restart: always
+        
+    elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.6.0
+        container_name: elasticsearch
+        environment:
+            - cluster.name=docker-cluster
+            - node.name=Master
+            - bootstrap.memory_lock=true
+            - "ES_JAVA_OPTS=-Xms$ES_MEM -Xmx$ES_MEM"
+            - "http.cors.allow-origin=*"
+            - "http.cors.enabled=true"
+            - "path.data=/es_data"
+            - "node.master=true"
+            - "node.data=false"
+            - discovery.seed_hosts=elasticsearch,elasticsearch1,elasticsearch2
+            - cluster.initial_master_nodes=Master
+            - indices.lifecycle.poll_interval=30s
+            - "indices.recovery.max_bytes_per_sec=0"
+            - "refresh_interval=30s"
+            - "cluster.routing.allocation.node_initial_primaries_recoveries=50"
+            - "cluster.routing.allocation.node_concurrent_recoveries=50"
+        ulimits:
+            memlock:
+                soft: -1
+                hard: -1
+            nofile:
+                soft: 655360
+                hard: 655360
+        volumes:
+            - $ES_VOLUME_PATH/es:/es_data
+        ports:
+            - 19200:9200
+            - 19300:9300 #Java API port
+        networks:
+            - esm
+        restart: always
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:9200"]
+            interval: 10s
+            timeout: 10s
+            retries: 5
+
+    elasticsearch1:
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.6.0
+        container_name: elasticsearch1
+        environment:
+            - cluster.name=docker-cluster
+            - node.name=es01
+            - bootstrap.memory_lock=true
+            - "ES_JAVA_OPTS=-Xms$ES1_MEM -Xmx$ES1_MEM"
+            - "path.data=/es_data"
+            - "node.master=false"
+            - discovery.seed_hosts=elasticsearch,elasticsearch1,elasticsearch2
+            - cluster.initial_master_nodes=Master
+            - indices.lifecycle.poll_interval=30s
+            - "indices.recovery.max_bytes_per_sec=0"
+            - "refresh_interval=30s"
+            - "cluster.routing.allocation.node_initial_primaries_recoveries=50"
+            - "cluster.routing.allocation.node_concurrent_recoveries=50"
+        depends_on:
+            elasticsearch:
+                condition: service_healthy
+        ulimits:
+            memlock:
+                soft: -1
+                hard: -1
+            nofile:
+                soft: 655360
+                hard: 655360
+        volumes:
+            - $ES_VOLUME_PATH/es1:/es_data
+        networks:
+            - esm
+        restart: always
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:9200"]
+            interval: 10s
+            timeout: 10s
+            retries: 5
+
+    elasticsearch2:
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.6.0
+        container_name: elasticsearch2
+        environment:
+            - cluster.name=docker-cluster
+            - node.name=es02
+            - bootstrap.memory_lock=true
+            - "ES_JAVA_OPTS=-Xms$ES2_MEM -Xmx$ES2_MEM"
+            - "path.data=/es_data"
+            - "node.master=false"
+            - discovery.seed_hosts=elasticsearch,elasticsearch1,elasticsearch2
+            - cluster.initial_master_nodes=Master
+            - indices.lifecycle.poll_interval=30s
+            - "indices.recovery.max_bytes_per_sec=0"
+            - "refresh_interval=30s"
+            - "cluster.routing.allocation.node_initial_primaries_recoveries=50"
+            - "cluster.routing.allocation.node_concurrent_recoveries=50"
+        depends_on:
+            elasticsearch:
+                condition: service_healthy
+        ulimits:
+            memlock:
+                soft: -1
+                hard: -1
+            nofile:
+                soft: 655360
+                hard: 655360
+        volumes:
+            - $ES_VOLUME_PATH/es2:/es_data
+        networks:
+            - esm
+        restart: always  
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:9200"]
+            interval: 10s
+            timeout: 10s
+            retries: 5
+
+    grafana:
+        image: grafana/grafana:6.7.2
+        container_name: grafana
+        ports:
+            - 13000:3000
+        user: "104"
+        environment:
+            - GF_SMTP_ENABLED=$GF_SMTP
+            - GF_SMTP_HOST=$GF_SMTP_HOST
+            - GF_SMTP_USER=$GF_SMTP_USER
+            - GF_SMTP_FROM_ADDRESS=$GF_SMTP_FROM_ADDRESS
+            - GF_SMTP_PASSWORD=$GF_SMTP_PASSWORD
+        volumes:
+            - grafana-storage:/var/lib/grafana
+            - ./grafana_plugins:/var/lib/grafana/plugins
+        networks:
+            - esm
+        restart: always
+volumes:
+    grafana-storage:
+        driver: local
+
+networks:
+  esm:
+    external:
+      name: esm_network

@@ -1,0 +1,20 @@
+version: '2.1'
+
+services:
+  tomcat:
+    restart: always
+    container_name: client_tomcat
+    image: pistolpetewu/tomcat-web:1.0.3
+    tty: true
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./ROOT.war:/usr/local/tomcat/webapps/ROOT.war
+      - ./location.properties:/usr/local/tomcat/webapps/location.properties
+      - ./rules:/home/ubuntu
+      #- ./client_application_esm_demo.properties:/usr/local/tomcat/webapps/client_application_esm_demo.properties
+    environment:
+      INTERFACE_NAME: $WEB_IF_NAME
+      API_KEY_VALUE: $API_KEY_VALUE
+      ORG_3_CODE: $ORG_3_CODE
+    network_mode: host
