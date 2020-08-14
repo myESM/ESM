@@ -6,27 +6,20 @@ services:
         ports:
         - 19100:9100
         restart: always
-        
+
     elasticsearch:
-        image: docker.elastic.co/elasticsearch/elasticsearch:7.6.0
+        image: docker.elastic.co/elasticsearch/elasticsearch-oss:7.6.0
         container_name: elasticsearch
         environment:
-            - cluster.name=docker-cluster
             - node.name=Master
             - bootstrap.memory_lock=true
             - "ES_JAVA_OPTS=-Xms$ES_MEM -Xmx$ES_MEM"
             - "http.cors.allow-origin=*"
             - "http.cors.enabled=true"
             - "path.data=/es_data"
-            - "node.master=true"
-            - "node.data=false"
-            - discovery.seed_hosts=elasticsearch,elasticsearch1,elasticsearch2
-            - cluster.initial_master_nodes=Master
-            - indices.lifecycle.poll_interval=30s
             - "indices.recovery.max_bytes_per_sec=0"
             - "refresh_interval=30s"
-            - "cluster.routing.allocation.node_initial_primaries_recoveries=50"
-            - "cluster.routing.allocation.node_concurrent_recoveries=50"
+            - cluster.initial_master_nodes=Master
         ulimits:
             memlock:
                 soft: -1
@@ -42,82 +35,6 @@ services:
         networks:
             - esm
         restart: always
-        healthcheck:
-            test: ["CMD", "curl", "-f", "http://localhost:9200"]
-            interval: 10s
-            timeout: 10s
-            retries: 5
-
-    elasticsearch1:
-        image: docker.elastic.co/elasticsearch/elasticsearch:7.6.0
-        container_name: elasticsearch1
-        environment:
-            - cluster.name=docker-cluster
-            - node.name=es01
-            - bootstrap.memory_lock=true
-            - "ES_JAVA_OPTS=-Xms$ES1_MEM -Xmx$ES1_MEM"
-            - "path.data=/es_data"
-            - "node.master=false"
-            - discovery.seed_hosts=elasticsearch,elasticsearch1,elasticsearch2
-            - cluster.initial_master_nodes=Master
-            - indices.lifecycle.poll_interval=30s
-            - "indices.recovery.max_bytes_per_sec=0"
-            - "refresh_interval=30s"
-            - "cluster.routing.allocation.node_initial_primaries_recoveries=50"
-            - "cluster.routing.allocation.node_concurrent_recoveries=50"
-        depends_on:
-            elasticsearch:
-                condition: service_healthy
-        ulimits:
-            memlock:
-                soft: -1
-                hard: -1
-            nofile:
-                soft: 655360
-                hard: 655360
-        volumes:
-            - $ES_VOLUME_PATH/es1:/es_data
-        networks:
-            - esm
-        restart: always
-        healthcheck:
-            test: ["CMD", "curl", "-f", "http://localhost:9200"]
-            interval: 10s
-            timeout: 10s
-            retries: 5
-
-    elasticsearch2:
-        image: docker.elastic.co/elasticsearch/elasticsearch:7.6.0
-        container_name: elasticsearch2
-        environment:
-            - cluster.name=docker-cluster
-            - node.name=es02
-            - bootstrap.memory_lock=true
-            - "ES_JAVA_OPTS=-Xms$ES2_MEM -Xmx$ES2_MEM"
-            - "path.data=/es_data"
-            - "node.master=false"
-            - discovery.seed_hosts=elasticsearch,elasticsearch1,elasticsearch2
-            - cluster.initial_master_nodes=Master
-            - indices.lifecycle.poll_interval=30s
-            - "indices.recovery.max_bytes_per_sec=0"
-            - "refresh_interval=30s"
-            - "cluster.routing.allocation.node_initial_primaries_recoveries=50"
-            - "cluster.routing.allocation.node_concurrent_recoveries=50"
-        depends_on:
-            elasticsearch:
-                condition: service_healthy
-        ulimits:
-            memlock:
-                soft: -1
-                hard: -1
-            nofile:
-                soft: 655360
-                hard: 655360
-        volumes:
-            - $ES_VOLUME_PATH/es2:/es_data
-        networks:
-            - esm
-        restart: always  
         healthcheck:
             test: ["CMD", "curl", "-f", "http://localhost:9200"]
             interval: 10s

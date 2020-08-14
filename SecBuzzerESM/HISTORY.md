@@ -1,4 +1,9 @@
 # Release History
+## V0.3.3
+- ES 改為 OSS 版
+- ES 改為單節點
+- 暫時移除 AI 模組
+
 ## V0.3.2
 - :tada: repush to Github :sparkler:
 

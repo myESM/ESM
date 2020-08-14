@@ -4,3 +4,4 @@ SecBuzzerESM/envimage
 __pycache__/
 *.py[cod]
 *$py.class
+*.rules

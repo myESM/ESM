@@ -65,8 +65,6 @@ ln -s ../SecBuzzerESM.env WEB/.env 2>/dev/nul
 ln -s ../SecBuzzerESM.env AI/.env 2>/dev/nul
 
 mkdir -p /opt/Logs/ES/volume/es
-mkdir -p /opt/Logs/ES/volume/es1
-mkdir -p /opt/Logs/ES/volume/es2
 mkdir -p /opt/Logs/Suricata
 mkdir -p /opt/Logs/Fluentd
 mkdir -p /opt/Logs/Buffers

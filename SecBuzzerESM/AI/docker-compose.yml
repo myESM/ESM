@@ -1,53 +1,53 @@
 version: '3.1'
 
 services:
-  PacketAnalyze:
-    image: openjdk:11.0.8-jre
-    restart: always
-    network_mode: "host"
-    tty: true
-    volumes:
-      - ./Packet_analyze/CICFlowMeter.jar:/CICFlowMeter.jar
-      - ./Packet_analyze/libjnetpcap.so:/usr/local/openjdk-11/lib/libjnetpcap.so
-      - ./Packet_analyze/libpcap.so.1.9.1:/usr/local/openjdk-11/lib/libpcap.so.0.8
-    environment:
-      - "ES_IP=localhost"
-      - "ES_PORT=19200"
-      - "ES_INDEX_PREFIX=cic_"
-      - "READ_LOCAL_FILE=FALSE"
-      - "NETWORK_INTERFACE=$IF_NAME"
-      - "WRITE_TO_CSV=FALSE"
-    command: "java -jar /CICFlowMeter.jar"
-
-  # OMP:
-  #   image: csti/omp:v1
-  #   build:
-  #     context: "./OMP/"
-  #     dockerfile: "Dockerfile"
+  # PacketAnalyze:
+  #   image: openjdk:11.0.8-jre
   #   restart: always
+  #   network_mode: "host"
+  #   tty: true
   #   volumes:
-  #   - "./OMP/code/:/usr/src/omp/code/"
-  #   - "./OMP/data/:/usr/src/omp/code/data/"
+  #     - ./Packet_analyze/CICFlowMeter.jar:/CICFlowMeter.jar
+  #     - ./Packet_analyze/libjnetpcap.so:/usr/local/openjdk-11/lib/libjnetpcap.so
+  #     - ./Packet_analyze/libpcap.so.1.9.1:/usr/local/openjdk-11/lib/libpcap.so.0.8
+  #   environment:
+  #     - "ES_IP=localhost"
+  #     - "ES_PORT=19200"
+  #     - "ES_INDEX_PREFIX=cic_"
+  #     - "READ_LOCAL_FILE=FALSE"
+  #     - "NETWORK_INTERFACE=$IF_NAME"
+  #     - "WRITE_TO_CSV=FALSE"
+  #   command: "java -jar /CICFlowMeter.jar"
 
-  Winlog:
-    image: csti/winlog:v1.1
-    build:
-      context: "./Winlog/"
-      dockerfile: "Dockerfile"
-    container_name: winlog
-    networks:
-      - esm
-    restart: always
+  # # OMP:
+  # #   image: csti/omp:v1
+  # #   build:
+  # #     context: "./OMP/"
+  # #     dockerfile: "Dockerfile"
+  # #   restart: always
+  # #   volumes:
+  # #   - "./OMP/code/:/usr/src/omp/code/"
+  # #   - "./OMP/data/:/usr/src/omp/code/data/"
 
-  ETA1:
-    image: csti/eta1:v1.1
-    build:
-      context: "./ETA1/"
-      dockerfile: "Dockerfile"
-    container_name: eta1
-    networks:
-      - esm
-    restart: always
+  # Winlog:
+  #   image: csti/winlog:v1.1
+  #   build:
+  #     context: "./Winlog/"
+  #     dockerfile: "Dockerfile"
+  #   container_name: winlog
+  #   networks:
+  #     - esm
+  #   restart: always
+
+  # ETA1:
+  #   image: csti/eta1:v1.1
+  #   build:
+  #     context: "./ETA1/"
+  #     dockerfile: "Dockerfile"
+  #   container_name: eta1
+  #   networks:
+  #     - esm
+  #   restart: always
 
 networks:
   esm:
