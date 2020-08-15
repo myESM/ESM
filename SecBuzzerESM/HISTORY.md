@@ -1,5 +1,8 @@
 # Release History
 ## V0.3.4
+- Suricata 同步更新 rules
+
+## V0.3.4
 - 增加 Suricata Updater 延時
 
 ## V0.3.3
