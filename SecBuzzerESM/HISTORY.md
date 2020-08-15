@@ -1,4 +1,8 @@
 # Release History
+## V0.3.6
+- 移除 ETA1 AI module
+- 將 Suricata 規則更新改為每十分鐘觸發
+
 ## V0.3.5
 - 將 AI 模組 PacketAnalyze 恢復
 - 將 AI 模組 Winlog 恢復
