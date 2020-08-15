@@ -1,4 +1,10 @@
 # Release History
+## V0.3.5
+- 將 AI 模組 PacketAnalyze 恢復
+- 將 AI 模組 Winlog 恢復
+- 將 AI 模組 ETA1 恢復
+- Install.sh 加上更新規則
+
 ## V0.3.4
 - Suricata 同步更新 rules
 

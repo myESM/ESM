@@ -64,6 +64,13 @@ ln -s ../SecBuzzerESM.env Crontab/.env 2>/dev/nul
 ln -s ../SecBuzzerESM.env WEB/.env 2>/dev/nul
 ln -s ../SecBuzzerESM.env AI/.env 2>/dev/nul
 
+mkdir -p tmp
+rules_version=`curl -X POST "https://test.api.secbuzzer.co/esmapi/web/file/fileVersion" -H "accept: */*" -H "authorization: bNC7vJwbrRXUyKnEPf2SeC9IWbu3fCqt" | cut -d : -f 2 | cut -d \" -f 2`
+curl -o rules.tgz "https://test.api.secbuzzer.co/esmapi/web/file/download/$rules_version" -H "accept: */*" -H "authorization: bNC7vJwbrRXUyKnEPf2SeC9IWbu3fCqt"
+tar zxvf rules.tgz -C tmp
+find tmp -type f -name "*.rules" -exec rsync -a --progress --remove-source-files {} Suricata/suricata/rules/ \;
+rm -rf tmp rules.tgz
+
 mkdir -p /opt/Logs/ES/volume/es
 mkdir -p /opt/Logs/Suricata
 mkdir -p /opt/Logs/Fluentd
