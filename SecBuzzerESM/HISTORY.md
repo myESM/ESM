@@ -1,4 +1,7 @@
 # Release History
+# V0.3.9
+- 隱藏重複創建 docker network 噴出的 error
+
 # V0.3.8
 - 修正 Suricata 無法送資料到ES
 

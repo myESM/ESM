@@ -79,4 +79,4 @@ mkdir -p /opt/Logs/Buffers
 chown 1000 /opt/Logs -R
 
 rm -rf envimage
-sudo docker network create esm_network
+sudo docker network create esm_network 2>/dev/null
