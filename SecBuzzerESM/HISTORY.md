@@ -1,4 +1,8 @@
 # Release History
+## V0.3.7
+- cron 補上 pipe line 
+- 移除 ES ILM相關設定
+
 ## V0.3.6
 - 移除 ETA1 AI module
 - 將 Suricata 規則更新改為每十分鐘觸發
