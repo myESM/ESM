@@ -1,7 +1,10 @@
 # Release History
+# V0.3.8
+- 修正 Suricata 無法送資料到ES
+
 ## V0.3.7
 - cron 補上 pipe line 
-- 移除 ES ILM相關設定
+- 移除 ES ILM相關設定
 
 ## V0.3.6
 - 移除 ETA1 AI module

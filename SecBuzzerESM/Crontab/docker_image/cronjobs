@@ -2,5 +2,5 @@
 @reboot root /usr/bin/python3 /scripts/diskcheck.py >> /var/log/cron.log
 @daily root /bin/bash /scripts/daily.sh >> /var/log/cron.log
 @hourly root /bin/bash /scripts/hourly.sh >> /var/log/cron.log
-@reboot root /bin/bash /scripts/reboot.sh >> /var/log/cron.log
+@reboot root /usr/bin/python3 /scripts/pipeline_creator.py >> /var/log/cron.log
 */10 * * * * root /bin/bash /scripts/Suricata_updater.sh >> /var/log/cron.log
