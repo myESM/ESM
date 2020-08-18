@@ -129,6 +129,8 @@ def suricata_output_format():
   suricata_fields["log_time"] = ""
   suricata_fields["_log_type"] = ""
   suricata_fields["module"] = "Winlog"
+  suricata_fields["dump_status"] = 0
+  suricata_fields["ingest_timestamp"] = ""
   suricata_fields["@timestamp"] = ""
   return suricata_fields
 
