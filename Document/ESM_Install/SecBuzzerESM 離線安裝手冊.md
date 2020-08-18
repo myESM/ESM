@@ -1,7 +1,6 @@
 # SecBuzzerESM 連線安裝手冊
 
 # 1. 硬體需求
--
 
 硬體配備需求依不同目的而有所差異，若只想測試基本功能，可以使用個人版進行安裝驗證，若在較大的場域中測試，則硬體依場域需求或流量大小而有所變更，其最基本的配備建議如下：
 
@@ -31,7 +30,6 @@ sudo apt-get install openssh-server
 - 請確認OS系統屬於 **乾淨** 的狀態，並沒有安裝其他工具，例如：Docker、Elasticsearch、Fluentd、Grafana等，ESM的安裝程式皆會自動安裝這些工具
 
 # 2. 系統安裝說明 (Offline)
--
 
 離線安裝版步驟請參考下列說明：(即安裝階段不需網路連線)
 
@@ -208,7 +206,6 @@ SMTP 密碼
 
 ![images/install_05.png](images/install_05.png)
 
----
 
 ## 2.6 安裝 SecBuzzerESM
 
