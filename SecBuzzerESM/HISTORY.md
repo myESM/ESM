@@ -1,4 +1,7 @@
 # Release History
+# V0.3.11
+- 更新ESM的「連線」與「離線」安裝文件
+
 # V0.3.10
 - Update_Suricata_rules.sh 修改為使用 env 內的 key
 - 更新 Winlog AI module 版本
