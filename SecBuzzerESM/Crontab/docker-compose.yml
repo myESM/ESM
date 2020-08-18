@@ -3,6 +3,7 @@ version: "3.3"
 services:
   cron:
     image: csti/cron:Crontab
+    container_name: cron 
     build:
       context: "./docker_image/"
       dockerfile: "Dockerfile"
@@ -15,6 +16,7 @@ services:
       - "./scripts:/scripts:ro"
       - "/etc/hostname:/hostname:ro"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - ../SecBuzzerESM.env:/.env:ro
     # command: tail -f /etc/hostname
     networks:
       - esm

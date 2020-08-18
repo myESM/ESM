@@ -30,7 +30,7 @@ services:
   #   - "./OMP/data/:/usr/src/omp/code/data/"
 
   Winlog:
-    image: csti/winlog:v1.1
+    image: csti/winlog:v1.2
     build:
       context: "./Winlog/"
       dockerfile: "Dockerfile"

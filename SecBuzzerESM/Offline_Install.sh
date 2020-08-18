@@ -53,3 +53,4 @@ mkdir -p /opt/Logs/Buffers
 chown 1000 /opt/Logs -R
 
 gunzip -c ./envimage/SecBuzzerESM.tgz | sudo docker load
+sudo docker network create esm_network 2>/dev/null

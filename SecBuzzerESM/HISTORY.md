@@ -1,4 +1,8 @@
 # Release History
+# V0.3.10
+- Update_Suricata_rules.sh 修改為使用 env 內的 key
+- 更新 Winlog AI module 版本
+
 # V0.3.9
 - 隱藏重複創建 docker network 噴出的 error
 
