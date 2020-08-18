@@ -84,20 +84,20 @@ def suricata_output_format():
   suricata_fields["event_type"] = "alert"
   suricata_fields["vlan"] = []
   suricata_fields["src_ip"] = ""
-  suricata_fields["src_port"] = ""
+  suricata_fields["src_port"] = 0
   suricata_fields["dest_ip"] = ""
-  suricata_fields["dest_port"] = ""
+  suricata_fields["dest_port"] = 0
   suricata_fields["proto"] = ""
   suricata_fields["metadata"] = {"flowbits" : []}
   suricata_fields["tx_id"] = ""
   suricata_fields["alert"] = {
                               "action" : "",
-                              "gid" : "",
+                              "gid" : 0,
                               "signature_id" : "",
                               "rev" : "",
                               "signature" : "",
                               "category" : "",
-                              "severity" : "",
+                              "severity" : 2,
                               "metadata" : {
                                 "by" : [],
                                 "created_at" : []
@@ -128,7 +128,7 @@ def suricata_output_format():
   suricata_fields["stream"] = ""
   suricata_fields["log_time"] = ""
   suricata_fields["_log_type"] = ""
-  suricata_fields["module"] = "winlog"
+  suricata_fields["module"] = "Winlog"
   suricata_fields["@timestamp"] = ""
   return suricata_fields
 
@@ -161,7 +161,7 @@ def user_execution_1A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
         suricata_output["alert"]["category"] = TECHNIQUE
-        suricata_output["alert"]["signature_id"] = "20210001"
+        suricata_output["alert"]["signature_id"] = int(20210001)
         suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
         suricata_output["log_time"] = res["@timestamp"]
         suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -194,7 +194,7 @@ def masquerading_1A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es
           suricata_output = suricata_output_format()
           suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
           suricata_output["alert"]["category"] = TECHNIQUE
-          suricata_output["alert"]["signature_id"] = "20210002"
+          suricata_output["alert"]["signature_id"] = int(20210002)
           suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
           suricata_output["log_time"] = res["@timestamp"]
           suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -227,7 +227,7 @@ def non_standard_port_1A3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_tim
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
         suricata_output["alert"]["category"] = TECHNIQUE
-        suricata_output["alert"]["signature_id"] = "20210003"
+        suricata_output["alert"]["signature_id"] = int(20210003)
         suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
         suricata_output["log_time"] = res["@timestamp"]
         suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -258,7 +258,7 @@ def command_line_interface_1B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_star
       suricata_output = suricata_output_format()
       suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
       suricata_output["alert"]["category"] = TECHNIQUE
-      suricata_output["alert"]["signature_id"] = "20210004"
+      suricata_output["alert"]["signature_id"] = int(20210004)
       suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
       suricata_output["log_time"] = res["@timestamp"]
       suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -289,7 +289,7 @@ def powershell_1B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_e
       suricata_output = suricata_output_format()
       suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
       suricata_output["alert"]["category"] = TECHNIQUE
-      suricata_output["alert"]["signature_id"] = "20210005"
+      suricata_output["alert"]["signature_id"] = int(20210005)
       suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
       suricata_output["log_time"] = res["@timestamp"]
       suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -320,7 +320,7 @@ def file_and_directory_discovery_2A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
       suricata_output = suricata_output_format()
       suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
       suricata_output["alert"]["category"] = TECHNIQUE
-      suricata_output["alert"]["signature_id"] = "20210006"
+      suricata_output["alert"]["signature_id"] = int(20210006)
       suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
       suricata_output["log_time"] = res["@timestamp"]
       suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -351,7 +351,7 @@ def automated_collection_2A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_
       suricata_output = suricata_output_format()
       suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
       suricata_output["alert"]["category"] = TECHNIQUE
-      suricata_output["alert"]["signature_id"] = "20210007"
+      suricata_output["alert"]["signature_id"] = int(20210007)
       suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
       suricata_output["log_time"] = res["@timestamp"]
       suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -382,7 +382,7 @@ def data_from_local_system_2A3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_star
       suricata_output = suricata_output_format()
       suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
       suricata_output["alert"]["category"] = TECHNIQUE
-      suricata_output["alert"]["signature_id"] = "20210008"
+      suricata_output["alert"]["signature_id"] = int(20210008)
       suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
       suricata_output["log_time"] = res["@timestamp"]
       suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -413,7 +413,7 @@ def data_compressed_2A4(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time,
       suricata_output = suricata_output_format()
       suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
       suricata_output["alert"]["category"] = TECHNIQUE
-      suricata_output["alert"]["signature_id"] = "20210009"
+      suricata_output["alert"]["signature_id"] = int(20210009)
       suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
       suricata_output["log_time"] = res["@timestamp"]
       suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -447,7 +447,7 @@ def data_staged_2A5(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_
             suricata_output = suricata_output_format()
             suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
             suricata_output["alert"]["category"] = TECHNIQUE
-            suricata_output["alert"]["signature_id"] = "20210010"
+            suricata_output["alert"]["signature_id"] = int(20210010)
             suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
             suricata_output["log_time"] = res["@timestamp"]
             suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -478,7 +478,7 @@ def remote_file_copy_3A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time
       suricata_output = suricata_output_format()
       suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
       suricata_output["alert"]["category"] = TECHNIQUE
-      suricata_output["alert"]["signature_id"] = "20210011"
+      suricata_output["alert"]["signature_id"] = int(20210011)
       suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
       suricata_output["log_time"] = res["@timestamp"]
       suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -509,7 +509,7 @@ def obfuscated_files_or_information_3A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX
       suricata_output = suricata_output_format()
       suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
       suricata_output["alert"]["category"] = TECHNIQUE
-      suricata_output["alert"]["signature_id"] = "20210012"
+      suricata_output["alert"]["signature_id"] = int(20210012)
       suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
       suricata_output["log_time"] = res["@timestamp"]
       suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -540,7 +540,7 @@ def component_object_model_hijacking_3B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDE
       suricata_output = suricata_output_format()
       suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
       suricata_output["alert"]["category"] = TECHNIQUE
-      suricata_output["alert"]["signature_id"] = "20210013"
+      suricata_output["alert"]["signature_id"] = int(20210013)
       suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
       suricata_output["log_time"] = res["@timestamp"]
       suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -571,7 +571,7 @@ def bypass_user_accounnt_control_3B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
       suricata_output = suricata_output_format()
       suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
       suricata_output["alert"]["category"] = TECHNIQUE
-      suricata_output["alert"]["signature_id"] = "20210014"
+      suricata_output["alert"]["signature_id"] = int(20210014)
       suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
       suricata_output["log_time"] = res["@timestamp"]
       suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -604,7 +604,7 @@ def commomly_used_port_3B3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_ti
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
         suricata_output["alert"]["category"] = TECHNIQUE
-        suricata_output["alert"]["signature_id"] = "20210015"
+        suricata_output["alert"]["signature_id"] = int(20210015)
         suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
         suricata_output["log_time"] = res["@timestamp"]
         suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -635,7 +635,7 @@ def standard_application_layer_protocol_3B4(es_conn, ES_INPUT_INDEX, ES_OUTPUT_I
       suricata_output = suricata_output_format()
       suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
       suricata_output["alert"]["category"] = TECHNIQUE
-      suricata_output["alert"]["signature_id"] = "20210016"
+      suricata_output["alert"]["signature_id"] = int(20210016)
       suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
       suricata_output["log_time"] = res["@timestamp"]
       suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -668,7 +668,7 @@ def modify_registry_3C1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time,
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
         suricata_output["alert"]["category"] = TECHNIQUE
-        suricata_output["alert"]["signature_id"] = "20210017"
+        suricata_output["alert"]["signature_id"] = int(20210017)
         suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
         suricata_output["log_time"] = res["@timestamp"]
         suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -699,7 +699,7 @@ def remote_file_copy_4A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time
       suricata_output = suricata_output_format()
       suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
       suricata_output["alert"]["category"] = TECHNIQUE
-      suricata_output["alert"]["signature_id"] = "20210018"
+      suricata_output["alert"]["signature_id"] = int(20210018)
       suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
       suricata_output["log_time"] = res["@timestamp"]
       suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -730,7 +730,7 @@ def powershell_4A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_e
       suricata_output = suricata_output_format()
       suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
       suricata_output["alert"]["category"] = TECHNIQUE
-      suricata_output["alert"]["signature_id"] = "20210019"
+      suricata_output["alert"]["signature_id"] = int(20210019)
       suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
       suricata_output["log_time"] = res["@timestamp"]
       suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -761,7 +761,7 @@ def decode_files_or_information_4A3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es
       suricata_output = suricata_output_format()
       suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
       suricata_output["alert"]["category"] = TECHNIQUE
-      suricata_output["alert"]["signature_id"] = "20210020"
+      suricata_output["alert"]["signature_id"] = int(20210020)
       suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
       suricata_output["log_time"] = res["@timestamp"]
       suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -792,7 +792,7 @@ def process_discovery_4B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_tim
       suricata_output = suricata_output_format()
       suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
       suricata_output["alert"]["category"] = TECHNIQUE
-      suricata_output["alert"]["signature_id"] = "20210021"
+      suricata_output["alert"]["signature_id"] = int(20210021)
       suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
       suricata_output["log_time"] = res["@timestamp"]
       suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -824,7 +824,7 @@ def file_deletion_4B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
         suricata_output["alert"]["category"] = TECHNIQUE
-        suricata_output["alert"]["signature_id"] = "20210022"
+        suricata_output["alert"]["signature_id"] = int(20210022)
         suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
         suricata_output["log_time"] = res["@timestamp"]
         suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -856,7 +856,7 @@ def file_deletion_4B3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
         suricata_output["alert"]["category"] = TECHNIQUE
-        suricata_output["alert"]["signature_id"] = "20210023"
+        suricata_output["alert"]["signature_id"] = int(20210023)
         suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
         suricata_output["log_time"] = res["@timestamp"]
         suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -888,7 +888,7 @@ def file_deletion_4B4(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
         suricata_output["alert"]["category"] = TECHNIQUE
-        suricata_output["alert"]["signature_id"] = "20210024"
+        suricata_output["alert"]["signature_id"] = int(20210024)
         suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
         suricata_output["log_time"] = res["@timestamp"]
         suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -919,7 +919,7 @@ def file_and_directory_discovery_4C1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
       suricata_output = suricata_output_format()
       suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
       suricata_output["alert"]["category"] = TECHNIQUE
-      suricata_output["alert"]["signature_id"] = "20210025"
+      suricata_output["alert"]["signature_id"] = int(20210025)
       suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
       suricata_output["log_time"] = res["@timestamp"]
       suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -950,7 +950,7 @@ def system_owner_or_user_discovery_4C2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX,
       suricata_output = suricata_output_format()
       suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
       suricata_output["alert"]["category"] = TECHNIQUE
-      suricata_output["alert"]["signature_id"] = "20210026"
+      suricata_output["alert"]["signature_id"] = int(20210026)
       suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
       suricata_output["log_time"] = res["@timestamp"]
       suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -982,7 +982,7 @@ def system_information_discovery_4C3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
         suricata_output["alert"]["category"] = TECHNIQUE
-        suricata_output["alert"]["signature_id"] = "20210027"
+        suricata_output["alert"]["signature_id"] = int(20210027)
         suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
         suricata_output["log_time"] = res["@timestamp"]
         suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -1014,7 +1014,7 @@ def system_network_configuration_discovery_4C4(es_conn, ES_INPUT_INDEX, ES_OUTPU
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
         suricata_output["alert"]["category"] = TECHNIQUE
-        suricata_output["alert"]["signature_id"] = "20210028"
+        suricata_output["alert"]["signature_id"] = int(20210028)
         suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
         suricata_output["log_time"] = res["@timestamp"]
         suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -1045,7 +1045,7 @@ def process_discovery_4C5(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_tim
       suricata_output = suricata_output_format()
       suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
       suricata_output["alert"]["category"] = TECHNIQUE
-      suricata_output["alert"]["signature_id"] = "20210029"
+      suricata_output["alert"]["signature_id"] = int(20210029)
       suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
       suricata_output["log_time"] = res["@timestamp"]
       suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -1077,7 +1077,7 @@ def system_information_discovery_4C6(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
         suricata_output["alert"]["category"] = TECHNIQUE
-        suricata_output["alert"]["signature_id"] = "20210030"
+        suricata_output["alert"]["signature_id"] = int(20210030)
         suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
         suricata_output["log_time"] = res["@timestamp"]
         suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -1109,7 +1109,7 @@ def security_software_discovery_4C7(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
         suricata_output["alert"]["category"] = TECHNIQUE
-        suricata_output["alert"]["signature_id"] = "20210031"
+        suricata_output["alert"]["signature_id"] = int(20210031)
         suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
         suricata_output["log_time"] = res["@timestamp"]
         suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -1141,7 +1141,7 @@ def security_software_discovery_4C8(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
         suricata_output["alert"]["category"] = TECHNIQUE
-        suricata_output["alert"]["signature_id"] = "20210032"
+        suricata_output["alert"]["signature_id"] = int(20210032)
         suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
         suricata_output["log_time"] = res["@timestamp"]
         suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -1173,7 +1173,7 @@ def permission_groups_discovery_4C9(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
         suricata_output["alert"]["category"] = TECHNIQUE
-        suricata_output["alert"]["signature_id"] = "20210033"
+        suricata_output["alert"]["signature_id"] = int(20210033)
         suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
         suricata_output["log_time"] = res["@timestamp"]
         suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -1205,7 +1205,7 @@ def execution_through_api_4C10(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_star
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
         suricata_output["alert"]["category"] = TECHNIQUE
-        suricata_output["alert"]["signature_id"] = "20210034"
+        suricata_output["alert"]["signature_id"] = int(20210034)
         suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
         suricata_output["log_time"] = res["@timestamp"]
         suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -1237,7 +1237,7 @@ def permission_groups_discovery_4C11(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
         suricata_output["alert"]["category"] = TECHNIQUE
-        suricata_output["alert"]["signature_id"] = "20210035"
+        suricata_output["alert"]["signature_id"] = int(20210035)
         suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
         suricata_output["log_time"] = res["@timestamp"]
         suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -1269,7 +1269,7 @@ def execution_through_api_4C12(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_star
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
         suricata_output["alert"]["category"] = TECHNIQUE
-        suricata_output["alert"]["signature_id"] = "20210036"
+        suricata_output["alert"]["signature_id"] = int(20210036)
         suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
         suricata_output["log_time"] = res["@timestamp"]
         suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -1301,7 +1301,7 @@ def new_service_5A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
         suricata_output["alert"]["category"] = TECHNIQUE
-        suricata_output["alert"]["signature_id"] = "20210037"
+        suricata_output["alert"]["signature_id"] = int(20210037)
         suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
         suricata_output["log_time"] = res["@timestamp"]
         suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -1333,7 +1333,7 @@ def registry_run_keys_or_startup_folder_5B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_I
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
         suricata_output["alert"]["category"] = TECHNIQUE
-        suricata_output["alert"]["signature_id"] = "20210038"
+        suricata_output["alert"]["signature_id"] = int(20210038)
         suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
         suricata_output["log_time"] = res["@timestamp"]
         suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -1365,7 +1365,7 @@ def private_keys_6B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
         suricata_output["alert"]["category"] = TECHNIQUE
-        suricata_output["alert"]["signature_id"] = "20210039"
+        suricata_output["alert"]["signature_id"] = int(20210039)
         suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
         suricata_output["log_time"] = res["@timestamp"]
         suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -1397,7 +1397,7 @@ def screen_capture_7A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
         suricata_output["alert"]["category"] = TECHNIQUE
-        suricata_output["alert"]["signature_id"] = "20210040"
+        suricata_output["alert"]["signature_id"] = int(20210040)
         suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
         suricata_output["log_time"] = res["@timestamp"]
         suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -1429,7 +1429,7 @@ def clipboard_data_7A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
         suricata_output["alert"]["category"] = TECHNIQUE
-        suricata_output["alert"]["signature_id"] = "20210041"
+        suricata_output["alert"]["signature_id"] = int(20210041)
         suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
         suricata_output["log_time"] = res["@timestamp"]
         suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -1461,7 +1461,7 @@ def input_capture_7A3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
         suricata_output["alert"]["category"] = TECHNIQUE
-        suricata_output["alert"]["signature_id"] = "20210042"
+        suricata_output["alert"]["signature_id"] = int(20210042)
         suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
         suricata_output["log_time"] = res["@timestamp"]
         suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -1494,7 +1494,7 @@ def data_compressed_7B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time,
           suricata_output = suricata_output_format()
           suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
           suricata_output["alert"]["category"] = TECHNIQUE
-          suricata_output["alert"]["signature_id"] = "20210043"
+          suricata_output["alert"]["signature_id"] = int(20210043)
           suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
           suricata_output["log_time"] = res["@timestamp"]
           suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -1527,7 +1527,7 @@ def data_encrypted_7B3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
           suricata_output = suricata_output_format()
           suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
           suricata_output["alert"]["category"] = TECHNIQUE
-          suricata_output["alert"]["signature_id"] = "20210044"
+          suricata_output["alert"]["signature_id"] = int(20210044)
           suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
           suricata_output["log_time"] = res["@timestamp"]
           suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -1558,7 +1558,7 @@ def remote_system_discovery_8A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_sta
       suricata_output = suricata_output_format()
       suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
       suricata_output["alert"]["category"] = TECHNIQUE
-      suricata_output["alert"]["signature_id"] = "20210045"
+      suricata_output["alert"]["signature_id"] = int(20210045)
       suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
       suricata_output["log_time"] = res["@timestamp"]
       suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -1589,7 +1589,7 @@ def windows_remote_management_8A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_s
       suricata_output = suricata_output_format()
       suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
       suricata_output["alert"]["category"] = TECHNIQUE
-      suricata_output["alert"]["signature_id"] = "20210046"
+      suricata_output["alert"]["signature_id"] = int(20210046)
       suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
       suricata_output["log_time"] = res["@timestamp"]
       suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -1621,7 +1621,7 @@ def process_discovery_8A3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_tim
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
         suricata_output["alert"]["category"] = TECHNIQUE
-        suricata_output["alert"]["signature_id"] = "20210047"
+        suricata_output["alert"]["signature_id"] = int(20210047)
         suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
         suricata_output["log_time"] = res["@timestamp"]
         suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -1652,7 +1652,7 @@ def remote_file_copy_8B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time
       suricata_output = suricata_output_format()
       suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
       suricata_output["alert"]["category"] = TECHNIQUE
-      suricata_output["alert"]["signature_id"] = "20210048"
+      suricata_output["alert"]["signature_id"] = int(20210048)
       suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
       suricata_output["log_time"] = res["@timestamp"]
       suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -1687,7 +1687,7 @@ def valid_accounts_8C1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
           suricata_output = suricata_output_format()
           suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
           suricata_output["alert"]["category"] = TECHNIQUE
-          suricata_output["alert"]["signature_id"] = "20210049"
+          suricata_output["alert"]["signature_id"] = int(20210049)
           suricata_output["_log_type"] = "Microsoft-Windows-Security-Auditing"
           suricata_output["log_time"] = res["@timestamp"]
           suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -1718,7 +1718,7 @@ def windows_admin_shares_8C2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_
       suricata_output = suricata_output_format()
       suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
       suricata_output["alert"]["category"] = TECHNIQUE
-      suricata_output["alert"]["signature_id"] = "20210050"
+      suricata_output["alert"]["signature_id"] = int(20210050)
       suricata_output["_log_type"] = "Microsoft-Windows-Security-Auditing"
       suricata_output["log_time"] = res["@timestamp"]
       suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -1749,7 +1749,7 @@ def service_execution_8C3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_tim
       suricata_output = suricata_output_format()
       suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
       suricata_output["alert"]["category"] = TECHNIQUE
-      suricata_output["alert"]["signature_id"] = "20210051"
+      suricata_output["alert"]["signature_id"] = int(20210051)
       suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
       suricata_output["log_time"] = res["@timestamp"]
       suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -1780,7 +1780,7 @@ def remote_file_copy_9A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time
       suricata_output = suricata_output_format()
       suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
       suricata_output["alert"]["category"] = TECHNIQUE
-      suricata_output["alert"]["signature_id"] = "20210052"
+      suricata_output["alert"]["signature_id"] = int(20210052)
       suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
       suricata_output["log_time"] = res["@timestamp"]
       suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -1811,7 +1811,7 @@ def remote_file_copy_9A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time
       suricata_output = suricata_output_format()
       suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
       suricata_output["alert"]["category"] = TECHNIQUE
-      suricata_output["alert"]["signature_id"] = "20210053"
+      suricata_output["alert"]["signature_id"] = int(20210053)
       suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
       suricata_output["log_time"] = res["@timestamp"]
       suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -1842,7 +1842,7 @@ def powershell_9B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_e
       suricata_output = suricata_output_format()
       suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
       suricata_output["alert"]["category"] = TECHNIQUE
-      suricata_output["alert"]["signature_id"] = "20210054"
+      suricata_output["alert"]["signature_id"] = int(20210054)
       suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
       suricata_output["log_time"] = res["@timestamp"]
       suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -1873,7 +1873,7 @@ def file_and_directory_discovery_9B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
       suricata_output = suricata_output_format()
       suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
       suricata_output["alert"]["category"] = TECHNIQUE
-      suricata_output["alert"]["signature_id"] = "20210055"
+      suricata_output["alert"]["signature_id"] = int(20210055)
       suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
       suricata_output["log_time"] = res["@timestamp"]
       suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -1904,7 +1904,7 @@ def automated_collection_9B3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_
       suricata_output = suricata_output_format()
       suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
       suricata_output["alert"]["category"] = TECHNIQUE
-      suricata_output["alert"]["signature_id"] = "20210056"
+      suricata_output["alert"]["signature_id"] = int(20210056)
       suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
       suricata_output["log_time"] = res["@timestamp"]
       suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -1935,7 +1935,7 @@ def data_from_local_system_9B4(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_star
       suricata_output = suricata_output_format()
       suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
       suricata_output["alert"]["category"] = TECHNIQUE
-      suricata_output["alert"]["signature_id"] = "20210057"
+      suricata_output["alert"]["signature_id"] = int(20210057)
       suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
       suricata_output["log_time"] = res["@timestamp"]
       suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -1969,7 +1969,7 @@ def data_staged_9B5(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_
             suricata_output = suricata_output_format()
             suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
             suricata_output["alert"]["category"] = TECHNIQUE
-            suricata_output["alert"]["signature_id"] = "20210058"
+            suricata_output["alert"]["signature_id"] = int(20210058)
             suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
             suricata_output["log_time"] = res["@timestamp"]
             suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -2001,7 +2001,7 @@ def data_encrypted_9B6(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
         suricata_output["alert"]["category"] = TECHNIQUE
-        suricata_output["alert"]["signature_id"] = "20210059"
+        suricata_output["alert"]["signature_id"] = int(20210059)
         suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
         suricata_output["log_time"] = res["@timestamp"]
         suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -2033,7 +2033,7 @@ def data_compressed_9B7(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time,
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
         suricata_output["alert"]["category"] = TECHNIQUE
-        suricata_output["alert"]["signature_id"] = "20210060"
+        suricata_output["alert"]["signature_id"] = int(20210060)
         suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
         suricata_output["log_time"] = res["@timestamp"]
         suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -2065,7 +2065,7 @@ def file_deletion_9C1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
         suricata_output["alert"]["category"] = TECHNIQUE
-        suricata_output["alert"]["signature_id"] = "20210061"
+        suricata_output["alert"]["signature_id"] = int(20210061)
         suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
         suricata_output["log_time"] = res["@timestamp"]
         suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -2097,7 +2097,7 @@ def file_deletion_9C2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
         suricata_output["alert"]["category"] = TECHNIQUE
-        suricata_output["alert"]["signature_id"] = "20210062"
+        suricata_output["alert"]["signature_id"] = int(20210062)
         suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
         suricata_output["log_time"] = res["@timestamp"]
         suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -2129,7 +2129,7 @@ def file_deletion_9C3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
         suricata_output["alert"]["category"] = TECHNIQUE
-        suricata_output["alert"]["signature_id"] = "20210063"
+        suricata_output["alert"]["signature_id"] = int(20210063)
         suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
         suricata_output["log_time"] = res["@timestamp"]
         suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -2162,7 +2162,7 @@ def file_deletion_9C4(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
         suricata_output["alert"]["category"] = TECHNIQUE
-        suricata_output["alert"]["signature_id"] = "20210064"
+        suricata_output["alert"]["signature_id"] = int(20210064)
         suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
         suricata_output["log_time"] = res["@timestamp"]
         suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
@@ -2193,7 +2193,7 @@ def service_execution_10A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_ti
       suricata_output = suricata_output_format()
       suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
       suricata_output["alert"]["category"] = TECHNIQUE
-      suricata_output["alert"]["signature_id"] = "20210065"
+      suricata_output["alert"]["signature_id"] = int(20210065)
       suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
       suricata_output["log_time"] = res["@timestamp"]
       suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
