@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import logging
+from datetime import datetime
 
 from elasticsearch import Elasticsearch
+
 
 class ElasticsearchConnector():
   def __init__(self, ES_HOST, ES_PORT):
@@ -15,6 +17,7 @@ class ElasticsearchConnector():
       self.es.indices.create(index=es_index)
       logging.info("Create the Elasticsearch index: {0}".format(es_index))
     try:
+      result_object["ingest_timestamp"] = datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%S.%fZ")
       self.es.index(index=es_index, body=result_object)
     except Exception as e:
       logging.error("Elasticsearch insert error: {0}".format(e))
