@@ -13,7 +13,7 @@ q_header = {
     'Connection': 'close'
 }
 
-q_json = """
+pipeline_settings = """
 {
   "description": "Adds a field to a document with the time of ingestion",
   "processors": [
@@ -27,10 +27,23 @@ q_json = """
 }
 """
 
+replica_settings =  """
+{
+        "index_patterns": ["*"],
+        "settings":{
+          "number_of_replicas": 0
+        }
+}
+"""
+
 while not pipline_state:
     try:
+        replica_state = requests.put('http://elasticsearch:9200/_template/replicas_0?pretty', 
+                      data = replica_settings, headers=q_header).status_code
+        print('replica_state:', replica_state)
         pipline_state = requests.put('http://elasticsearch:9200/_ingest/pipeline/my_timestamp_pipeline', 
-                    data = q_json, headers=q_header).status_code 
+                    data = pipeline_settings, headers=q_header).status_code
+        print('pipline_state:', pipline_state) 
     except:
         time.sleep(1)
-print('[*] Pipe created!')
+print('[*] es_setter done!')
