@@ -51,7 +51,6 @@ class Main():
   def processData(self, df):
     # 67 features and rename columns
     df_fin = df[self.preds]
-    # es_id = df["id"]
     df_id = df[["id", "Timestamp", "Src IP", "Src Port", "Dst IP", "Dst Port", "Protocol", "nic_name"]]
     return df_fin, df_id
   
@@ -83,22 +82,26 @@ class Main():
                        "Dst Port":"dest_port",
                        "Protocol":"proto",
                        "nic_name":"in_iface"}, inplace=True)
+    df["src_port"] = df["src_port"].astype("int")
+    df["dest_port"] = df["dest_port"].astype("int")
     df["proto"] = df["proto"].apply(lambda x: self.proto_table[x])
     df["title"] = [self.attck_table[x] for x in pred] # alert.category
     t = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f+08:00") 
-    df["timestamp"] = t 
+    df["timestamp"] = t
+    df["ingest_timestamp"] = datetime.datetime.now(tz=datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
     df["event_type"] = "alert"
     df["severity"] = 10 # alert.severity
     df["message"] = df["title"].apply(lambda x: self.attck_msg[x]) # alert.signature
     df["action"] = "" # alert.action
     df["rule_sig_id"] = df["title"].apply(lambda x: self.sig_id[x]) # alert.signature_id
-    df["alert_group_id"] = "" # alert.gid
+    df["alert_group_id"] = 0 # alert.gid
     df["alert"] = df.apply(lambda x: {"category":x["title"], "severity":x["severity"], "signature":x["message"],
                                       "action":x["action"], "signature_id":x["rule_sig_id"], "gid":x["alert_group_id"]}, axis=1)
     df["reference"] = df["title"].apply(lambda x: self.url_table[x])
     df.drop(["title", "severity", "message", "action", "rule_sig_id", "alert_group_id"], axis=1, inplace=True)
     df["module"] = "ETA1"
     df["log_type"] = "NetFlow"
+    df["dump_status"] = "0"
     output = eval(df.to_json(orient="records"))
     # tt = datetime.datetime.now().strftime("%Y-%m-%dT%H-%M-%S") 
     # with open("output_{}.json".format(tt), 'wb') as f:
