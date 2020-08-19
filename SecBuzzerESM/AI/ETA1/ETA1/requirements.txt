@@ -1,2 +1,8 @@
+wheel==0.31.1
+Cython==0.28.2
 elasticsearch==6.3.1
+Flask==1.0.2
 xgboost==1.0.0
+scikit-learn==0.23.1
+pandas==0.25.0
+numpy==1.18.4
