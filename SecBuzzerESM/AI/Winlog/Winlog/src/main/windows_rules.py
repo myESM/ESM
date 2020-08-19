@@ -3,6 +3,7 @@ import json
 import logging
 from datetime import datetime
 
+import pytz
 from src.main.windows_rules_setting import user_execution_1A1_query
 from src.main.windows_rules_setting import masquerading_1A2_query
 from src.main.windows_rules_setting import non_standard_port_1A3_query
@@ -68,6 +69,14 @@ from src.main.windows_rules_setting import file_deletion_9C2_query
 from src.main.windows_rules_setting import file_deletion_9C3_query
 from src.main.windows_rules_setting import file_deletion_9C4_query
 from src.main.windows_rules_setting import service_execution_10A1_query
+
+taiwan_tz = pytz.timezone("Asia/Taipei")
+
+def tz_convert(ts, tz_new="Asia/Taipei", tz_old="UTC"):
+	tz_old = pytz.timezone(tz_old)
+	tz_new = pytz.timezone(tz_new)
+	ts = datetime.fromtimestamp(float(ts))
+	return tz_old.localize(ts).astimezone(tz_new).isoformat()
 
 def suricata_output_format():
   """
@@ -161,12 +170,14 @@ def user_execution_1A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
         res_imphash = res_hashes.split(",")[2].split("=")[1]
 
         suricata_output = suricata_output_format()
-        suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
         suricata_output["alert"]["signature_id"] = int(20210001)
         suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
-        suricata_output["log_time"] = res["@timestamp"]
-        suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["user_data1"] = res
         es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("user_execution_1A1 finished.")
@@ -194,12 +205,14 @@ def masquerading_1A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es
         res = res["_source"]
         if "\u202e" in res["winlog"]["event_data"]["Image"]:
           suricata_output = suricata_output_format()
-          suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+          suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
           suricata_output["alert"]["category"] = TECHNIQUE
           suricata_output["alert"]["signature_id"] = int(20210002)
           suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
-          suricata_output["log_time"] = res["@timestamp"]
-          suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+          res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+          res_time_timestamp = datetime.timestamp(res_time)
+          suricata_output["log_time"] = tz_convert(res_time_timestamp)
+          suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
           suricata_output["user_data1"] = res
           es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("masquerading_1A2 finished.")
@@ -227,12 +240,14 @@ def non_standard_port_1A3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_tim
       res = res["_source"]
       if res["winlog"]["event_data"]["DestinationPort"] not in WINDOWS_COMMON_PORT_LIST:
         suricata_output = suricata_output_format()
-        suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
         suricata_output["alert"]["signature_id"] = int(20210003)
         suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
-        suricata_output["log_time"] = res["@timestamp"]
-        suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["user_data1"] = res
         es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("non_standard_port_1A3 finished.")
@@ -258,12 +273,14 @@ def command_line_interface_1B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_star
     for res in result["hits"]["hits"]:
       res = res["_source"]
       suricata_output = suricata_output_format()
-      suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["alert"]["category"] = TECHNIQUE
       suricata_output["alert"]["signature_id"] = int(20210004)
       suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
-      suricata_output["log_time"] = res["@timestamp"]
-      suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["user_data1"] = res
       es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("command_line_interface_1B1 finished.")
@@ -289,12 +306,14 @@ def powershell_1B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_e
     for res in result["hits"]["hits"]:
       res = res["_source"]
       suricata_output = suricata_output_format()
-      suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["alert"]["category"] = TECHNIQUE
       suricata_output["alert"]["signature_id"] = int(20210005)
       suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
-      suricata_output["log_time"] = res["@timestamp"]
-      suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["user_data1"] = res
       es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("powershell_1B2 finished.")
@@ -320,12 +339,14 @@ def file_and_directory_discovery_2A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
     for res in result["hits"]["hits"]:
       res = res["_source"]
       suricata_output = suricata_output_format()
-      suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["alert"]["category"] = TECHNIQUE
       suricata_output["alert"]["signature_id"] = int(20210006)
       suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
-      suricata_output["log_time"] = res["@timestamp"]
-      suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["user_data1"] = res
       es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("file_and_directory_discovery_2A1 finished.")
@@ -351,12 +372,14 @@ def automated_collection_2A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_
     for res in result["hits"]["hits"]:
       res = res["_source"]
       suricata_output = suricata_output_format()
-      suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["alert"]["category"] = TECHNIQUE
       suricata_output["alert"]["signature_id"] = int(20210007)
       suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
-      suricata_output["log_time"] = res["@timestamp"]
-      suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["user_data1"] = res
       es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("automated_collection_2A2 finished.")
@@ -382,12 +405,14 @@ def data_from_local_system_2A3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_star
     for res in result["hits"]["hits"]:
       res = res["_source"]
       suricata_output = suricata_output_format()
-      suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["alert"]["category"] = TECHNIQUE
       suricata_output["alert"]["signature_id"] = int(20210008)
       suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
-      suricata_output["log_time"] = res["@timestamp"]
-      suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["user_data1"] = res
       es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("data_from_local_system_2A3 finished.")
@@ -413,12 +438,14 @@ def data_compressed_2A4(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time,
     for res in result["hits"]["hits"]:
       res = res["_source"]
       suricata_output = suricata_output_format()
-      suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["alert"]["category"] = TECHNIQUE
       suricata_output["alert"]["signature_id"] = int(20210009)
       suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
-      suricata_output["log_time"] = res["@timestamp"]
-      suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["user_data1"] = res
       es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("data_compressed_2A4 finished.")
@@ -447,12 +474,14 @@ def data_staged_2A5(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_
         if "-DestinationPath" in res["winlog"]["event_data"]["ScriptBlockText"]:
           if ".zip" in res["winlog"]["event_data"]["ScriptBlockText"]:
             suricata_output = suricata_output_format()
-            suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+            suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
             suricata_output["alert"]["category"] = TECHNIQUE
             suricata_output["alert"]["signature_id"] = int(20210010)
             suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
-            suricata_output["log_time"] = res["@timestamp"]
-            suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+            res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+            res_time_timestamp = datetime.timestamp(res_time)
+            suricata_output["log_time"] = tz_convert(res_time_timestamp)
+            suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
             suricata_output["user_data1"] = res
             es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("data_staged_2A5 finished.")
@@ -478,12 +507,14 @@ def remote_file_copy_3A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time
     for res in result["hits"]["hits"]:
       res = res["_source"]
       suricata_output = suricata_output_format()
-      suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["alert"]["category"] = TECHNIQUE
       suricata_output["alert"]["signature_id"] = int(20210011)
       suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
-      suricata_output["log_time"] = res["@timestamp"]
-      suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["user_data1"] = res
       es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("remote_file_copy_3A1 finished.")
@@ -509,12 +540,14 @@ def obfuscated_files_or_information_3A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX
     for res in result["hits"]["hits"]:
       res = res["_source"]
       suricata_output = suricata_output_format()
-      suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["alert"]["category"] = TECHNIQUE
       suricata_output["alert"]["signature_id"] = int(20210012)
       suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
-      suricata_output["log_time"] = res["@timestamp"]
-      suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["user_data1"] = res
       es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("obfuscated_files_or_information_3A2 finished.")
@@ -540,12 +573,14 @@ def component_object_model_hijacking_3B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDE
     for res in result["hits"]["hits"]:
       res = res["_source"]
       suricata_output = suricata_output_format()
-      suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["alert"]["category"] = TECHNIQUE
       suricata_output["alert"]["signature_id"] = int(20210013)
       suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
-      suricata_output["log_time"] = res["@timestamp"]
-      suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["user_data1"] = res
       es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("component_object_model_hijacking_3B1 finished.")
@@ -571,12 +606,14 @@ def bypass_user_accounnt_control_3B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
     for res in result["hits"]["hits"]:
       res = res["_source"]
       suricata_output = suricata_output_format()
-      suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["alert"]["category"] = TECHNIQUE
       suricata_output["alert"]["signature_id"] = int(20210014)
       suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
-      suricata_output["log_time"] = res["@timestamp"]
-      suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["user_data1"] = res
       es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("bypass_user_accounnt_control_3B2 finished.")
@@ -604,12 +641,14 @@ def commomly_used_port_3B3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_ti
       res = res["_source"]
       if res["winlog"]["event_data"]["DestinationPort"] in WINDOWS_COMMON_PORT_LIST:
         suricata_output = suricata_output_format()
-        suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
         suricata_output["alert"]["signature_id"] = int(20210015)
         suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
-        suricata_output["log_time"] = res["@timestamp"]
-        suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["user_data1"] = res
         es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("commomly_used_port_3B3 finished.")
@@ -635,12 +674,14 @@ def standard_application_layer_protocol_3B4(es_conn, ES_INPUT_INDEX, ES_OUTPUT_I
     for res in result["hits"]["hits"]:
       res = res["_source"]
       suricata_output = suricata_output_format()
-      suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["alert"]["category"] = TECHNIQUE
       suricata_output["alert"]["signature_id"] = int(20210016)
       suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
-      suricata_output["log_time"] = res["@timestamp"]
-      suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["user_data1"] = res
       es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("standard_application_layer_protocol_3B4 finished.")
@@ -668,12 +709,14 @@ def modify_registry_3C1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time,
       res_scripts = res["winlog"]["event_data"]["ScriptBlockText"]
       if "HKCU:\\" in res_scripts or "HKEY_CURRENT_USER" in res_scripts:
         suricata_output = suricata_output_format()
-        suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
         suricata_output["alert"]["signature_id"] = int(20210017)
         suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
-        suricata_output["log_time"] = res["@timestamp"]
-        suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["user_data1"] = res
         es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("modify_registry_3C1 finished.")
@@ -699,12 +742,14 @@ def remote_file_copy_4A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time
     for res in result["hits"]["hits"]:
       res = res["_source"]
       suricata_output = suricata_output_format()
-      suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["alert"]["category"] = TECHNIQUE
       suricata_output["alert"]["signature_id"] = int(20210018)
       suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
-      suricata_output["log_time"] = res["@timestamp"]
-      suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["user_data1"] = res
       es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("remote_file_copy_4A1 finished.")
@@ -730,12 +775,14 @@ def powershell_4A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_e
     for res in result["hits"]["hits"]:
       res = res["_source"]
       suricata_output = suricata_output_format()
-      suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["alert"]["category"] = TECHNIQUE
       suricata_output["alert"]["signature_id"] = int(20210019)
       suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
-      suricata_output["log_time"] = res["@timestamp"]
-      suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["user_data1"] = res
       es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("powershell_4A2 finished.")
@@ -761,12 +808,14 @@ def decode_files_or_information_4A3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es
     for res in result["hits"]["hits"]:
       res = res["_source"]
       suricata_output = suricata_output_format()
-      suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["alert"]["category"] = TECHNIQUE
       suricata_output["alert"]["signature_id"] = int(20210020)
       suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
-      suricata_output["log_time"] = res["@timestamp"]
-      suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["user_data1"] = res
       es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("decode_files_or_information_4A3 finished.")
@@ -792,12 +841,14 @@ def process_discovery_4B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_tim
     for res in result["hits"]["hits"]:
       res = res["_source"]
       suricata_output = suricata_output_format()
-      suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["alert"]["category"] = TECHNIQUE
       suricata_output["alert"]["signature_id"] = int(20210021)
       suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
-      suricata_output["log_time"] = res["@timestamp"]
-      suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["user_data1"] = res
       es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("process_discovery_4B1 finished.")
@@ -824,12 +875,14 @@ def file_deletion_4B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
       res = res["_source"]
       if "CommandLine" in res["winlog"]["event_data"]:
         suricata_output = suricata_output_format()
-        suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
         suricata_output["alert"]["signature_id"] = int(20210022)
         suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
-        suricata_output["log_time"] = res["@timestamp"]
-        suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["user_data1"] = res
         es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("file_deletion_4B2 finished.")
@@ -856,12 +909,14 @@ def file_deletion_4B3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
       res = res["_source"]
       if "CommandLine" in res["winlog"]["event_data"]:
         suricata_output = suricata_output_format()
-        suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
         suricata_output["alert"]["signature_id"] = int(20210023)
         suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
-        suricata_output["log_time"] = res["@timestamp"]
-        suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["user_data1"] = res
         es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("file_deletion_4B3 finished.")
@@ -888,12 +943,14 @@ def file_deletion_4B4(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
       res = res["_source"]
       if "CommandLine" in res["winlog"]["event_data"]:
         suricata_output = suricata_output_format()
-        suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
         suricata_output["alert"]["signature_id"] = int(20210024)
         suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
-        suricata_output["log_time"] = res["@timestamp"]
-        suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["user_data1"] = res
         es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("file_deletion_4B4 finished.")
@@ -919,12 +976,14 @@ def file_and_directory_discovery_4C1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
     for res in result["hits"]["hits"]:
       res = res["_source"]
       suricata_output = suricata_output_format()
-      suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["alert"]["category"] = TECHNIQUE
       suricata_output["alert"]["signature_id"] = int(20210025)
       suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
-      suricata_output["log_time"] = res["@timestamp"]
-      suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["user_data1"] = res
       es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("file_and_directory_discovery_4C1 finished.")
@@ -950,12 +1009,14 @@ def system_owner_or_user_discovery_4C2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX,
     for res in result["hits"]["hits"]:
       res = res["_source"]
       suricata_output = suricata_output_format()
-      suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["alert"]["category"] = TECHNIQUE
       suricata_output["alert"]["signature_id"] = int(20210026)
       suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
-      suricata_output["log_time"] = res["@timestamp"]
-      suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["user_data1"] = res
       es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("system_owner_or_user_discovery_4C2 finished.")
@@ -982,12 +1043,14 @@ def system_information_discovery_4C3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
       res = res["_source"]
       if "$env:COMPUTERNAME" in res["winlog"]["event_data"]["ScriptBlockText"]:
         suricata_output = suricata_output_format()
-        suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
         suricata_output["alert"]["signature_id"] = int(20210027)
         suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
-        suricata_output["log_time"] = res["@timestamp"]
-        suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["user_data1"] = res
         es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("system_information_discovery_4C3 finished.")
@@ -1014,12 +1077,14 @@ def system_network_configuration_discovery_4C4(es_conn, ES_INPUT_INDEX, ES_OUTPU
       res = res["_source"]
       if "$env:USERDOMAIN" in res["winlog"]["event_data"]["ScriptBlockText"]:
         suricata_output = suricata_output_format()
-        suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
         suricata_output["alert"]["signature_id"] = int(20210028)
         suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
-        suricata_output["log_time"] = res["@timestamp"]
-        suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["user_data1"] = res
         es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("system_network_configuration_discovery_4C4 finished.")
@@ -1045,12 +1110,14 @@ def process_discovery_4C5(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_tim
     for res in result["hits"]["hits"]:
       res = res["_source"]
       suricata_output = suricata_output_format()
-      suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["alert"]["category"] = TECHNIQUE
       suricata_output["alert"]["signature_id"] = int(20210029)
       suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
-      suricata_output["log_time"] = res["@timestamp"]
-      suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["user_data1"] = res
       es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("process_discovery_4C5 finished.")
@@ -1077,12 +1144,14 @@ def system_information_discovery_4C6(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
       res = res["_source"]
       if "Win32_OperatingSystem" in res["winlog"]["event_data"]["ScriptBlockText"]:
         suricata_output = suricata_output_format()
-        suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
         suricata_output["alert"]["signature_id"] = int(20210030)
         suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
-        suricata_output["log_time"] = res["@timestamp"]
-        suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["user_data1"] = res
         es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("system_information_discovery_4C6 finished.")
@@ -1109,12 +1178,14 @@ def security_software_discovery_4C7(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es
       res = res["_source"]
       if "AntiVirusProduct" in res["winlog"]["event_data"]["ScriptBlockText"]:
         suricata_output = suricata_output_format()
-        suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
         suricata_output["alert"]["signature_id"] = int(20210031)
         suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
-        suricata_output["log_time"] = res["@timestamp"]
-        suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["user_data1"] = res
         es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("security_software_discovery_4C7 finished.")
@@ -1141,12 +1212,14 @@ def security_software_discovery_4C8(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es
       res = res["_source"]
       if "FireWallProduct" in res["winlog"]["event_data"]["ScriptBlockText"]:
         suricata_output = suricata_output_format()
-        suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
         suricata_output["alert"]["signature_id"] = int(20210032)
         suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
-        suricata_output["log_time"] = res["@timestamp"]
-        suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["user_data1"] = res
         es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("security_software_discovery_4C8 finished.")
@@ -1173,12 +1246,14 @@ def permission_groups_discovery_4C9(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es
       res = res["_source"]
       if "Invoke-NetUserGetGroups" in res["winlog"]["event_data"]["ScriptBlockText"]:
         suricata_output = suricata_output_format()
-        suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
         suricata_output["alert"]["signature_id"] = int(20210033)
         suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
-        suricata_output["log_time"] = res["@timestamp"]
-        suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["user_data1"] = res
         es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("permission_groups_discovery_4C9 finished.")
@@ -1205,12 +1280,14 @@ def execution_through_api_4C10(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_star
       res = res["_source"]
       if "Netapi32.dll" in res["winlog"]["event_data"]["ScriptBlockText"]:
         suricata_output = suricata_output_format()
-        suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
         suricata_output["alert"]["signature_id"] = int(20210034)
         suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
-        suricata_output["log_time"] = res["@timestamp"]
-        suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["user_data1"] = res
         es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("execution_through_api_4C10 finished.")
@@ -1237,12 +1314,14 @@ def permission_groups_discovery_4C11(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
       res = res["_source"]
       if "Invoke-NetUserGetLocalGroups" in res["winlog"]["event_data"]["ScriptBlockText"]:
         suricata_output = suricata_output_format()
-        suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
         suricata_output["alert"]["signature_id"] = int(20210035)
         suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
-        suricata_output["log_time"] = res["@timestamp"]
-        suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["user_data1"] = res
         es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("permission_groups_discovery_4C11 finished.")
@@ -1269,12 +1348,14 @@ def execution_through_api_4C12(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_star
       res = res["_source"]
       if "Netapi32.dll" in res["winlog"]["event_data"]["ScriptBlockText"]:
         suricata_output = suricata_output_format()
-        suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
         suricata_output["alert"]["signature_id"] = int(20210036)
         suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
-        suricata_output["log_time"] = res["@timestamp"]
-        suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["user_data1"] = res
         es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("execution_through_api_4C12 finished.")
@@ -1301,12 +1382,14 @@ def new_service_5A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_
       res = res["_source"]
       if "New-Service" in res["winlog"]["event_data"]["ScriptBlockText"]:
         suricata_output = suricata_output_format()
-        suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
         suricata_output["alert"]["signature_id"] = int(20210037)
         suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
-        suricata_output["log_time"] = res["@timestamp"]
-        suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["user_data1"] = res
         es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("new_service_5A1 finished.")
@@ -1333,12 +1416,14 @@ def registry_run_keys_or_startup_folder_5B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_I
       res = res["_source"]
       if "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp" in res["winlog"]["event_data"]["TargetFilename"]:
         suricata_output = suricata_output_format()
-        suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
         suricata_output["alert"]["signature_id"] = int(20210038)
         suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
-        suricata_output["log_time"] = res["@timestamp"]
-        suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["user_data1"] = res
         es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("registry_run_keys_or_startup_folder_5B1 finished.")
@@ -1365,12 +1450,14 @@ def private_keys_6B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es
       res = res["_source"]
       if ".pfx" in res["winlog"]["event_data"]["TargetFilename"]:
         suricata_output = suricata_output_format()
-        suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
         suricata_output["alert"]["signature_id"] = int(20210039)
         suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
-        suricata_output["log_time"] = res["@timestamp"]
-        suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["user_data1"] = res
         es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("private_keys_6B1 finished.")
@@ -1397,12 +1484,14 @@ def screen_capture_7A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
       res = res["_source"]
       if "CopyFromScreen" in res["winlog"]["event_data"]["ScriptBlockText"]:
         suricata_output = suricata_output_format()
-        suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
         suricata_output["alert"]["signature_id"] = int(20210040)
         suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
-        suricata_output["log_time"] = res["@timestamp"]
-        suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["user_data1"] = res
         es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("screen_capture_7A1 finished.")
@@ -1429,12 +1518,14 @@ def clipboard_data_7A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
       res = res["_source"]
       if "Get-Clipboard" in res["winlog"]["event_data"]["ScriptBlockText"]:
         suricata_output = suricata_output_format()
-        suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
         suricata_output["alert"]["signature_id"] = int(20210041)
         suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
-        suricata_output["log_time"] = res["@timestamp"]
-        suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["user_data1"] = res
         es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("clipboard_data_7A2 finished.")
@@ -1461,12 +1552,14 @@ def input_capture_7A3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
       res = res["_source"]
       if "GetAsyncKeyState" in res["winlog"]["event_data"]["ScriptBlockText"]:
         suricata_output = suricata_output_format()
-        suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
         suricata_output["alert"]["signature_id"] = int(20210042)
         suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
-        suricata_output["log_time"] = res["@timestamp"]
-        suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["user_data1"] = res
         es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("input_capture_7A3 finished.")
@@ -1494,12 +1587,14 @@ def data_compressed_7B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time,
       if "Compress-7Zip" in res["winlog"]["event_data"]["ScriptBlockText"]:
         if ".7z" in res["winlog"]["event_data"]["ScriptBlockText"]:
           suricata_output = suricata_output_format()
-          suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+          suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
           suricata_output["alert"]["category"] = TECHNIQUE
           suricata_output["alert"]["signature_id"] = int(20210043)
           suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
-          suricata_output["log_time"] = res["@timestamp"]
-          suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+          res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+          res_time_timestamp = datetime.timestamp(res_time)
+          suricata_output["log_time"] = tz_convert(res_time_timestamp)
+          suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
           suricata_output["user_data1"] = res
           es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("data_compressed_7B2 finished.")
@@ -1527,12 +1622,14 @@ def data_encrypted_7B3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
       if "Compress-7Zip" in res["winlog"]["event_data"]["ScriptBlockText"]:
         if "-Password" in res["winlog"]["event_data"]["ScriptBlockText"]:
           suricata_output = suricata_output_format()
-          suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+          suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
           suricata_output["alert"]["category"] = TECHNIQUE
           suricata_output["alert"]["signature_id"] = int(20210044)
           suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
-          suricata_output["log_time"] = res["@timestamp"]
-          suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+          res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+          res_time_timestamp = datetime.timestamp(res_time)
+          suricata_output["log_time"] = tz_convert(res_time_timestamp)
+          suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
           suricata_output["user_data1"] = res
           es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("data_encrypted_7B3 finished.")
@@ -1558,12 +1655,14 @@ def remote_system_discovery_8A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_sta
     for res in result["hits"]["hits"]:
       res = res["_source"]
       suricata_output = suricata_output_format()
-      suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["alert"]["category"] = TECHNIQUE
       suricata_output["alert"]["signature_id"] = int(20210045)
       suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
-      suricata_output["log_time"] = res["@timestamp"]
-      suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["user_data1"] = res
       es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("remote_system_discovery_8A1 finished.")
@@ -1589,12 +1688,14 @@ def windows_remote_management_8A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_s
     for res in result["hits"]["hits"]:
       res = res["_source"]
       suricata_output = suricata_output_format()
-      suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["alert"]["category"] = TECHNIQUE
       suricata_output["alert"]["signature_id"] = int(20210046)
       suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
-      suricata_output["log_time"] = res["@timestamp"]
-      suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["user_data1"] = res
       es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("windows_remote_management_8A2 finished.")
@@ -1621,12 +1722,14 @@ def process_discovery_8A3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_tim
       res = res["_source"]
       if "Get-Process" in res["winlog"]["event_data"]["ScriptBlockText"]:
         suricata_output = suricata_output_format()
-        suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
         suricata_output["alert"]["signature_id"] = int(20210047)
         suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
-        suricata_output["log_time"] = res["@timestamp"]
-        suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["user_data1"] = res
         es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("process_discovery_8A3 finished.")
@@ -1652,12 +1755,14 @@ def remote_file_copy_8B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time
     for res in result["hits"]["hits"]:
       res = res["_source"]
       suricata_output = suricata_output_format()
-      suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["alert"]["category"] = TECHNIQUE
       suricata_output["alert"]["signature_id"] = int(20210048)
       suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
-      suricata_output["log_time"] = res["@timestamp"]
-      suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["user_data1"] = res
       es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("remote_file_copy_8B1 finished.")
@@ -1687,12 +1792,14 @@ def valid_accounts_8C1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
       if target_user_name not in SYSTEM_DEFAULT_ACCOUNT:
         if not target_user_name.endswith("$"):
           suricata_output = suricata_output_format()
-          suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+          suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
           suricata_output["alert"]["category"] = TECHNIQUE
           suricata_output["alert"]["signature_id"] = int(20210049)
           suricata_output["_log_type"] = "Microsoft-Windows-Security-Auditing"
-          suricata_output["log_time"] = res["@timestamp"]
-          suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+          res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+          res_time_timestamp = datetime.timestamp(res_time)
+          suricata_output["log_time"] = tz_convert(res_time_timestamp)
+          suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
           suricata_output["user_data1"] = res
           es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("valid_accounts_8C1 finished.")
@@ -1718,12 +1825,14 @@ def windows_admin_shares_8C2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_
     for res in result["hits"]["hits"]:
       res = res["_source"]
       suricata_output = suricata_output_format()
-      suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["alert"]["category"] = TECHNIQUE
       suricata_output["alert"]["signature_id"] = int(20210050)
       suricata_output["_log_type"] = "Microsoft-Windows-Security-Auditing"
-      suricata_output["log_time"] = res["@timestamp"]
-      suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["user_data1"] = res
       es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("windows_admin_shares_8C2 finished.")
@@ -1749,12 +1858,14 @@ def service_execution_8C3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_tim
     for res in result["hits"]["hits"]:
       res = res["_source"]
       suricata_output = suricata_output_format()
-      suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["alert"]["category"] = TECHNIQUE
       suricata_output["alert"]["signature_id"] = int(20210051)
       suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
-      suricata_output["log_time"] = res["@timestamp"]
-      suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["user_data1"] = res
       es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("service_execution_8C3 finished.")
@@ -1780,12 +1891,14 @@ def remote_file_copy_9A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time
     for res in result["hits"]["hits"]:
       res = res["_source"]
       suricata_output = suricata_output_format()
-      suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["alert"]["category"] = TECHNIQUE
       suricata_output["alert"]["signature_id"] = int(20210052)
       suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
-      suricata_output["log_time"] = res["@timestamp"]
-      suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["user_data1"] = res
       es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("remote_file_copy_9A1 finished.")
@@ -1811,12 +1924,14 @@ def remote_file_copy_9A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time
     for res in result["hits"]["hits"]:
       res = res["_source"]
       suricata_output = suricata_output_format()
-      suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["alert"]["category"] = TECHNIQUE
       suricata_output["alert"]["signature_id"] = int(20210053)
       suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
-      suricata_output["log_time"] = res["@timestamp"]
-      suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["user_data1"] = res
       es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("remote_file_copy_9A2 finished.")
@@ -1842,12 +1957,14 @@ def powershell_9B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_e
     for res in result["hits"]["hits"]:
       res = res["_source"]
       suricata_output = suricata_output_format()
-      suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["alert"]["category"] = TECHNIQUE
       suricata_output["alert"]["signature_id"] = int(20210054)
       suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
-      suricata_output["log_time"] = res["@timestamp"]
-      suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["user_data1"] = res
       es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("powershell_9B1 finished.")
@@ -1873,12 +1990,14 @@ def file_and_directory_discovery_9B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
     for res in result["hits"]["hits"]:
       res = res["_source"]
       suricata_output = suricata_output_format()
-      suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["alert"]["category"] = TECHNIQUE
       suricata_output["alert"]["signature_id"] = int(20210055)
       suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
-      suricata_output["log_time"] = res["@timestamp"]
-      suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["user_data1"] = res
       es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("file_and_directory_discovery_9B2 finished.")
@@ -1904,12 +2023,14 @@ def automated_collection_9B3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_
     for res in result["hits"]["hits"]:
       res = res["_source"]
       suricata_output = suricata_output_format()
-      suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["alert"]["category"] = TECHNIQUE
       suricata_output["alert"]["signature_id"] = int(20210056)
       suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
-      suricata_output["log_time"] = res["@timestamp"]
-      suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["user_data1"] = res
       es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("automated_collection_9B3 finished.")
@@ -1935,12 +2056,14 @@ def data_from_local_system_9B4(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_star
     for res in result["hits"]["hits"]:
       res = res["_source"]
       suricata_output = suricata_output_format()
-      suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["alert"]["category"] = TECHNIQUE
       suricata_output["alert"]["signature_id"] = int(20210057)
       suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
-      suricata_output["log_time"] = res["@timestamp"]
-      suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["user_data1"] = res
       es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("data_from_local_system_9B4 finished.")
@@ -1969,12 +2092,14 @@ def data_staged_9B5(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_
         if "-DestinationPath" in res["winlog"]["event_data"]["ScriptBlockText"]:
           if ".zip" in res["winlog"]["event_data"]["ScriptBlockText"]:
             suricata_output = suricata_output_format()
-            suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+            suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
             suricata_output["alert"]["category"] = TECHNIQUE
             suricata_output["alert"]["signature_id"] = int(20210058)
             suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
-            suricata_output["log_time"] = res["@timestamp"]
-            suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+            res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+            res_time_timestamp = datetime.timestamp(res_time)
+            suricata_output["log_time"] = tz_convert(res_time_timestamp)
+            suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
             suricata_output["user_data1"] = res
             es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("data_staged_9B5 finished.")
@@ -2001,12 +2126,14 @@ def data_encrypted_9B6(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
       res = res["_source"]
       if "Rar.exe a" in res["winlog"]["event_data"]["ScriptBlockText"]:
         suricata_output = suricata_output_format()
-        suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
         suricata_output["alert"]["signature_id"] = int(20210059)
         suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
-        suricata_output["log_time"] = res["@timestamp"]
-        suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["user_data1"] = res
         es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("data_encrypted_9B6 finished.")
@@ -2033,12 +2160,14 @@ def data_compressed_9B7(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time,
       res = res["_source"]
       if "Rar.exe" in res["winlog"]["event_data"]["Image"]:
         suricata_output = suricata_output_format()
-        suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
         suricata_output["alert"]["signature_id"] = int(20210060)
         suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
-        suricata_output["log_time"] = res["@timestamp"]
-        suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["user_data1"] = res
         es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("data_compressed_9B7 finished.")
@@ -2065,12 +2194,14 @@ def file_deletion_9C1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
       res = res["_source"]
       if "CommandLine" in res["winlog"]["event_data"]:
         suricata_output = suricata_output_format()
-        suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
         suricata_output["alert"]["signature_id"] = int(20210061)
         suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
-        suricata_output["log_time"] = res["@timestamp"]
-        suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["user_data1"] = res
         es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("file_deletion_9C1 finished.")
@@ -2097,12 +2228,14 @@ def file_deletion_9C2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
       res = res["_source"]
       if "CommandLine" in res["winlog"]["event_data"]:
         suricata_output = suricata_output_format()
-        suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
         suricata_output["alert"]["signature_id"] = int(20210062)
         suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
-        suricata_output["log_time"] = res["@timestamp"]
-        suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["user_data1"] = res
         es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("file_deletion_9C2 finished.")
@@ -2129,12 +2262,14 @@ def file_deletion_9C3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
       res = res["_source"]
       if "CommandLine" in res["winlog"]["event_data"]:
         suricata_output = suricata_output_format()
-        suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
         suricata_output["alert"]["signature_id"] = int(20210063)
         suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
-        suricata_output["log_time"] = res["@timestamp"]
-        suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["user_data1"] = res
         es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("file_deletion_9C3 finished.")
@@ -2162,12 +2297,14 @@ def file_deletion_9C4(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
       res = res["_source"]
       if "CommandLine" in res["winlog"]["event_data"]:
         suricata_output = suricata_output_format()
-        suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
         suricata_output["alert"]["signature_id"] = int(20210064)
         suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
-        suricata_output["log_time"] = res["@timestamp"]
-        suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["user_data1"] = res
         es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("file_deletion_9C4 finished.")
@@ -2193,12 +2330,14 @@ def service_execution_10A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_ti
     for res in result["hits"]["hits"]:
       res = res["_source"]
       suricata_output = suricata_output_format()
-      suricata_output["timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["alert"]["category"] = TECHNIQUE
       suricata_output["alert"]["signature_id"] = int(20210065)
       suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
-      suricata_output["log_time"] = res["@timestamp"]
-      suricata_output["@timestamp"] = datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f")
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
       suricata_output["user_data1"] = res
       es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("service_execution_10A1 finished.")
