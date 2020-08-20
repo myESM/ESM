@@ -1,4 +1,7 @@
 # Release History
+# V0.3.14 (2020-08-20)
+- 補上缺少的 classification.config
+
 # V0.3.13 (2020-08-20)
 - 掛載 Suricata classification、iprep
 
