@@ -1,4 +1,7 @@
 # Release History
+# V0.3.15 (2020-08-20)
+- 更新 classification.config (新增快篩規則中定義的類別)
+
 # V0.3.14 (2020-08-20)
 - 補上缺少的 classification.config
 
