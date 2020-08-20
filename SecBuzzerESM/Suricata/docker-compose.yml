@@ -18,4 +18,6 @@ services:
       - $SURICATA_LOG_PATH:/var/log/suricata
       - ./suricata/rules:/var/lib/suricata/rules
       - ./suricata/dist/suricata.yaml:/etc/suricata/suricata.yaml
-      - "/usr/share/zoneinfo/ROC:/etc/localtime:ro" 
+      - "/usr/share/zoneinfo/ROC:/etc/localtime:ro"
+      - "./suricata/iprep:/etc/suricata/iprep"
+      - "./suricata/classification.config:/classification.config"

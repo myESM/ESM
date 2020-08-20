@@ -1,4 +1,10 @@
 # Release History
+# V0.3.13 (2020-08-20)
+- 掛載 Suricata classification、iprep
+
+# V0.3.12 (2020-08-19)
+- 修改 es replica, 解決 ES 不健康
+
 # V0.3.11
 - 更新ESM的「連線」與「離線」安裝文件
 

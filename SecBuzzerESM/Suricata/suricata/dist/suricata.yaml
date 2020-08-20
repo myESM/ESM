@@ -1092,10 +1092,10 @@ legacy:
 #   - alert
 
 # IP Reputation
-#reputation-categories-file: /etc/suricata/iprep/categories.txt
-#default-reputation-path: /etc/suricata/iprep
-#reputation-files:
-# - reputation.list
+reputation-categories-file: /etc/suricata/iprep/categories.txt
+default-reputation-path: /etc/suricata/iprep
+reputation-files:
+- reputation.list
 
 # When run with the option --engine-analysis, the engine will read each of
 # the parameters below, and print reports for each of the enabled sections
@@ -1816,7 +1816,7 @@ default-rule-path: /var/lib/suricata/rules
 rule-files:
  - "*.rules"
 
-classification-file: /etc/suricata/rules/classification.config
+classification-file: /classification.config
 reference-config-file: /etc/suricata/reference.config
 # threshold-file: /etc/suricata/threshold.config
 
