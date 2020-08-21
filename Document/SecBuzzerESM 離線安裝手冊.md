@@ -1,4 +1,4 @@
-# SecBuzzerESM 連線安裝手冊
+# SecBuzzerESM 離線安裝手冊
 
 # 1. 硬體需求
 
