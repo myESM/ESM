@@ -67,6 +67,8 @@ def downloadRulesAndCheck(version:int, path:str='/tmp/rules.tgz'):
         return False
 
 if __name__ == "__main__":
+    time.sleep(random.randint(0,15))
+
     esm_api_key = getApiKey()
     if esm_api_key:
         header.update({'authorization': esm_api_key})
@@ -74,9 +76,13 @@ if __name__ == "__main__":
         tprint('ESM API key not found! Bye~')
         os._exit(2)
     
-    version_check = requests.post(f'{esm_srv_url}/esmapi/web/file/fileVersion',
-    headers=header).json().get('FileVersion')
-    current_rules_version = version_check
+    try:
+        version_check = requests.post(f'{esm_srv_url}/esmapi/web/file/fileVersion',
+        headers=header).json().get('FileVersion')
+        current_rules_version = version_check
+    except:
+        tprint('Connection fail, Bye!')
+        os._exit(2)
 
     if not current_rules_version: # can't get latest version
         tprint('Get current rules version fail, Bye~')
@@ -90,7 +96,7 @@ if __name__ == "__main__":
         local_rules_version = 0
     
     if current_rules_version != local_rules_version:
-
+        tprint(f'New version found! rules will update to {current_rules_version}')
         for i in range(6): 
             if i: tprint('Rules download fail, Retry',i)  # print retry times
             if downloadRulesAndCheck(current_rules_version):
@@ -104,6 +110,7 @@ if __name__ == "__main__":
                 subprocess.call('curl -XPOST --unix-socket /var/run/docker.sock -H "Content-Type: application/json" http://localhost/containers/suricata/restart',shell=True)
                 subprocess.call('rm /tmp/local_rules_version 2>/dev/null',shell=True)
                 subprocess.call(f'echo {current_rules_version} > /tmp/local_rules_version',shell=True)
+                tprint('Done!')
                 break
             else:
                 continue
