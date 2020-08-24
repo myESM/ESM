@@ -86,8 +86,11 @@ class Main():
     df["dest_port"] = df["dest_port"].astype("int")
     df["proto"] = df["proto"].apply(lambda x: self.proto_table[x])
     df["title"] = [self.attck_table[x] for x in pred] # alert.category
-    t = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f+08:00") 
-    df["timestamp"] = t 
+    t = datetime.datetime.now()
+    utc = datetime.datetime.now(tz=datetime.timezone.utc)
+    df["timestamp"] = t.strftime("%Y-%m-%dT%H:%M:%S.%f+08:00")
+    df["ingest_timestamp"] = utc.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
+    df["timestamp"] = t
     df["event_type"] = "alert"
     df["severity"] = 2 # alert.severity
     df["message"] = df["title"].apply(lambda x: self.attck_msg[x]) # alert.signature
@@ -101,7 +104,6 @@ class Main():
     df["module"] = "ETA-ATTACK"
     df["log_type"] = "Traffic"
     df["dump_status"] = "0"
-    df["ingest_timestamp"] = datetime.datetime.now(tz=datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
     output = eval(df.to_json(orient="records"))
     return output
   
