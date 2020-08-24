@@ -1,4 +1,12 @@
 # Release History
+# V0.3.17 (2020-08-21)
+- 更新 Suricata updater, 輸出更詳細的內容!
+- 更新 Suricata updater, 增加隨機 Sleep
+
+# V0.3.16 (2020-08-21)
+- 換上 python 版本的 Suricata updater
+- 修改 fluentd syslog host 欄位名稱為 hostname 
+
 # V0.3.15 (2020-08-20)
 - 更新 classification.config (新增快篩規則中定義的類別)
 

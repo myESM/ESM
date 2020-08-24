@@ -3,4 +3,4 @@
 @daily root /bin/bash /scripts/daily.sh >> /var/log/cron.log
 @hourly root /bin/bash /scripts/hourly.sh >> /var/log/cron.log
 @reboot root /usr/bin/python3 /scripts/es_setter.py >> /var/log/cron.log
-*/10 * * * * root /bin/bash /scripts/Suricata_updater.sh >> /var/log/cron.log
+*/10 * * * * root /usr/bin/python3 /scripts/Suricata_updater.py >> /var/log/cron.log
