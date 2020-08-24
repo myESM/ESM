@@ -102,7 +102,7 @@ class Main():
     df["reference"] = df["title"].apply(lambda x: self.url_table[x])
     df.drop(["title", "severity", "message", "action", "rule_sig_id", "alert_group_id"], axis=1, inplace=True)
     df["module"] = "ETA-ATTACK"
-    df["log_type"] = "Traffic"
+    df["log_type"] = "traffic"
     df["dump_status"] = "0"
     output = eval(df.to_json(orient="records"))
     return output
