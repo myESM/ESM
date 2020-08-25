@@ -86,11 +86,13 @@ class Main():
     df["dest_port"] = df["dest_port"].astype("int")
     df["proto"] = df["proto"].apply(lambda x: self.proto_table[x])
     df["title"] = [self.attck_table[x] for x in pred] # alert.category
-    t = datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S.%f+08:00") 
+    t = datetime.datetime.now()
+    utc = datetime.datetime.now(tz=datetime.timezone.utc)
+    df["timestamp"] = t.strftime("%Y-%m-%dT%H:%M:%S.%f+08:00")
+    df["ingest_timestamp"] = utc.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
     df["timestamp"] = t
-    df["ingest_timestamp"] = datetime.datetime.now(tz=datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%S.%fZ")
     df["event_type"] = "alert"
-    df["severity"] = 10 # alert.severity
+    df["severity"] = 2 # alert.severity
     df["message"] = df["title"].apply(lambda x: self.attck_msg[x]) # alert.signature
     df["action"] = "" # alert.action
     df["rule_sig_id"] = df["title"].apply(lambda x: self.sig_id[x]) # alert.signature_id
@@ -99,18 +101,15 @@ class Main():
                                       "action":x["action"], "signature_id":x["rule_sig_id"], "gid":x["alert_group_id"]}, axis=1)
     df["reference"] = df["title"].apply(lambda x: self.url_table[x])
     df.drop(["title", "severity", "message", "action", "rule_sig_id", "alert_group_id"], axis=1, inplace=True)
-    df["module"] = "ETA1"
-    df["log_type"] = "NetFlow"
+    df["module"] = "ETA-ATTACK"
+    df["log_type"] = "traffic"
     df["dump_status"] = "0"
     output = eval(df.to_json(orient="records"))
-    # tt = datetime.datetime.now().strftime("%Y-%m-%dT%H-%M-%S") 
-    # with open("output_{}.json".format(tt), 'wb') as f:
-    #   f.write(json.dumps(output).encode('utf-8'))
     return output
   
   def toES(self, dic):
     count = 0
-    es_idx = datetime.datetime.now().strftime("eta1-%Y-%m")
+    es_idx = datetime.datetime.now().strftime("eta-attack-%Y-%m")
     for d in dic:
       if d["alert"]["category"] == "Benign":
         pass

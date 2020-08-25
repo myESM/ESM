@@ -6,9 +6,9 @@ import json
 import shutil
 import hashlib
 import subprocess
+import random
 from datetime import datetime
 
-from pprint import pprint
 esm_srv_url = 'https://api.secbuzzer.co'
 
 esm_api_key = None
