@@ -1,4 +1,7 @@
 # Release History
+# V0.3.18 (2020-08-25)
+- 修正 SuricataUpdater 套件沒引用導致的錯誤
+
 # V0.3.17 (2020-08-21)
 - 更新 Suricata updater, 輸出更詳細的內容!
 - 更新 Suricata updater, 增加隨機 Sleep
