@@ -9,7 +9,7 @@ import subprocess
 from datetime import datetime
 
 from pprint import pprint
-esm_srv_url = 'https://api.secbuzzer.co'
+esm_srv_url = 'https://api.hub.secbuzzer.co'
 
 esm_api_key = None
 local_rules_version = None
