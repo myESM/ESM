@@ -11,7 +11,7 @@ services:
     volumes:
       - ./ROOT.war:/usr/local/tomcat/webapps/ROOT.war
       - ./location.properties:/usr/local/tomcat/webapps/location.properties
-      - ./rules:/home/ubuntu
+      #- ./rules:/home/ubuntu
       #- ./client_application_esm_demo.properties:/usr/local/tomcat/webapps/client_application_esm_demo.properties
     environment:
       INTERFACE_NAME: $WEB_IF_NAME
