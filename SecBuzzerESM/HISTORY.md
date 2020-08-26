@@ -1,4 +1,7 @@
 # Release History
+# V0.3.19 (2020-08-26)
+- 修正 SuricataUpdater 無法下載 Rule 時重試失敗
+
 # V0.3.18 (2020-08-25)
 - 修正 SuricataUpdater 套件沒引用導致的錯誤
 

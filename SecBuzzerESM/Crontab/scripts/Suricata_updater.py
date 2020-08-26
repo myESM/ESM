@@ -48,9 +48,9 @@ def getApiKey() -> int:
                 else:
                     return None
 
-def tprint(text:str):
+def tprint(*text):
     now = datetime.now().strftime("[*] %Y/%m/%d %H:%M:%S ")
-    print(''.join([now, text]))
+    print(now, ' '.join(str(_) for _ in text))
 
 def downloadRulesAndCheck(version:int, path:str='/tmp/rules.tgz'):
     """Download rules file and check md5 hash
