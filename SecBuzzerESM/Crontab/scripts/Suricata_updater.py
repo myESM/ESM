@@ -73,7 +73,6 @@ if __name__ == "__main__":
     esm_api_key = getApiKey()
     if esm_api_key:
         header.update({'authorization': esm_api_key})
-        print(esm_api_key)
     else:
         tprint('ESM API key not found! Bye~')
         os._exit(2)
@@ -81,7 +80,6 @@ if __name__ == "__main__":
     try:
         version_check = requests.post(f'{esm_srv_url}/esmapi/web/file/fileVersion',
         headers=header, json={'TypeCode': 'it'}).json().get('FileVersion')
-        print(version_check)
         current_rules_version = version_check
     except:
         tprint('Connection fail, Bye!')
