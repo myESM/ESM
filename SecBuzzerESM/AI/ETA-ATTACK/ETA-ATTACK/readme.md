@@ -1,4 +1,4 @@
-# ETA1
+# ETA-ATTACK
 
 ## Prerequest
 
@@ -33,12 +33,12 @@ es_port = 9201
 ## Run Code
 
 ```
-python3 eta1_api.py
+python3 eta_attack_api.py
 ```
 
 ## API Example
 
-- API route: eta1/api/v1.0
+- API route: eta_attack/api/v1.0
 - API example
 	- index
 	- start_time
@@ -48,11 +48,11 @@ python3 eta1_api.py
 
 
 ```
-http://localhost:5000/eta1/api/v1.0?index=cic_20200804&start_time=2020-08-04T11:25:00.000000%2B08:00&end_time=2020-08-04T11:30:00.000000%2B08:00
+http://localhost:5000/eta_attack/api/v1.0?index=cic_20200827&start_time=2020-08-27T12:00:00.000000%2B08:00&end_time=2020-08-27T13:00:00.000000%2B08:00
 ```
 
 ```
-curl -i http://localhost:5000/eta1/api/v1.0\?index\=cic_20200804\&start_time\=2020-08-04T11:25:00.000000%2B08:00\&end_time\=2020-08-04T11:30:00.00000%2B08:00
+curl -i http://localhost:5000/eta_attack/api/v1.0\?index\=cic_20200827\&start_time\=2020-08-27T12:00:00.000000%2B08:00\&end_time\=2020-08-27T13:00:00.00000%2B08:00
 ```
 
 ## Response Code
@@ -122,7 +122,7 @@ Subflow Fwd Packets         | 0
 Subflow Fwd Bytes           | 335
 Subflow Bwd Packets         | 0
 Subflow Bwd Bytes           | 40
-FWD Init Win Bytes          | 64240
+Fwd Init Win Bytes          | 64240
 Bwd Init Win Bytes          | 501
 Fwd Act Data Pkts           | 2
 Fwd Seg Size Min            | 20
@@ -152,10 +152,10 @@ src_port            | 138
 dest_port           | 138
 alert.action        | N/A
 proto               | tcp
-module              | ETA1
+module              | ETA-ATTACK
 in_iface            | [From Input]
 alert.signature_id  | 20110002
-log_type            | NetFlow
+log_type            | traffic
 reference           | https://attack.mitre.org/techniques/T1204/
 log_time            | 2020-03-11T10:02:56.762791+08:00
 alert.gid           | 0
