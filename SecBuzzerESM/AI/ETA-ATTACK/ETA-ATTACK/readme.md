@@ -48,11 +48,11 @@ python3 eta_attack_api.py
 
 
 ```
-http://localhost:5000/eta_attack/api/v1.0?index=cic_20200804&start_time=2020-08-04T11:25:00.000000%2B08:00&end_time=2020-08-04T11:30:00.000000%2B08:00
+http://localhost:5000/eta_attack/api/v1.0?index=cic_20200827&start_time=2020-08-27T12:00:00.000000%2B08:00&end_time=2020-08-27T13:00:00.000000%2B08:00
 ```
 
 ```
-curl -i http://localhost:5000/eta_attack/api/v1.0\?index\=cic_20200804\&start_time\=2020-08-04T11:25:00.000000%2B08:00\&end_time\=2020-08-04T11:30:00.00000%2B08:00
+curl -i http://localhost:5000/eta_attack/api/v1.0\?index\=cic_20200827\&start_time\=2020-08-27T12:00:00.000000%2B08:00\&end_time\=2020-08-27T13:00:00.00000%2B08:00
 ```
 
 ## Response Code

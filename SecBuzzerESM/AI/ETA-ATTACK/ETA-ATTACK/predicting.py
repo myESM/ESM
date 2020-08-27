@@ -121,9 +121,9 @@ class Main():
 
 
 if __name__ == "__main__":
-  es_index = "cic_20200804"
-  start_time = "2020-08-04T11:25:00.000000+08:00"
-  end_time = "2020-08-04T11:30:00.000000+08:00"
+  es_index = "cic_20200827"
+  start_time = "2020-08-27T12:00:00.000000+08:00"
+  end_time = "2020-08-27T13:00:00.000000+08:00"
 
   load_main = Main()
   res = load_main.queryES(es_index, start_time, end_time)
