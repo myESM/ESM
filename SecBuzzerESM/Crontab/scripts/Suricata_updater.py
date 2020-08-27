@@ -57,9 +57,9 @@ def downloadRulesAndCheck(version:int, path:str='/tmp/rules.tgz'):
     param: Rules version
     param: save file path
     """
-    file_md5 = requests.get(f'{esm_srv_url}/esmapi/web/file/getmd5/{current_rules_version}/',
+    file_md5 = requests.get(f'{esm_srv_url}/esmapi/web/file/getmd5/it/{current_rules_version}/',
     headers=header).json().get('md5')
-    response = requests.get(f'{esm_srv_url}/esmapi/web/file/download/{version}', headers=header, stream=True)
+    response = requests.get(f'{esm_srv_url}/esmapi/web/file/download/it/{version}', headers=header, stream=True)
     with open(path, 'wb') as f:
         shutil.copyfileobj(response.raw, f)
     if file_md5 == md5(path):
@@ -73,13 +73,15 @@ if __name__ == "__main__":
     esm_api_key = getApiKey()
     if esm_api_key:
         header.update({'authorization': esm_api_key})
+        print(esm_api_key)
     else:
         tprint('ESM API key not found! Bye~')
         os._exit(2)
     
     try:
         version_check = requests.post(f'{esm_srv_url}/esmapi/web/file/fileVersion',
-        headers=header).json().get('FileVersion')
+        headers=header, json={'TypeCode': 'it'}).json().get('FileVersion')
+        print(version_check)
         current_rules_version = version_check
     except:
         tprint('Connection fail, Bye!')
@@ -100,7 +102,8 @@ if __name__ == "__main__":
         tprint(f'New version found! rules will update to {current_rules_version}')
         for i in range(6): 
             if i: tprint('Rules download fail, Retry',i)  # print retry times
-            if downloadRulesAndCheck(current_rules_version):
+            download_status = downloadRulesAndCheck(current_rules_version)
+            if download_status:
                 subprocess.call('mkdir -p /tmp/rules', shell=True)
                 subprocess.call('tar zxf /tmp/rules.tgz -C /tmp/rules', shell=True)
                 subprocess.call('chown 1000:1000 /tmp/* -R',shell=True)
@@ -116,5 +119,5 @@ if __name__ == "__main__":
             else:
                 continue
         else:
-            tprint('Md5 check faile')
+            tprint('Md5 check fail or file download fail :(')
             os._exit(2)
