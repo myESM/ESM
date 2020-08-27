@@ -1,4 +1,10 @@
 # Release History
+# V0.3.21 (2020-08-27)
+- 調整 Dickcheck.py 邏輯
+- 新增每日自動檢查並移除 es index
+- 調整 SuricataUpdater 輸出 log
+- 新增每日自動移除 Cron 產生的 Log
+
 # V0.3.20 (2020-08-27)
 - 修改 SuricataUpdater API
 - 修改 Update_Suricata_rules API
