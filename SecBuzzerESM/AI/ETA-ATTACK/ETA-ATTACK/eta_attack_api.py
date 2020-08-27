@@ -17,9 +17,9 @@ def not_found(error):
 def not_found(error):
   return make_response(jsonify({"error": "500 INTERNAL SERVER ERROR"}), 500)
 
-# run eta1 api
-@app.route("/eta1/api/v1.0", methods=["GET"])
-def eta1_handler():
+# run eta_attack api
+@app.route("/eta_attack/api/v1.0", methods=["GET"])
+def eta_attack_handler():
   #check the parameters
   es_index = request.args.get("index", None)
   es_start_time = request.args.get("start_time", None)
