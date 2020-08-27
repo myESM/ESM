@@ -45,10 +45,10 @@ sudo su
 
 ## 2.2 下載專案
 
-請先由Github上下載SecBuzzerESM專案
+請先由Github上下載SecBuzzerESM專案 (開發測試專用)
 
 ```bash
-git clone https://github.com/myESM/ESM.git
+git clone https://github.com/myESM/ESM.git -b master
 ```
 
 ![images/install_02.png](images/install_02.png)
