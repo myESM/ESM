@@ -1,4 +1,12 @@
 # Release History
+# V0.3.20 (2020-08-27)
+- 修改 SuricataUpdater API
+- 修改 Update_Suricata_rules API
+- 修改 Install.sh 更新 Rules API
+
+# V0.3.19 (2020-08-26)
+- 修正 SuricataUpdater 無法下載 Rule 時重試失敗
+
 # V0.3.18 (2020-08-25)
 - 修正 SuricataUpdater 套件沒引用導致的錯誤
 

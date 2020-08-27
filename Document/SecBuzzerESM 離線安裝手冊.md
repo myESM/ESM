@@ -39,7 +39,7 @@ sudo apt-get install openssh-server
 
 - 離線安裝包下載：[SecBuzzerESM_V0.3.18](https://myspace.iii.org.tw/d/f/572586712180504958)
 
-在此以scp指令為例：
+在此以scp指令為例：(以下為示意圖，若檔案有版本號的話指令請自行調整)
 
 ![images/install_10_off.png](images/install_10_off.png)
 
@@ -56,7 +56,7 @@ sudo su
 將離線安裝包進行解壓縮，指令如下：
 
 ```bash
-tar zxvf SecBuzzerESM.tgz
+tar zxvf SecBuzzerESM_XXX.tgz (XXX代表版本號)
 ```
 
 ![images/install_11_off.png](images/install_11_off.png)
