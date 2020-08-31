@@ -144,7 +144,7 @@ flow_id             | XyPZBXEBOI2XA3yCwRPD
 timestamp           | 2020-03-23T13:24:39.144408+08:00
 event_type          | alert
 alert.category      | Endpoint Denial of Service
-alert.severity      | 10
+alert.severity      | 2
 alert.signature     | CSTI ETA1 - ATT&CK Endpoint Denial of Service - T1499
 src_ip              | 192.168.70.196
 dest_ip             | 192.168.70.1
