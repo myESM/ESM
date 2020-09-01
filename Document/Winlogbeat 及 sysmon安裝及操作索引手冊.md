@@ -17,23 +17,11 @@
 
 	winlogbeat.event_logs:
 	  - name: Security
-	    processors:
-	      - script:
-	          lang: javascript
-	          id: security
-	          file: ${path.home}/module/security/config/winlogbeat-security.js
 	
 	  - name: Microsoft-Windows-Sysmon/Operational
-	    processors:
-	      - script:
-	          lang: javascript
-	          id: sysmon
-	          file: ${path.home}/module/sysmon/config/winlogbeat-sysmon.js
 	
 	  - name: Microsoft-Windows-PowerShell/Operational
 	
-	winlogbeat.shutdown_timeout: 30s 
-	winlogbeat.registry_file: evtx-registry.yml 
 	
 	output.elasticsearch.hosts: ['http://localhost:9200']
 
@@ -55,10 +43,6 @@ winlogbeat.yml 中的name：可以利用windows內附的”事件檢視器”取
 
 	winlogbeat.event_logs:
 	  - name: ${EVTX_FILE} 
-	    no_more_events: stop 
-	
-	winlogbeat.shutdown_timeout: 30s 
-	winlogbeat.registry_file: evtx-registry.yml 
 	
 	output.elasticsearch:
 	
