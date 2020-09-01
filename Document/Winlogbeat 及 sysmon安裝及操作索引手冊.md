@@ -1,7 +1,7 @@
 引言：本文章介紹如何透過現有開源工具，於windows平台上進行log收集的動作以利網管人員管理及監控。文章以WinlogBeat及sysmon兩套開源工具為主進行說明。
 
 # 1. Winlogbeat的設定  
-[Winlogbeat下載點](https://www.elastic.co/downloads/beats/winlogbeat)
+[Winlogbeat下載點](https://www.elastic.co/downloads/beats/winlogbeat-oss)
 
 簡介：Winlogbeat為ELK開源家族的其中一個工具，其功能為擷取windows上的eventlog，並透過設定winlogbeat.yml檔案，達到將log資料即時輸出至logstash或是elasticsearch或是其他接收端的目的。在設定winlogbeat.yml時，可以根據需求，選擇隨意地一個具有evtx的路徑當成Winlogbeat.exe的輸入，也可以以windows預設的路徑(C:\Windows\System32\winevt)進行即時的監控。本文章介紹以較常受到關注的三個channel為主進行實際操演．列出如下：
 
