@@ -1,20 +1,17 @@
-version: '2.1'
+version: '2.2'
 
 services:
-  tomcat:
-    restart: always
+  edgeapp:
+    image: openjdk:11.0.8-jre
     container_name: client_tomcat
-    image: pistolpetewu/tomcat-web:1.0.3
-    tty: true
-    ports:
-      - "8080:8080"
+    restart: always
+    network_mode: "host"
+    #tty: "true"
     volumes:
-      - ./ROOT.war:/usr/local/tomcat/webapps/ROOT.war
-      - ./location.properties:/usr/local/tomcat/webapps/location.properties
-      #- ./rules:/home/ubuntu
-      #- ./client_application_esm_demo.properties:/usr/local/tomcat/webapps/client_application_esm_demo.properties
+      - ./EsmEdgeApp.jar:/EsmEdgeApp.jar
+      - ./location.properties:/location.properties
     environment:
       INTERFACE_NAME: $WEB_IF_NAME
       API_KEY_VALUE: $API_KEY_VALUE
       ORG_3_CODE: $ORG_3_CODE
-    network_mode: host
+    command: "java -jar /EsmEdgeApp.jar" #  -Xmx3g"
