@@ -1,13 +1,19 @@
 引言：本文章介紹如何透過現有開源工具，於windows平台上進行log收集的動作以利網管人員管理及監控。文章以WinlogBeat及sysmon兩套開源工具為主進行說明。
 
-# 1. Winlogbeat的設定  
-[Winlogbeat下載點](https://www.elastic.co/downloads/beats/winlogbeat-oss)
+# 1. Winlogbeat的執行及設定  
 
-簡介：Winlogbeat為ELK開源家族的其中一個工具，其功能為擷取windows上的eventlog，並透過設定winlogbeat.yml檔案，達到將log資料即時輸出至logstash或是elasticsearch或是其他接收端的目的。在設定winlogbeat.yml時，可以根據需求，選擇隨意地一個具有evtx的路徑當成Winlogbeat.exe的輸入，也可以以windows預設的路徑(C:\Windows\System32\winevt)進行即時的監控。本文章介紹以較常受到關注的三個channel為主進行實際操演．列出如下：
+簡介：Winlogbeat為ELK開源家族的其中一個工具，其功能為擷取windows上的eventlog，並透過設定winlogbeat.yml檔案，達到收集該主機的log資料，並即時輸出至logstash或是elasticsearch或是其他接收端的目的。
 
-1. 	Microsoft-Windows-Sysmon%4Operational
-2.	Microsoft-Windows-PowerShell%4Operational
-3.	Security
+首先我們可以至官網進行Winlogbeat的下載[Winlogbeat下載點](https://www.elastic.co/downloads/beats/winlogbeat-oss) 。下載後為一zip檔案，須先用解壓縮軟體解開，會在解壓後的檔案目錄中看到winlogbeat.exe和winlogbeat.yml等相關檔案，透過在終端機介面中移動到解壓縮後的檔案目錄，然後輸入  <font color="red"><b>  winlogbeat.exe -c -e winlogbeat.yml  </b></font>指令即可以開始使用．
+
+如果要改變預設的監控檔案，則可以根據需求設定winlogbeat.yml檔案．而相關監控檔案的位置會在
+(C:\Windows\System32\winevt)。
+
+本文章介紹以較常受到關注的三個channel為主進行實際操演．列出如下：
+
+1. 	Security
+2.	Microsoft-Windows-Sysmon%4Operational
+3.	Microsoft-Windows-PowerShell%4Operational
 
 
 
@@ -17,32 +23,38 @@
 
 	winlogbeat.event_logs:
 	  - name: Security
-	
+
 	  - name: Microsoft-Windows-Sysmon/Operational
-	
+
 	  - name: Microsoft-Windows-PowerShell/Operational
 	
 	
 	output.elasticsearch.hosts: ['http://localhost:9200']
 
 說明：
-output.elasticsearch.hosts: ['http://localhost:9200']：'http://localhost:9200' 為輸出的es的位置 （本文的輸出以es為主，可於官網中進行下載）[es官方載點](https://www.elastic.co/downloads/elasticsearch)
+
+output.elasticsearch.hosts: ['http://localhost:9200']：'http://localhost:9200' 為輸出的es的位置 （本文的輸出以es為主要範例，可於官網中進行es下載）[es官方載點](https://www.elastic.co/downloads/elasticsearch)
 
 winlogbeat.yml 中的name：可以利用windows內附的”事件檢視器”取得想要監聽的channel，此”全名”就會對應到yml中的name。例如要取得 Security，那可以如下圖操作，其他的channel取得也是一樣的方式。
 
-接著即可以至 es head 觀察資料是否已經正確輸入 
+接著即可以至 es head 觀察資料是否已經正確輸入指定的es
 
 [官網參考資料連結](https://www.elastic.co/guide/en/beats/winlogbeat/current/reading-from-evtx.html)
 
 ### <font color="red">事件檢視器操作示意圖</font>
-![](https://github.com/shwang362000/ESM/blob/master/Document/ESM_Install/images/%E4%BA%8B%E4%BB%B6%E6%AA%A2%E8%A6%96%E5%99%A8%E6%93%8D%E4%BD%9C%E7%A4%BA%E6%84%8F%E5%9C%96.png)
+![](https://https://github.com/shwang362000/ESM/blob/master/Document/ESM_Install/images/%E4%BA%8B%E4%BB%B6%E6%AA%A2%E8%A6%96%E5%99%A8%E6%93%8D%E4%BD%9C%E7%A4%BA%E6%84%8F%E5%9C%96.png)
 
 
 ## 1-2. ectx輸出到指定的es index
 小編於本次演練中，因為需要將多台主機的evtx log打到不同的es index中，參考了官方的文件，始終無法順利解決，後來發現必須在winlogbeat.yaml 做細部的設定，即可以達到該功能，將winlogbeat.yaml 分享如下：
 
 	winlogbeat.event_logs:
-	  - name: ${EVTX_FILE} 
+	  - name: Security
+
+	  - name: Microsoft-Windows-Sysmon/Operational
+
+	  - name: Microsoft-Windows-PowerShell/Operational
+	
 	
 	output.elasticsearch:
 	
@@ -57,12 +69,18 @@ winlogbeat.yml 中的name：可以利用windows內附的”事件檢視器”取
 
 * index: "winlogbeat-%{+yyyyMMdd}"：index 的名稱，%{+yyyyMMdd}為以“日期”為變數，當成索引的產出，產出的索引名稱如“winlogbeat-20200901”
 
-* setup.template.name: "winlogbeat-%{+yyyyMMdd}" <font color="red">如果不是利用預設名稱，則強迫要設定這個項目</font>
+* setup.template.name: "winlogbeat-%{+yyyyMMdd}" <font color="red">如果不是利用預設index名稱，則強迫要設定這個項目</font>
 
-* setup.template.pattern: "winlogbeat-%{+yyyyMMdd}" <font color="red">如果不是利用預設名稱，則強迫要設定這個項目</font>
+* setup.template.pattern: "winlogbeat-%{+yyyyMMdd}" <font color="red">如果不是利用預設index名稱，則強迫要設定這個項目</font>
 
-* setup.ilm.enabled: false  <font color="red">如果不是利用預設名稱，則強迫要設定這個項目</font>
+* setup.ilm.enabled: false  <font color="red">如果不是利用預設index名稱，則強迫要設定這個項目</font>
 	
+注意事項：
+
+* 在執行<font color="red"><b>  winlogbeat.exe -c -e winlogbeat.yml  </b></font>後，winlogbeat會將已經寫出的資料訊息儲存在該目錄的data目錄中，如果因為操作錯誤想要重新讀取log檔並輸出，則只要將data目錄刪除後重新執行即可
+
+
+
 # 2. Sysmon安裝 
 
 [Sysmon程式下載點](https://download.sysinternals.com/files/Sysmon.zip)
