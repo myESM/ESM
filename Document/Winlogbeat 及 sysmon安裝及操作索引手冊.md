@@ -4,7 +4,7 @@
 
 簡介：Winlogbeat為ELK開源家族的其中一個工具，其功能為擷取windows上的eventlog，並透過設定winlogbeat.yml檔案，達到收集該主機的log資料，並即時輸出至logstash或是elasticsearch或是其他接收端的目的。
 
-首先我們可以至官網進行Winlogbeat的下載[Winlogbeat下載點](https://www.elastic.co/downloads/beats/winlogbeat-oss) 。下載後為一zip檔案，須先用解壓縮軟體解開，會在解壓後的檔案目錄中看到winlogbeat.exe和winlogbeat.yml等相關檔案，透過在終端機介面中移動到解壓縮後的檔案目錄，然後輸入  <font color="red">  winlogbeat.exe -c -e winlogbeat.yml  </font>指令即可以開始使用．
+首先我們可以至官網進行Winlogbeat的下載[Winlogbeat下載點](https://www.elastic.co/downloads/beats/winlogbeat-oss) 。下載後為一zip檔案，須先用解壓縮軟體解開，會在解壓後的檔案目錄中看到winlogbeat.exe和winlogbeat.yml等相關檔案，透過在終端機介面中移動到解壓縮後的檔案目錄，然後輸入  <font color="red"><b>  winlogbeat.exe -c -e winlogbeat.yml  </b></font>指令即可以開始使用．
 
 如果要改變預設的監控檔案，則可以根據需求設定winlogbeat.yml檔案．而相關監控檔案的位置會在
 (C:\Windows\System32\winevt)。
@@ -77,7 +77,7 @@ winlogbeat.yml 中的name：可以利用windows內附的”事件檢視器”取
 	
 注意事項：
 
-* 在執行<font color="red">  winlogbeat.exe -c -e winlogbeat.yml  </font>後，winlogbeat會將已經寫出的資料訊息儲存在該目錄的data目錄中，如果因為操作錯誤想要重新讀取log檔並輸出，則只要將data目錄刪除後重新執行即可
+* 在執行<font color="red"><b>  winlogbeat.exe -c -e winlogbeat.yml  </b></font>後，winlogbeat會將已經寫出的資料訊息儲存在該目錄的data目錄中，如果因為操作錯誤想要重新讀取log檔並輸出，則只要將data目錄刪除後重新執行即可
 
 
 
