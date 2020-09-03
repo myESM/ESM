@@ -1,4 +1,7 @@
 # Release History
+# V0.3.22 (2020-08-28)
+- 修正 Suricata Updater 無法輸出 Log
+
 # V0.3.21 (2020-08-27)
 - 調整 Dickcheck.py 邏輯
 - 新增每日自動檢查並移除 es index
