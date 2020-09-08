@@ -20,4 +20,3 @@ services:
       - ./suricata/dist/suricata.yaml:/etc/suricata/suricata.yaml
       - "/usr/share/zoneinfo/ROC:/etc/localtime:ro"
       - "./suricata/iprep:/etc/suricata/iprep"
-      - "./suricata/classification.config:/classification.config"
