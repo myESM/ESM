@@ -94,7 +94,7 @@ class Main():
     df["event_type"] = "alert"
     df["severity"] = 2 # alert.severity
     df["message"] = df["title"].apply(lambda x: self.attck_msg[x]) # alert.signature
-    df["action"] = "" # alert.action
+    df["action"] = 0 # alert.action
     df["rule_sig_id"] = df["title"].apply(lambda x: self.sig_id[x]) # alert.signature_id
     df["alert_group_id"] = 0 # alert.gid
     df["alert"] = df.apply(lambda x: {"category":x["title"], "severity":x["severity"], "signature":x["message"],
