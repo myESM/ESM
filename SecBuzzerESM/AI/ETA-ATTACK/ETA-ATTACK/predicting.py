@@ -90,7 +90,6 @@ class Main():
     utc = datetime.datetime.now(tz=datetime.timezone.utc)
     df["timestamp"] = t.strftime("%Y-%m-%dT%H:%M:%S.%f+08:00")
     df["ingest_timestamp"] = utc.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
-    df["timestamp"] = t
     df["event_type"] = "alert"
     df["severity"] = 2 # alert.severity
     df["message"] = df["title"].apply(lambda x: self.attck_msg[x]) # alert.signature
