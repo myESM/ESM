@@ -1816,7 +1816,7 @@ default-rule-path: /var/lib/suricata/rules
 rule-files:
  - "*.rules"
 
-classification-file: /classification.config
+classification-file: /var/lib/suricata/rules/classification.config
 reference-config-file: /etc/suricata/reference.config
 # threshold-file: /etc/suricata/threshold.config
 

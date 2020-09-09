@@ -7,6 +7,7 @@ import shutil
 import hashlib
 import subprocess
 import random
+import sys
 from datetime import datetime
 
 esm_srv_url = 'https://api.hub.secbuzzer.co'
@@ -74,19 +75,19 @@ if __name__ == "__main__":
         header.update({'authorization': esm_api_key})
     else:
         tprint('ESM API key not found! Bye~')
-        os._exit(2)
+        sys.exit(1)
     
     try:
         version_check = requests.post(f'{esm_srv_url}/esmapi/web/file/fileVersion',
         headers=header, json={'TypeCode': 'it'}).json().get('FileVersion')
         current_rules_version = version_check
     except:
-        tprint('Connection fail, Bye!')
-        os._exit(2)
+        tprint('Rule Server Connection fail, Bye!')
+        sys.exit(1)
 
     if not current_rules_version: # can't get latest version
         tprint('Get current rules version fail, Bye~')
-        os._exit(2)
+        sys.exit(1)
 
     lv_path = "/tmp/local_rules_version" # local version file path
     if os.path.isfile(lv_path):
@@ -117,4 +118,4 @@ if __name__ == "__main__":
                 continue
         else:
             tprint('Md5 check fail or file download fail :(')
-            os._exit(2)
+            sys.exit(1)

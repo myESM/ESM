@@ -1,4 +1,14 @@
 # Release History
+# V0.4.0 (2020-09-08)
+- 新增 Upgrade_ESM.py
+- 修改為讀取線上更新的 classification
+- 更新 ETA-Attack 並啟用
+- 更新 PacketAnalyze
+- Install.sh & Update_Suricata_rules.sh 加上 API Key 防呆, 避免噴錯
+
+# V0.3.22 (2020-08-28)
+- 修正 Suricata Updater 無法輸出 Log
+
 # V0.3.21 (2020-08-27)
 - 調整 Dickcheck.py 邏輯
 - 新增每日自動檢查並移除 es index
