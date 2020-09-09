@@ -1,4 +1,4 @@
-FROM continuumio/anaconda3:2020.07
+FROM python:3.8.5-buster
 
 # 建立資料夾; -p 建立子目錄
 COPY ./ETA-ATTACK /usr/src/ETA-ATTACK

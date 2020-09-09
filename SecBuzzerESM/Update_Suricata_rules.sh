@@ -10,5 +10,5 @@ sudo rsync -r --delete tmp/rules/ Suricata/suricata/rules/
 rm -rf tmp rules.tgz
 docker-compose --env-file SecBuzzerESM.env -f Suricata/docker-compose.yml restart
 else
-echo No API key found, check SecBuzzerESM.env
+echo No API key found, Suricata rules download fail, check SecBuzzerESM.env
 fi
