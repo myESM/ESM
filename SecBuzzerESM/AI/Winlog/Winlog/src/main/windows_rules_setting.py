@@ -2821,3 +2821,1550 @@ def service_execution_10A1_query(es_start_time, es_end_time):
     }
   }
   return service_execution_str
+
+def virtualization_evasion_11A3_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 11.A.3, Virtualization/Sandbox Evasion, T1497
+  https://attack.mitre.org/techniques/T1497/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "4104"
+  event_provider = "Microsoft-Windows-PowerShell"
+  virtualization_evasion_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "wildcard": {
+            "winlog.event_data.ScriptBlockText": "*Win32_BIOS*"
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }]
+      }
+    }
+  }
+  return virtualization_evasion_str
+
+def system_information_discovery_11A4_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 11.A.4, System Information Discovery, T1082
+  https://attack.mitre.org/techniques/T1082/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "4104"
+  event_provider = "Microsoft-Windows-PowerShell"
+  system_information_discovery_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }]
+      }
+    }
+  }
+  return system_information_discovery_str
+
+def peripheral_device_discovery_11A5_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 11.A.5, Peripheral Device Discovery, T1120
+  https://attack.mitre.org/techniques/T1120/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "4104"
+  event_provider = "Microsoft-Windows-PowerShell"
+  peripheral_device_discovery_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "wildcard": {
+            "winlog.event_data.ScriptBlockText": "*Win32_PnPEntity*"
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }]
+      }
+    }
+  }
+  return peripheral_device_discovery_str
+
+def system_owner_user_discovery_11A6_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 11.A.6, System Owner/User Discovery, T1033
+  https://attack.mitre.org/techniques/T1033/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "4104"
+  event_provider = "Microsoft-Windows-PowerShell"
+  system_owner_user_discovery_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }]
+      }
+    }
+  }
+  return system_owner_user_discovery_str
+
+def system_network_configuration_discovery_11A7_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 11.A.7, System Network Configuration Discovery, T1016
+  https://attack.mitre.org/techniques/T1016/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "4104"
+  event_provider = "Microsoft-Windows-PowerShell"
+  system_network_configuration_discovery_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }]
+      }
+    }
+  }
+  return system_network_configuration_discovery_str
+
+def process_discovery_11A8_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 11.A.8, Process Discovery, T1057
+  https://attack.mitre.org/techniques/T1057/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "4104"
+  event_provider = "Microsoft-Windows-PowerShell"
+  process_discovery_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "wildcard": {
+            "winlog.event_data.ScriptBlockText": "*Win32_Process*"
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }]
+      }
+    }
+  }
+  return process_discovery_str
+
+def file_and_directory_discovery_11A9_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 11.A.9, File and Directory Discovery, T1083
+  https://attack.mitre.org/techniques/T1083/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "4104"
+  event_provider = "Microsoft-Windows-PowerShell"
+  file_and_directory_discovery_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "wildcard": {
+            "winlog.event_data.ScriptBlockText": "*Get-Item*"
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }]
+      }
+    }
+  }
+  return file_and_directory_discovery_str
+
+def decode_files_or_information_11A10_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 11.A.10, Deobfuscate/Decode Files or Information, T1140
+  https://attack.mitre.org/techniques/T1140/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "1"
+  event_provider = "Microsoft-Windows-Sysmon"
+  decode_files_or_information_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "wildcard": {
+            "winlog.event_data.Image": "*certutil.exe*"
+          }
+        },
+        {
+          "wildcard":{
+            "winlog.event_data.CommandLine": "*-decode*"
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }]
+      }
+    }
+  }
+  return decode_files_or_information_str
+
+def powershell_11A12_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 11.A.12, Command and Scripting Interpreter: PowerShell, T1059.001
+  https://attack.mitre.org/techniques/T1059/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "1"
+  event_provider = "Microsoft-Windows-Sysmon"
+  powershell_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "wildcard": {
+            "winlog.event_data.Image": "*powershell.exe*"
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }]
+      }
+    }
+  }
+  return powershell_str
+
+def commomly_used_port_11A13_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 11.A.13, Commonly Used Port, T1436
+  https://attack.mitre.org/techniques/T1436/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "3"
+  event_provider = "Microsoft-Windows-Sysmon"
+  commomly_used_port_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }]
+      }
+    }
+  }
+  return commomly_used_port_str
+
+def standard_application_layer_protocol_11A14_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 11.A.4, Application Layer Protocol, T1071
+  https://attack.mitre.org/techniques/T1071/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "3"
+  event_provider = "Microsoft-Windows-Sysmon"
+  standard_application_layer_protocol_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "match": {
+            "winlog.event_data.DestinationPortName": "https"
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }]
+      }
+    }
+  }
+  return standard_application_layer_protocol_str
+
+def file_and_directory_discovery_12A1_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 12.A.1, File and Directory Discovery, T1083
+  https://attack.mitre.org/techniques/T1083/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "4104"
+  event_provider = "Microsoft-Windows-PowerShell"
+  file_and_directory_discovery_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "wildcard": {
+            "winlog.event_data.ScriptBlockText": "*env:windir*"
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }]
+      }
+    }
+  }
+  return file_and_directory_discovery_str
+
+def security_software_discovery_12B1_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 12.B.1, Software Discovery: Security Software Discovery, T1518.001
+  https://attack.mitre.org/techniques/T1518/001/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "4104"
+  event_provider = "Microsoft-Windows-PowerShell"
+  security_software_discovery_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "wildcard": {
+            "winlog.event_data.ScriptBlockText": "*AntiVirusProduct*"
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }]
+      }
+    }
+  }
+  return security_software_discovery_str
+
+def system_information_discovery_13A1_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 13.A.1, System Information Discovery, T1082
+  https://attack.mitre.org/techniques/T1082/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "4104"
+  event_provider = "Microsoft-Windows-PowerShell"
+  system_information_discovery_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }]
+      }
+    }
+  }
+  return system_information_discovery_str
+
+def system_network_configuration_discovery_13B1_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 13.B.1, System Network Configuration Discovery, T1016
+  https://attack.mitre.org/techniques/T1016/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "4104"
+  event_provider = "Microsoft-Windows-PowerShell"
+  system_network_configuration_discovery_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }]
+      }
+    }
+  }
+  return system_network_configuration_discovery_str
+
+def system_owner_user_discovery_13C1_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 13.C.1, System Owner/User Discovery, T1033
+  https://attack.mitre.org/techniques/T1033/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "4104"
+  event_provider = "Microsoft-Windows-PowerShell"
+  system_owner_user_discovery_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }]
+      }
+    }
+  }
+  return system_owner_user_discovery_str
+
+def process_discovery_13D1_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 13.D.1, Process Discovery, T1057
+  https://attack.mitre.org/techniques/T1057/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "4104"
+  event_provider = "Microsoft-Windows-PowerShell"
+  process_discovery_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }]
+      }
+    }
+  }
+  return process_discovery_str
+
+def component_object_model_hijacking_14A1_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 14.A.1, Event Triggered Execution: Component Object Model Hijacking, T1546.015
+  https://attack.mitre.org/techniques/T1546/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "4104"
+  event_provider = "Microsoft-Windows-PowerShell"
+  component_object_model_hijacking_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }]
+      }
+    }
+  }
+  return component_object_model_hijacking_str
+
+def bypass_user_accounnt_control_14A2_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 14.A.2, Abuse Elevation Control Mechanism: Bypass User Access Control, T1548.002
+  https://attack.mitre.org/techniques/T1548/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "1"
+  event_provider = "Microsoft-Windows-Sysmon"
+  bypass_user_accounnt_control_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "wildcard": {
+            "winlog.event_data.Image": "*sdclt.exe*"
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }]
+      }
+    }
+  }
+  return bypass_user_accounnt_control_str
+
+def modify_registry_14A3_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 14.A.3, Modify Registry, T1112
+  https://attack.mitre.org/techniques/T1112/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "4104"
+  event_provider = "Microsoft-Windows-PowerShell"
+  modify_registry_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "wildcard": {
+            "winlog.event_data.ScriptBlockText": "*Remove-Item*"
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }]
+      }
+    }
+  }
+  return modify_registry_str
+
+def process_discovery_14B2_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 14.B.2, Process Discovery, T1057
+  https://attack.mitre.org/techniques/T1057/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "4104"
+  event_provider = "Microsoft-Windows-PowerShell"
+  process_discovery_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }]
+      }
+    }
+  }
+  return process_discovery_str
+
+def system_owner_user_discovery_15A1_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 15.A.1, System Owner/User Discovery, T1033
+  https://attack.mitre.org/techniques/T1033/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "4104"
+  event_provider = "Microsoft-Windows-PowerShell"
+  system_owner_user_discovery_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }]
+      }
+    }
+  }
+  return system_owner_user_discovery_str
+
+
+def remote_system_discovery_16A1_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 16.A.1, Remote System Discovery, T1018
+  https://attack.mitre.org/techniques/T1018/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "3"
+  event_provider = "Microsoft-Windows-Sysmon"
+  remote_system_discovery_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "wildcard": {
+            "winlog.event_data.Image": "*powershell.exe*"
+          }
+        },
+        {
+          "match": {
+            "winlog.event_data.DestinationPort": "389"
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }]
+      }
+    }
+  }
+  return remote_system_discovery_str
+
+def execution_through_api_16B2_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 16.B.2, Native API, T1106
+  https://attack.mitre.org/techniques/T1106/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "4104"
+  event_provider = "Microsoft-Windows-PowerShell"
+  execution_through_api_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }]
+      }
+    }
+  }
+  return execution_through_api_str
+
+def windows_remote_management_16C1_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 16.C.1, Remote Services: Windows Remote Management, T1021.006
+  https://attack.mitre.org/techniques/T1021/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "3"
+  event_provider = "Microsoft-Windows-Sysmon"
+  windows_remote_management_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "wildcard": {
+            "winlog.event_data.Image": "*powershell.exe*"
+          }
+        },
+        {
+          "match": {
+            "winlog.event_data.DestinationPort": "5985"
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }]
+      }
+    }
+  }
+  return windows_remote_management_str
+
+
+def valid_accounts_16C2_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 16.C.2, Valid Accounts, T1078
+  https://attack.mitre.org/techniques/T1078/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "4624"
+  event_provider = "Microsoft-Windows-Security-Auditing"
+  valid_accounts_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }]
+      }
+    }
+  }
+  return valid_accounts_str
+
+def email_collection_17A1_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 16.C.2, Email Collection, T1114
+  https://attack.mitre.org/techniques/T1114/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "1"
+  event_provider = "Microsoft-Windows-Sysmon"
+  email_collection_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "wildcard": {
+            "winlog.event_data.Image": "*OUTLOOK*"
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }]
+      }
+    }
+  }
+  return email_collection_str
+
+def data_staged_17B2_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 17.B.2, Data Staged, T1074
+  https://attack.mitre.org/techniques/T1074/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "11"
+  event_provider = "Microsoft-Windows-Sysmon"
+  data_staged_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "wildcard": {
+            "winlog.event_data.Image": "*powershell.exe*"
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }],
+        "should": [{
+          "wildcard": {
+            "winlog.event_data.Image": "*PowerShell.exe*"
+          }
+        }]
+      }
+    }
+  }
+  return data_staged_str
+
+def data_compressed_17C1_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 17.C.1, Archive Collected Data, T1560
+  https://attack.mitre.org/techniques/T1560/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "4104"
+  event_provider = "Microsoft-Windows-PowerShell"
+  data_compressed_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "wildcard": {
+            "winlog.event_data.ScriptBlockText": "*System.IO.Compression.ZipFile*"
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }]
+      }
+    }
+  }
+  return data_compressed_str
+
+def web_service_18A1_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 18.A.1, Web Service, T1102
+  https://attack.mitre.org/techniques/T1102/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "1"
+  event_provider = "Microsoft-Windows-Sysmon"
+  web_service_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "wildcard": {
+            "winlog.event_data.Image": "*net.exe*"
+          }
+        },
+        {
+          "wildcard": {
+            "winlog.event_data.ParentImage": "*powershell.exe*"
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }]
+      }
+    }
+  }
+  return web_service_str
+
+def rundll32_20A1_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 20.A.1, Signed Binary Proxy Execution: Rundll32, T1218.011
+  https://attack.mitre.org/techniques/T1218/011/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "1"
+  event_provider = "Microsoft-Windows-Sysmon"
+  rundll32_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "wildcard": {
+            "winlog.event_data.Image": "*rundll32.exe*"
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }]
+      }
+    }
+  }
+  return rundll32_str
+
+def windows_management_instrumentation_event_subscription_20A2_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 20.A.2, Event Triggered Execution: Windows Management Instrumentation Event Subscription, T1546.003
+  https://attack.mitre.org/techniques/T1546/003/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "1"
+  event_provider = "Microsoft-Windows-Sysmon"
+  windows_management_instrumentation_event_subscription_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "wildcard": {
+            "winlog.event_data.Image": "*powershell.exe*"
+          }
+        },
+        {
+          "wildcard": {
+            "winlog.event_data.ParentImage": "*WmiPrvSE*"
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }]
+      }
+    }
+  }
+  return windows_management_instrumentation_event_subscription_str
+
+def pass_the_ticket_20A2_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 20.A.2, Use Alternate Authentication Material: Pass the Ticket, T1550.003
+  https://attack.mitre.org/techniques/T1550/003/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "4104"
+  event_provider = "Microsoft-Windows-PowerShell"
+  pass_the_ticket_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "wildcard": {
+            "winlog.event_data.ScriptBlockText": "*kerberos::golden*"
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }]
+      }
+    }
+  }
+  return pass_the_ticket_str
+
+def windows_remote_management_20B2_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 20.B.2, Remote Services: Windows Remote Management, T1021.006
+  https://attack.mitre.org/techniques/T1021/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "3"
+  event_provider = "Microsoft-Windows-Sysmon"
+  windows_remote_management_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "match": {
+            "winlog.event_data.DestinationPort": "5985"
+          }
+        },
+        {
+          "wildcard": {
+            "winlog.event_data.Image": "*powershell.exe*"
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }]
+      }
+    }
+  }
+  return windows_remote_management_str
+
+def create_account_20B3_query(es_start_time, es_end_time):
+  """
+  APT29, Second Scenario, 20.B.3, Create Account, T1136
+  https://attack.mitre.org/techniques/T1136/
+
+  Parameters:
+    - es_start_time: elasticsearch range query start time
+    - es_end_time: elasticsearch range query end time
+
+  Returns:
+    The query string.
+  """
+  event_id = "1"
+  event_provider = "Microsoft-Windows-Sysmon"
+  create_account_str = {
+    "query": {
+      "bool": {
+        "must": [{
+          "match": {
+            "winlog.event_id": event_id
+          }
+        },
+        {
+          "match": {
+            "winlog.provider_name": event_provider
+          }
+        },
+        {
+          "wildcard": {
+            "winlog.event_data.Image": "*net.exe*"
+          }
+        },
+        {
+          "range": {
+            "@timestamp": {
+              "gte": es_start_time,
+              "lte": es_end_time
+            }
+          }
+        }]
+      }
+    }
+  }
+  return create_account_str
