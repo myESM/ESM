@@ -9,7 +9,7 @@ from elasticsearch import Elasticsearch, helpers
 class Main():
   def __init__(self):
     config = configparser.ConfigParser()
-    config.read("config.ini")
+    config.read("/ETA-ATTACK/config.ini")
     # es
     self.es_server = config.get("ES", "es_server")
     self.es_port = eval(config.get("ES", "es_port"))

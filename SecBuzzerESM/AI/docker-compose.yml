@@ -47,8 +47,8 @@ services:
       dockerfile: "Dockerfile"
     container_name: eta_attack
     volumes:
-      - "./ETA/ETA-ATTACK/:/ETA-Attack/"
-    command: "python /ETA-Attack/eta_attack_api.py"
+      - "./ETA/ETA-ATTACK/:/ETA-ATTACK/"
+    command: "python /ETA-ATTACK/eta_attack_api.py"
     networks:
       - esm
     restart: always 
