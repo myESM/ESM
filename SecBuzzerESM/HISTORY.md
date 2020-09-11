@@ -1,4 +1,7 @@
 # Release History
+# V0.5.2 (2020-09-11)
+- 更新EsmEdgeApp.jar
+
 # V0.5.1 (2020-09-11)
 - 修正 Update_ESM.py 版本判斷
 - 增加對版本的防呆機制、若無法讀取版本則提示完整更新
