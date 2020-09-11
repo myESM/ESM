@@ -4,6 +4,7 @@ from datetime import datetime
 from pathlib import Path
 import subprocess
 import sys
+import os
 
 parser = ArgumentParser()
 parser.add_argument("-p", "--path", help="ESM's path", dest="ESM_Path", default="/opt/SecbuzzerESM")
@@ -36,8 +37,14 @@ def tprint(*text):
     print(now, ' '.join(str(_) for _ in text) + bcolors.ENDC)
 
 def init():
-    # Check ESM path
     global lastest_ver, prev_ver, yamls
+
+    euid = os.geteuid()
+    if euid != 0:
+        tprint(f'{bcolors.FAIL}請使用 root 執行')
+        sys.exit()
+
+    # Check ESM path
     if not Path(ESMPATH).is_dir():
         tprint(f'{bcolors.FAIL}找不到 ESM 路徑, 可使用以下指令來修改 ESM 路徑')
         tprint(f'{bcolors.WARNING}python3 Upgrade_ESM.py -p <Absolute ESM path>')
@@ -50,7 +57,15 @@ def init():
     with open('./HISTORY.md', 'r') as f:
         vers = [_.split(' ')[1].strip("V").strip() for _ in f.readlines() if "# V" in _]
         lastest_ver = vers[0].split('.')
-        prev_ver = vers[1].split('.')
+
+    if not Path(ESMPATH+'/HISTORY.md').is_file() and not FULL_UPGRADE:
+        tprint(f'{bcolors.FAIL}版本判斷失敗, 請使用 -F 參數來進行完整更新')
+        sys.exit(1)
+
+    with open(ESMPATH+'/HISTORY.md', 'r') as f:
+        vers = [_.split(' ')[1].strip("V").strip() for _ in f.readlines() if "# V" in _]
+        prev_ver = vers[0].split('.')
+
     tprint(f'{bcolors.HEADER}{".".join(prev_ver)} -> {".".join(lastest_ver)}')
 
 def update():
@@ -71,7 +86,7 @@ def update():
         # rsync
         # no-cache install all images
         # sys.exit
-        subprocess.call(f'rsync -a --progress --exclude=SecBuzzerESM.env . {ESMPATH}', shell=True)
+        subprocess.call(f'rsync -ra --progress --exclude=SecBuzzerESM.env . {ESMPATH}', shell=True)
         for path in yamls:
             subprocess.call(f'docker-compose -f {path} build {cache}', shell=True)
             subprocess.call(f'docker-compose -f {path} pull', shell=True)
