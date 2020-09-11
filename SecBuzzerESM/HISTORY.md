@@ -1,4 +1,8 @@
 # Release History
+# V0.5.1 (2020-09-11)
+- 修正 Update_ESM.py 版本判斷
+- 增加對版本的防呆機制、若無法讀取版本則提示完整更新
+
 # V0.5.0 (2020-09-10)
 - 重新調整 ETA 在 EMS 的架構 (ETA ATTACK、MALWARE 放在 ETA 目錄且共用 Image)
 - 重寫 Dockerfile (移除 ADD、pip install requirement)
