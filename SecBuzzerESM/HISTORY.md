@@ -1,4 +1,14 @@
 # Release History
+# V0.5.4 (2020-09-15)
+- 修正 Update_ESM.py 預設的讀取路徑
+
+# V0.5.3 (2020-09-15)
+- 更新WEB/docker-compose.yml
+- 指定時區為台北時間
+
+# V0.5.2 (2020-09-11)
+- 更新EsmEdgeApp.jar
+
 # V0.5.1 (2020-09-11)
 - 修正 Update_ESM.py 版本判斷
 - 增加對版本的防呆機制、若無法讀取版本則提示完整更新

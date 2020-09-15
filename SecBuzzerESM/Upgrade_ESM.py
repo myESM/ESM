@@ -7,7 +7,7 @@ import sys
 import os
 
 parser = ArgumentParser()
-parser.add_argument("-p", "--path", help="ESM's path", dest="ESM_Path", default="/opt/SecbuzzerESM")
+parser.add_argument("-p", "--path", help="ESM's path", dest="ESM_Path", default="/opt/SecBuzzerESM")
 parser.add_argument("-C", "--cache", help="Install with cache", action="store_true")
 parser.add_argument("-F", "--full", help="Full upgrade, remove all images and run Install.sh", action="store_true")
 parser.add_argument("-M", "--medium", help="Medium upgrade, rebuild images and pull images", action="store_true")
