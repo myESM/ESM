@@ -1,6 +1,7 @@
 # Release History
 # V0.5.3 (2020-09-15)
-- 更新WEB/docker-compose.yml(指定時區為
+- 更新WEB/docker-compose.yml
+- 指定時區為台北時間
 
 # V0.5.2 (2020-09-11)
 - 更新EsmEdgeApp.jar
