@@ -42,7 +42,7 @@ winlogbeat.yml 中的name：可以利用windows內附的”事件檢視器”取
 [官網參考資料連結](https://www.elastic.co/guide/en/beats/winlogbeat/current/reading-from-evtx.html)
 
 ### <font color="red">事件檢視器操作示意圖</font>
-![](https://https://github.com/shwang362000/ESM/blob/master/Document/ESM_Install/images/%E4%BA%8B%E4%BB%B6%E6%AA%A2%E8%A6%96%E5%99%A8%E6%93%8D%E4%BD%9C%E7%A4%BA%E6%84%8F%E5%9C%96.png)
+![](https://github.com/shwang362000/ESM/blob/master/Document/ESM_Install/images/%E4%BA%8B%E4%BB%B6%E6%AA%A2%E8%A6%96%E5%99%A8%E6%93%8D%E4%BD%9C%E7%A4%BA%E6%84%8F%E5%9C%96.png)
 
 
 ## 1-2. ectx輸出到指定的es index
