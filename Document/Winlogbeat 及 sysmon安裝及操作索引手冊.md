@@ -97,7 +97,7 @@ winlogbeat.yml 中的name：可以利用windows內附的”事件檢視器”取
 2.	將此檔案儲存成 Winlogbeat.bat (這邊要注意，不要存成.txt 或是其他副檔名)
 3.	將上述的檔案放置windows的啟動目錄中，即完成．此時可以重新開機，並進入“工作管理員“中的”服務“看看“Winlogbeat.bat的狀態”，應該是“執行中”
 
-這邊要注意：因為windows的版本眾多，路徑和系統程式也不盡相同．啟動目錄列舉如下：
+這邊要注意：因為windows的版本差異，路徑和系統程式也不盡相同．啟動目錄列舉如下：
 
 
 	WinXP: C:/Documents and Settings/Administrator/「開始」選單/程式/啟動
