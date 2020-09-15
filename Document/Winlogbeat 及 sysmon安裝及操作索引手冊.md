@@ -33,11 +33,11 @@
 
 說明：
 
-output.elasticsearch.hosts: ['http://localhost:9200']：'http://localhost:9200' 為輸出的es的位置 （本文的輸出以es為主要範例，可於官網中進行es下載）[es官方載點](https://www.elastic.co/downloads/elasticsearch)
+上述範例中的'http://localhost:9200' 為輸出的ES的位置，可以根據真實情況進行編修 （本文的輸出以ES為主，可於官網中進行windows版本的ES下載進行測試）[ES官方載點](https://www.elastic.co/downloads/elasticsearch)
 
 winlogbeat.yml 中的name：可以利用windows內附的”事件檢視器”取得想要監聽的channel，此”全名”就會對應到yml中的name。例如要取得 Security，那可以如下圖操作，其他的channel取得也是一樣的方式。
 
-接著即可以至 es head 觀察資料是否已經正確輸入指定的es
+接著即可以至 ES head 觀察資料是否已經正確輸入指定的es
 
 [官網參考資料連結](https://www.elastic.co/guide/en/beats/winlogbeat/current/reading-from-evtx.html)
 
@@ -78,6 +78,36 @@ winlogbeat.yml 中的name：可以利用windows內附的”事件檢視器”取
 注意事項：
 
 * 在執行<font color="red"><b>  winlogbeat.exe -c -e winlogbeat.yml  </b></font>後，winlogbeat會將已經寫出的資料訊息儲存在該目錄的data目錄中，如果因為操作錯誤想要重新讀取log檔並輸出，則只要將data目錄刪除後重新執行即可
+
+
+
+## 1-3. 註冊Winlogbeat為服務，並使其開機後可以自動執行
+在真實的情況中，我們會希望安裝完Winlogbeat後，其就會如阿信一樣在背景默默的工作，此時就需要透過以下的步驟進行．
+
+“以系統管理員身份”開啟Windows PowerShell．變更目錄到剛剛解壓縮的Winlogbeat目錄中，確認有找到install-service-winlogbeat.ps1，接著在PowerShell中輸入以下指令：
+
+1. 	<b> set-executionpolicy remotesigned </b> (打開PowerShell執行指令碼的權限)
+2.	<b> get-executionpolicy </b> (確認命令列回傳 “RemoteSigned”）
+3.	<b> .\install-service-winlogbeat.ps1 </b> (將Winlogbeat註冊成“服務”，此時應可以在 “工作管理員“中的”服務“看到Winlogbeat，但是其 “狀態”是 “已停止”)
+4.	<b>在 “工作管理員“中的”服務“中將Winlogbeat按下滑鼠右鍵，“啟動”Winlogbeat </b>
+
+這時，差不多已經完成80%的步驟了，但是因為每次重開機後，Winlogbeat又會默默的回到 “已停止”的狀態，實在是不聰明．這時後，就需要自行撰寫一個bat檔案來執行“重開機後自動啟動的步驟”了．如下：
+
+1. 	開啟文字編輯器，裡面的內容只需一行  <font color="red"><b> sc start winlogbeat </b></font>
+2.	將此檔案儲存成 Winlogbeat.bat (這邊要注意，不要存成.txt 或是其他副檔名)
+3.	將上述的檔案放置windows的啟動目錄中，即完成．此時可以重新開機，並進入“工作管理員“中的”服務“看看“Winlogbeat.bat的狀態”，應該是“執行中”
+
+這邊要注意：因為windows的版本眾多，路徑和系統程式也不盡相同．啟動目錄列舉如下：
+
+
+	WinXP: C:/Documents and Settings/Administrator/「開始」選單/程式/啟動
+
+	Win7:   C:\Users\Administrator\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
+
+	Win10:C:\Users\Administrator\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
+
+	所有使用者通用啟動目錄:C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp
+	
 
 
 
