@@ -69,11 +69,11 @@ winlogbeat.yml 中的name：可以利用windows內附的”事件檢視器”取
 
 * index: "winlogbeat-%{+yyyyMMdd}"：index 的名稱，%{+yyyyMMdd}為以“日期”為變數，當成索引的產出，產出的索引名稱如“winlogbeat-20200901”
 
-* setup.template.name: "winlogbeat-%{+yyyyMMdd}" <font color="red">如果不是利用預設index名稱，則強迫要設定這個項目</font>
+* setup.template.name: "winlogbeat-%{+yyyyMMdd}"   <font color="red">(如果不是利用預設index名稱，則強迫要設定這個項目)</font>
 
-* setup.template.pattern: "winlogbeat-%{+yyyyMMdd}" <font color="red">如果不是利用預設index名稱，則強迫要設定這個項目</font>
+* setup.template.pattern: "winlogbeat-%{+yyyyMMdd}" <font color="red">(如果不是利用預設index名稱，則強迫要設定這個項目)/font>
 
-* setup.ilm.enabled: false  <font color="red">如果不是利用預設index名稱，則強迫要設定這個項目</font>
+* setup.ilm.enabled: false     <font color="red">(如果不是利用預設index名稱，則強迫要設定這個項目)</font>
 	
 注意事項：
 
