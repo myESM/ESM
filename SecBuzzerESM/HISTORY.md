@@ -1,4 +1,7 @@
 # Release History
+# V0.5.4 (2020-09-15)
+- 修正 Update_ESM.py 預設的讀取路徑
+
 # V0.5.3 (2020-09-15)
 - 更新WEB/docker-compose.yml
 - 指定時區為台北時間
