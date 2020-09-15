@@ -77,12 +77,10 @@
 
 <font color="red"><b>＊＊＊Winlogbeat.bat已經置於上述載點中 ＊＊＊</b></font>
 
-這邊要注意：因為windows的版本差異，路徑和系統程式也不盡相同。啟動目錄列舉如下：
+這邊要注意：因為windows的版本差異，路徑和系統程式也不盡相同。本文範例啟動目錄如下：
 
 
-	Win10:C:\Users\Administrator\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
-
-	
+	Win10:  C:\Users\Administrator\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
 
 
 # 2. Sysmon安裝 
