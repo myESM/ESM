@@ -9,14 +9,14 @@ services:
             - ES_PORT=19200
             - ORG1CODE=01
             - ORG2CODE=02
-            - ORG3CODE=03
+            - ORG3CODE=$ORG_3_CODE
         #FLOW SCAN PARAMETER
             - FLOWSCAN_SCHED_PERIOD=1
             - INTERFACE=$IF_NAME
-            - FLOWSCAN_SOURCEIP=192.168.70.0/24
-            - FLOWSCAN_DESTIP=192.168.70.0/24
+            - FLOWSCAN_SOURCEIP=$FLOWSCAN_SOURCEIP
+            - FLOWSCAN_DESTIP=$FLOWSCAN_DESTIP
             - PACKETCOUNT=1000
-            - TOTALCOUNT=100
+            - TOTALCOUNT=$FLOWSCAN_TOTALCOUNT
         #NMAP SCAN PARAMETER 
             - NMAPSCAN_SCHED_PERIOD=1
-            - NMAPSCAN_IP=192.168.70.0/24
+            - NMAPSCAN_IP=$NMAPSCAN_IP
