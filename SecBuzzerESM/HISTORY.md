@@ -1,6 +1,12 @@
 # Release History
+# V0.5.5 (2020-09-16)
+- 修正使用 Upgrade_ESM.py 時同版本時跳出錯誤
+- 優化 Upgrade_ESM.py 邏輯, 更新失敗時不會蓋掉版本號
+- 優化 Docker 更新過程, 清除環境變數帶來的 WARNING
+- 優化 Install.sh, 清除環境變數帶來的 WARNING
+
 # V0.5.4 (2020-09-15)
-- 修正 Update_ESM.py 預設的讀取路徑
+- 修正 Upgrade_ESM.py 預設的讀取路徑
 
 # V0.5.3 (2020-09-15)
 - 更新WEB/docker-compose.yml
@@ -10,7 +16,7 @@
 - 更新EsmEdgeApp.jar
 
 # V0.5.1 (2020-09-11)
-- 修正 Update_ESM.py 版本判斷
+- 修正 Upgrade_ESM.py 版本判斷
 - 增加對版本的防呆機制、若無法讀取版本則提示完整更新
 
 # V0.5.0 (2020-09-10)
