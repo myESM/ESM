@@ -29,8 +29,8 @@ else
 fi
 
 echo "[*] Build & Pull docker images"
-find . -type f -name "docker-compose.yml" -exec docker-compose -f {} build \;
-find . -type f -name "docker-compose.yml" -exec docker-compose -f {} pull \;
+find . -type f -name "docker-compose.yml" -exec docker-compose -f {} --log-level ERROR build \;
+find . -type f -name "docker-compose.yml" -exec docker-compose -f {} --log-level ERROR pull \;
 
 sudo mv /etc/sysctl.conf.bak /etc/sysctl.conf 2>/dev/null
 sudo cp -n /etc/sysctl.conf{,.bak}
@@ -63,6 +63,7 @@ ln -s ../SecBuzzerESM.env Suricata/.env 2>/dev/nul
 ln -s ../SecBuzzerESM.env Crontab/.env 2>/dev/nul
 ln -s ../SecBuzzerESM.env WEB/.env 2>/dev/nul
 ln -s ../SecBuzzerESM.env AI/.env 2>/dev/nul
+ln -s ../SecBuzzerESM.env Scan/.env 2>/dev/nul
 
 API_KEY=`cat SecBuzzerESM.env | grep API_KEY_VALUE | cut -d = -f 2`
 if [ -n "$API_KEY" ]
