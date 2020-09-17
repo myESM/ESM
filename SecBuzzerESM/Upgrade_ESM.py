@@ -70,7 +70,7 @@ def init():
 
 def update():
     cache = '' if args.cache else '--no-cache'
-    if lastest_ver == prev_ver:
+    if lastest_ver == prev_ver and not (FULL_UPGRADE or MEDIUM_UPGRADE or SMALL_UPGRADE):
         tprint(f'{bcolors.OKGREEN}已經是最新版了')
         sys.exit()
 
