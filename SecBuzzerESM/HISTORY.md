@@ -1,4 +1,11 @@
 # Release History
+# V0.5.7 (2020-09-22)
+- 修正 winlog 模組呼叫失敗
+- 優化 prepare.sh 路徑問題
+
+# V0.5.6 (2020-09-17)
+- 修正EsmEdgeApp.jar內runCheckDataForDay的重送資料
+
 # V0.5.5 (2020-09-16)
 - 修正使用 Upgrade_ESM.py 時同版本時跳出錯誤
 - 優化 Upgrade_ESM.py 邏輯, 更新失敗時不會蓋掉版本號

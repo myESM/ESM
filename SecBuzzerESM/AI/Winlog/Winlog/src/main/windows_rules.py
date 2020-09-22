@@ -69,6 +69,41 @@ from src.main.windows_rules_setting import file_deletion_9C2_query
 from src.main.windows_rules_setting import file_deletion_9C3_query
 from src.main.windows_rules_setting import file_deletion_9C4_query
 from src.main.windows_rules_setting import service_execution_10A1_query
+from src.main.windows_rules_setting import virtualization_evasion_11A3_query
+from src.main.windows_rules_setting import system_information_discovery_11A4_query
+from src.main.windows_rules_setting import peripheral_device_discovery_11A5_query
+from src.main.windows_rules_setting import system_owner_user_discovery_11A6_query
+from src.main.windows_rules_setting import system_network_configuration_discovery_11A7_query
+from src.main.windows_rules_setting import process_discovery_11A8_query
+from src.main.windows_rules_setting import file_and_directory_discovery_11A9_query
+from src.main.windows_rules_setting import decode_files_or_information_11A10_query
+from src.main.windows_rules_setting import powershell_11A12_query
+from src.main.windows_rules_setting import commomly_used_port_11A13_query
+from src.main.windows_rules_setting import standard_application_layer_protocol_11A14_query
+from src.main.windows_rules_setting import file_and_directory_discovery_12A1_query
+from src.main.windows_rules_setting import security_software_discovery_12B1_query
+from src.main.windows_rules_setting import system_information_discovery_13A1_query
+from src.main.windows_rules_setting import system_network_configuration_discovery_13B1_query
+from src.main.windows_rules_setting import system_owner_user_discovery_13C1_query
+from src.main.windows_rules_setting import process_discovery_13D1_query
+from src.main.windows_rules_setting import component_object_model_hijacking_14A1_query
+from src.main.windows_rules_setting import bypass_user_accounnt_control_14A2_query
+from src.main.windows_rules_setting import modify_registry_14A3_query
+from src.main.windows_rules_setting import process_discovery_14B2_query
+from src.main.windows_rules_setting import system_owner_user_discovery_15A1_query
+from src.main.windows_rules_setting import remote_system_discovery_16A1_query
+from src.main.windows_rules_setting import execution_through_api_16B2_query
+from src.main.windows_rules_setting import windows_remote_management_16C1_query
+from src.main.windows_rules_setting import valid_accounts_16C2_query
+from src.main.windows_rules_setting import email_collection_17A1_query
+from src.main.windows_rules_setting import data_staged_17B2_query
+from src.main.windows_rules_setting import data_compressed_17C1_query
+from src.main.windows_rules_setting import web_service_18A1_query
+from src.main.windows_rules_setting import rundll32_20A1_query
+from src.main.windows_rules_setting import windows_management_instrumentation_event_subscription_20A2_query
+from src.main.windows_rules_setting import pass_the_ticket_20A2_query
+from src.main.windows_rules_setting import windows_remote_management_20B2_query
+from src.main.windows_rules_setting import create_account_20B3_query
 
 taiwan_tz = pytz.timezone("Asia/Taipei")
 
@@ -2341,4 +2376,1181 @@ def service_execution_10A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_ti
       suricata_output["user_data1"] = res
       es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
   logging.info("service_execution_10A1 finished.")
+  return True
+
+def virtualization_evasion_11A3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "Virtualization/Sandbox Evasion - T1497"
+  query_str = virtualization_evasion_11A3_query(es_start_time, es_end_time)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      suricata_output = suricata_output_format()
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["alert"]["category"] = TECHNIQUE
+      suricata_output["alert"]["signature_id"] = int(20210101)
+      suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["user_data1"] = res
+      es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("virtualization_evasion_11A3 finished.")
+  return True
+
+def system_information_discovery_11A4(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "System Information Discovery - T1082"
+  query_str = system_information_discovery_11A4_query(es_start_time, es_end_time)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      if "Win32_ComputerSystem" in res["winlog"]["event_data"]["ScriptBlockText"]:
+        suricata_output = suricata_output_format()
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+        suricata_output["alert"]["category"] = TECHNIQUE
+        suricata_output["alert"]["signature_id"] = int(20210102)
+        suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+        suricata_output["user_data1"] = res
+        es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("system_information_discovery_11A4 finished.")
+  return True
+
+def peripheral_device_discovery_11A5(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "Peripheral Device Discovery - T1120"
+  query_str = peripheral_device_discovery_11A5_query(es_start_time, es_end_time)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      suricata_output = suricata_output_format()
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["alert"]["category"] = TECHNIQUE
+      suricata_output["alert"]["signature_id"] = int(20210103)
+      suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["user_data1"] = res
+      es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("peripheral_device_discovery_11A5 finished.")
+  return True
+
+def system_owner_user_discovery_11A6(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "System Owner/User Discovery - T1033"
+  query_str = system_owner_user_discovery_11A6_query(es_start_time, es_end_time)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      if "Win32_ComputerSystem" in res["winlog"]["event_data"]["ScriptBlockText"]:
+        suricata_output = suricata_output_format()
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+        suricata_output["alert"]["category"] = TECHNIQUE
+        suricata_output["alert"]["signature_id"] = int(20210104)
+        suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+        suricata_output["user_data1"] = res
+        es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("system_owner_user_discovery_11A6 finished.")
+  return True
+
+def system_network_configuration_discovery_11A7(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "System Network Configuration Discovery - T1016"
+  query_str = system_network_configuration_discovery_11A7_query(es_start_time, es_end_time)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      if "Win32_ComputerSystem" in res["winlog"]["event_data"]["ScriptBlockText"]:
+        suricata_output = suricata_output_format()
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+        suricata_output["alert"]["category"] = TECHNIQUE
+        suricata_output["alert"]["signature_id"] = int(20210105)
+        suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+        suricata_output["user_data1"] = res
+        es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("system_network_configuration_discovery_11A7 finished.")
+  return True
+
+def process_discovery_11A8(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "Process Discovery - T1057"
+  query_str = process_discovery_11A8_query(es_start_time, es_end_time)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      suricata_output = suricata_output_format()
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["alert"]["category"] = TECHNIQUE
+      suricata_output["alert"]["signature_id"] = int(20210106)
+      suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["user_data1"] = res
+      es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("process_discovery_11A8 finished.")
+  return True
+
+def file_and_directory_discovery_11A9(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "File and Directory Discovery - T1083"
+  query_str = file_and_directory_discovery_11A9_query(es_start_time, es_end_time)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      suricata_output = suricata_output_format()
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["alert"]["category"] = TECHNIQUE
+      suricata_output["alert"]["signature_id"] = int(20210107)
+      suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["user_data1"] = res
+      es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("file_and_directory_discovery_11A9 finished.")
+  return True
+
+def decode_files_or_information_11A10(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "Deobfuscate/Decode Files or Information - T1140"
+  query_str = decode_files_or_information_11A10_query(es_start_time, es_end_time)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      suricata_output = suricata_output_format()
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["alert"]["category"] = TECHNIQUE
+      suricata_output["alert"]["signature_id"] = int(20210108)
+      suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["user_data1"] = res
+      es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("decode_files_or_information_11A10 finished.")
+  return True
+
+def powershell_11A12(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "Command and Scripting Interpreter: PowerShell - T1059.001"
+  query_str = powershell_11A12_query(es_start_time, es_end_time)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      suricata_output = suricata_output_format()
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["alert"]["category"] = TECHNIQUE
+      suricata_output["alert"]["signature_id"] = int(20210109)
+      suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["user_data1"] = res
+      es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("powershell_11A12 finished.")
+  return True
+
+def commomly_used_port_11A13(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "Commonly Used Port - T1436"
+  WINDOWS_COMMON_PORT_LIST = ["443"]
+  query_str = commomly_used_port_11A13_query(es_start_time, es_end_time)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      if res["winlog"]["event_data"]["DestinationPort"] in WINDOWS_COMMON_PORT_LIST:
+        suricata_output = suricata_output_format()
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+        suricata_output["alert"]["category"] = TECHNIQUE
+        suricata_output["alert"]["signature_id"] = int(20210110)
+        suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+        suricata_output["user_data1"] = res
+        es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("commomly_used_port_11A13 finished.")
+  return True
+
+def standard_application_layer_protocol_11A14(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "Application Layer Protocol - T1071"
+  query_str = standard_application_layer_protocol_11A14_query(es_start_time, es_end_time)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      suricata_output = suricata_output_format()
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["alert"]["category"] = TECHNIQUE
+      suricata_output["alert"]["signature_id"] = int(20210111)
+      suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["user_data1"] = res
+      es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("standard_application_layer_protocol_11A14 finished.")
+  return True
+
+def file_and_directory_discovery_12A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "File and Directory Discovery - T1083"
+  query_str = file_and_directory_discovery_12A1_query(es_start_time, es_end_time)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      suricata_output = suricata_output_format()
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["alert"]["category"] = TECHNIQUE
+      suricata_output["alert"]["signature_id"] = int(20210112)
+      suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["user_data1"] = res
+      es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("file_and_directory_discovery_12A1 finished.")
+  return True
+
+def security_software_discovery_12B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "Software Discovery: Security Software Discovery - T1518.001"
+  query_str = security_software_discovery_12B1_query(es_start_time, es_end_time)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      suricata_output = suricata_output_format()
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["alert"]["category"] = TECHNIQUE
+      suricata_output["alert"]["signature_id"] = int(20210113)
+      suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["user_data1"] = res
+      es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("security_software_discovery_12B1 finished.")
+  return True
+
+def system_information_discovery_13A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "System Information Discovery - T1082"
+  query_str = system_information_discovery_13A1_query(es_start_time, es_end_time)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      if "GetComputerNameEx" in res["winlog"]["event_data"]["ScriptBlockText"]:
+        suricata_output = suricata_output_format()
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+        suricata_output["alert"]["category"] = TECHNIQUE
+        suricata_output["alert"]["signature_id"] = int(20210114)
+        suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+        suricata_output["user_data1"] = res
+        es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("system_information_discovery_13A1 finished.")
+  return True
+
+def system_network_configuration_discovery_13B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "System Network Configuration Discovery - T1016"
+  query_str = system_network_configuration_discovery_13B1_query(es_start_time, es_end_time)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      if "NetWkstaGetInfo" in res["winlog"]["event_data"]["ScriptBlockText"]:
+        suricata_output = suricata_output_format()
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+        suricata_output["alert"]["category"] = TECHNIQUE
+        suricata_output["alert"]["signature_id"] = int(20210115)
+        suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+        suricata_output["user_data1"] = res
+        es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("system_network_configuration_discovery_13B1 finished.")
+  return True
+
+def system_owner_user_discovery_13C1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "System Owner/User Discovery - T1033"
+  query_str = system_owner_user_discovery_13C1_query(es_start_time, es_end_time)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      if "GetUserNameEx" in res["winlog"]["event_data"]["ScriptBlockText"]:
+        suricata_output = suricata_output_format()
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+        suricata_output["alert"]["category"] = TECHNIQUE
+        suricata_output["alert"]["signature_id"] = int(20210116)
+        suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+        suricata_output["user_data1"] = res
+        es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("system_owner_user_discovery_13C1 finished.")
+  return True
+
+def process_discovery_13D1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "Process Discovery - T1057"
+  query_str = process_discovery_13D1_query(es_start_time, es_end_time)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      if "CreateToolhelp32Snapshot" in res["winlog"]["event_data"]["ScriptBlockText"]:
+        suricata_output = suricata_output_format()
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+        suricata_output["alert"]["category"] = TECHNIQUE
+        suricata_output["alert"]["signature_id"] = int(20210117)
+        suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+        suricata_output["user_data1"] = res
+        es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("process_discovery_13D1 finished.")
+  return True
+
+def component_object_model_hijacking_14A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "Event Triggered Execution: Component Object Model Hijacking - T1546.015"
+  query_str = component_object_model_hijacking_14A1_query(es_start_time, es_end_time)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      if "DelegateExecute" in res["winlog"]["event_data"]["ScriptBlockText"]:
+        suricata_output = suricata_output_format()
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+        suricata_output["alert"]["category"] = TECHNIQUE
+        suricata_output["alert"]["signature_id"] = int(20210118)
+        suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+        suricata_output["user_data1"] = res
+        es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("component_object_model_hijacking_14A1 finished.")
+  return True
+
+def bypass_user_accounnt_control_14A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "Abuse Elevation Control Mechanism: Bypass User Access Control - T1548.002"
+  query_str = bypass_user_accounnt_control_14A2_query(es_start_time, es_end_time)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      suricata_output = suricata_output_format()
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["alert"]["category"] = TECHNIQUE
+      suricata_output["alert"]["signature_id"] = int(20210119)
+      suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["user_data1"] = res
+      es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("bypass_user_accounnt_control_14A2 finished.")
+  return True
+
+def modify_registry_14A3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "Modify Registry - T1112"
+  query_str = modify_registry_14A3_query(es_start_time, es_end_time)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      res_scripts = res["winlog"]["event_data"]["ScriptBlockText"]
+      if "HKCU:\\" in res_scripts or "HKEY_CURRENT_USER" in res_scripts:
+        suricata_output = suricata_output_format()
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+        suricata_output["alert"]["category"] = TECHNIQUE
+        suricata_output["alert"]["signature_id"] = int(20210120)
+        suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+        suricata_output["user_data1"] = res
+        es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("modify_registry_14A3 finished.")
+  return True
+
+def process_discovery_14B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "Process Discovery - T1057"
+  query_str = process_discovery_14B2_query(es_start_time, es_end_time)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      if "Get-Process" in res["winlog"]["event_data"]["ScriptBlockText"]:
+        suricata_output = suricata_output_format()
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+        suricata_output["alert"]["category"] = TECHNIQUE
+        suricata_output["alert"]["signature_id"] = int(20210121)
+        suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+        suricata_output["user_data1"] = res
+        es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("process_discovery_14B2 finished.")
+  return True
+
+def system_owner_user_discovery_15A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "System Owner/User Discovery - T1033"
+  query_str = system_owner_user_discovery_15A1_query(es_start_time, es_end_time)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      if "$env:username" in res["winlog"]["event_data"]["ScriptBlockText"]:
+        suricata_output = suricata_output_format()
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+        suricata_output["alert"]["category"] = TECHNIQUE
+        suricata_output["alert"]["signature_id"] = int(20210123)
+        suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+        suricata_output["user_data1"] = res
+        es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("system_owner_user_discovery_15A1 finished.")
+  return True
+
+def remote_system_discovery_16A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "Remote System Discovery - T1018"
+  query_str = remote_system_discovery_16A1_query(es_start_time, es_end_time)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      suricata_output = suricata_output_format()
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["alert"]["category"] = TECHNIQUE
+      suricata_output["alert"]["signature_id"] = int(20210124)
+      suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["user_data1"] = res
+      es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("remote_system_discovery_16A1 finished.")
+  return True
+
+def execution_through_api_16B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "Native API - T1106"
+  query_str = execution_through_api_16B2_query(es_start_time, es_end_time)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      if "Advapi32.dll" in res["winlog"]["event_data"]["ScriptBlockText"]:
+        suricata_output = suricata_output_format()
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+        suricata_output["alert"]["category"] = TECHNIQUE
+        suricata_output["alert"]["signature_id"] = int(20210125)
+        suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+        suricata_output["user_data1"] = res
+        es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("execution_through_api_16B2 finished.")
+  return True
+
+def windows_remote_management_16C1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "Remote Services: Windows Remote Management - T1021.006"
+  query_str = windows_remote_management_16C1_query(es_start_time, es_end_time)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      suricata_output = suricata_output_format()
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["alert"]["category"] = TECHNIQUE
+      suricata_output["alert"]["signature_id"] = int(20210126)
+      suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["user_data1"] = res
+      es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("windows_remote_management_16C1 finished.")
+  return True
+
+def valid_accounts_16C2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "Valid Accounts - T1078"
+  query_str = valid_accounts_16C2_query(es_start_time, es_end_time)
+  SYSTEM_DEFAULT_ACCOUNT = ["SYSTEM", "LOCAL SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE", "UMFD-0", "UMFD-1", "DWM-1"]
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      target_user_name = res["winlog"]["event_data"]["TargetUserName"]
+      if target_user_name not in SYSTEM_DEFAULT_ACCOUNT:
+        if not target_user_name.endswith("$"):
+          suricata_output = suricata_output_format()
+          suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+          suricata_output["alert"]["category"] = TECHNIQUE
+          suricata_output["alert"]["signature_id"] = int(20210127)
+          suricata_output["_log_type"] = "Microsoft-Windows-Security-Auditing"
+          res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+          res_time_timestamp = datetime.timestamp(res_time)
+          suricata_output["log_time"] = tz_convert(res_time_timestamp)
+          suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+          suricata_output["user_data1"] = res
+          es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("valid_accounts_16C2 finished.")
+  return True
+
+def email_collection_17A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "Email Collection - T1114"
+  query_str = email_collection_17A1_query(es_start_time, es_end_time)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      parent_image = res["winlog"]["event_data"]["ParentImage"]
+      if "powershell" in parent_image or "svchost" in parent_image:
+        suricata_output = suricata_output_format()
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+        suricata_output["alert"]["category"] = TECHNIQUE
+        suricata_output["alert"]["signature_id"] = int(20210128)
+        suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+        suricata_output["user_data1"] = res
+        es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("email_collection_17A1 finished.")
+  return True
+
+def data_staged_17B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "Data Staged - T1074"
+  query_str = data_staged_17B2_query(es_start_time, es_end_time)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      suricata_output = suricata_output_format()
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["alert"]["category"] = TECHNIQUE
+      suricata_output["alert"]["signature_id"] = int(20210129)
+      suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["user_data1"] = res
+      es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("data_staged_17B2 finished.")
+  return True
+
+def data_compressed_17C1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "Archive Collected Data - T1560"
+  query_str = data_compressed_17C1_query(es_start_time, es_end_time)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      suricata_output = suricata_output_format()
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["alert"]["category"] = TECHNIQUE
+      suricata_output["alert"]["signature_id"] = int(20210130)
+      suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["user_data1"] = res
+      es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("data_compressed_17C1 finished.")
+  return True
+
+def web_service_18A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "Web Service - T1102"
+  query_str = web_service_18A1_query(es_start_time, es_end_time)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      suricata_output = suricata_output_format()
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["alert"]["category"] = TECHNIQUE
+      suricata_output["alert"]["signature_id"] = int(20210131)
+      suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["user_data1"] = res
+      es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("web_service_18A1 finished.")
+  return True
+
+def rundll32_20A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "Signed Binary Proxy Execution: Rundll32, T1218.011"
+  query_str = rundll32_20A1_query(es_start_time, es_end_time)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      suricata_output = suricata_output_format()
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["alert"]["category"] = TECHNIQUE
+      suricata_output["alert"]["signature_id"] = int(20210132)
+      suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["user_data1"] = res
+      es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("rundll32_20A1 finished.")
+  return True
+
+def windows_management_instrumentation_event_subscription_20A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "Event Triggered Execution: Windows Management Instrumentation Event Subscription, T1546.003"
+  query_str = windows_management_instrumentation_event_subscription_20A2_query(es_start_time, es_end_time)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      suricata_output = suricata_output_format()
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["alert"]["category"] = TECHNIQUE
+      suricata_output["alert"]["signature_id"] = int(20210133)
+      suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["user_data1"] = res
+      es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("windows_management_instrumentation_event_subscription_20A2 finished.")
+  return True
+
+def pass_the_ticket_20A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "Use Alternate Authentication Material: Pass the Ticket - T1550.003"
+  query_str = pass_the_ticket_20A2_query(es_start_time, es_end_time)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      suricata_output = suricata_output_format()
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["alert"]["category"] = TECHNIQUE
+      suricata_output["alert"]["signature_id"] = int(20210134)
+      suricata_output["_log_type"] = "Microsoft-Windows-PowerShell"
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["user_data1"] = res
+      es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("pass_the_ticket_20A2 finished.")
+  return True
+
+def windows_remote_management_20B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "Remote Services: Windows Remote Management - T1021.006"
+  query_str = windows_remote_management_20B2_query(es_start_time, es_end_time)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      suricata_output = suricata_output_format()
+      suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["alert"]["category"] = TECHNIQUE
+      suricata_output["alert"]["signature_id"] = int(20210135)
+      suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
+      res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+      res_time_timestamp = datetime.timestamp(res_time)
+      suricata_output["log_time"] = tz_convert(res_time_timestamp)
+      suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+      suricata_output["user_data1"] = res
+      es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("windows_remote_management_20B2 finished.")
+  return True
+
+def create_account_20B3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time):
+  """
+  Parameters:
+    - es_conn: elasticsearch connection instance
+    - ES_INPUT_INDEX: elasticsearch intput index name
+    - ES_OUTPUT_INDEX: elasticsearch output index name
+    - es_start_time: elasticsearch range query start time
+    - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
+
+  Returns:
+    True
+  """
+  TECHNIQUE = "Create Account, T1136"
+  query_str = create_account_20B3_query(es_start_time, es_end_time)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
+  result_length = result["hits"]["total"]["value"]
+  if result_length > 0:
+    for res in result["hits"]["hits"]:
+      res = res["_source"]
+      if "/user" in res["winlog"]["event_data"]["CommandLine"]:
+        suricata_output = suricata_output_format()
+        suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+        suricata_output["alert"]["category"] = TECHNIQUE
+        suricata_output["alert"]["signature_id"] = int(20210136)
+        suricata_output["_log_type"] = "Microsoft-Windows-Sysmon"
+        res_time = datetime.strptime(res["@timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
+        res_time_timestamp = datetime.timestamp(res_time)
+        suricata_output["log_time"] = tz_convert(res_time_timestamp)
+        suricata_output["@timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
+        suricata_output["user_data1"] = res
+        es_conn.insert_result(ES_OUTPUT_INDEX, suricata_output)
+  logging.info("create_account_20B3 finished.")
   return True
