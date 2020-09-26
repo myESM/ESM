@@ -57,7 +57,7 @@ root hard nofile 655360
 * soft nofile 655360
 * hard nofile 655360' >> /etc/security/limits.conf"
 
-ln -s ../SecBuzzerESM.env ES/.env 2>/dev/nul
+ln -s ../SecBuzzerESM.env Graylog/.env 2>/dev/nul
 ln -s ../SecBuzzerESM.env Fluentd/.env 2>/dev/nul
 ln -s ../SecBuzzerESM.env Suricata/.env 2>/dev/nul
 ln -s ../SecBuzzerESM.env Crontab/.env 2>/dev/nul
