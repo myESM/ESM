@@ -1,4 +1,8 @@
 # Release History
+# V0.5.8 (2020-09-28)
+- 修正 prepare.sh 噴錯
+- 修正 winlogbeat index 不移除問題
+
 # V0.5.7 (2020-09-22)
 - 修正 winlog 模組呼叫失敗
 - 優化 prepare.sh 路徑問題
