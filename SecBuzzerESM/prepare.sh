@@ -10,9 +10,12 @@ shell_path=$(dirname "$BASH_SOURCE")
 command -v docker >/dev/null 2>&1 || { echo >&2 "[*] 請確認是否有安裝 Docker"; exit 1; }
 command -v docker-compose >/dev/null 2>&1 || { echo >&2 "[*] 請確認是否有安裝 Docker-compose"; exit 1; }
 
+echo "[*] Delete All images"
+docker rmi $(docker images -q)
+
 echo "[*] Build & Pull docker images"
-find . -type f -name "docker-compose.yml" -exec docker-compose -f {} build \;
-find . -type f -name "docker-compose.yml" -exec docker-compose -f {} pull \;
+find . -type f -name "docker-compose.yml" -exec docker-compose -f {} --log-level ERROR build \;
+find . -type f -name "docker-compose.yml" -exec docker-compose -f {} --log-level ERROR pull \;
 
 echo [*] Packaging all images
 mkdir -p $shell_path'/envimage'
