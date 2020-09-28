@@ -5,9 +5,11 @@
 
 # 1. Winlogbeat的由來  
 
+[Winlogbeat下載點](https://myspace.iii.org.tw/d/f/578606223698474547) 首先進行Winlogbeat的下載，因為整個操作需要做較多的設定，故可在此下載本篇文章的範例 。
+
+
 簡介：Winlogbeat為ELK開源家族的其中一個工具，其功能為擷取windows上的eventlog，並透過設定winlogbeat.yml檔案，達到收集該主機的log資料，並即時輸出至logstash或是elasticsearch或是其他接收端的目的。
 
-首先可以進行Winlogbeat的下載，因為整個操作需要做較多的設定，故可在此下載本篇文章的範例[Winlogbeat下載點](https://myspace.iii.org.tw/d/f/578606223698474547)  。
 
 下載後為一zip檔案，須先用解壓縮軟體解開，可在解壓後的檔案目錄中看到winlogbeat.exe和winlogbeat.yml等相關檔案，透過在終端機介面中移動到解壓縮後的檔案目錄，然後輸入  
 <font color="red"><b>  winlogbeat.exe -c -e winlogbeat.yml  </b></font>
@@ -82,16 +84,16 @@
 
 	Win10:  C:\Users\Administrator\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
 
+	
+
+
 
 # 2. Sysmon安裝 
 
-[Sysmon程式下載點](https://download.sysinternals.com/files/Sysmon.zip)
+[Sysmon下載點](https://myspace.iii.org.tw/d/f/578608233711713089)
 
-[Sysmon規則下載點](https://github.com/SwiftOnSecurity/sysmon-config)
 
-簡介：Sysmon.exe是一個Microsoft提供的log紀錄工具，其功能為根據”規則”生成windows上的log。此工具可於官網下載，下載後為一個zip檔，於解壓縮後會看到Sysmon.exe，Sysmon64.exe兩隻程式。
-
-接著下載sysmon規則，並將此規則 “sysmonconfig-export.xml” 與 Sysmon64.exe放置於同一資料夾下，接著利用terminal(以系統管理員身分執行)執行如下指令：
+簡介：Sysmon.exe是一個Microsoft提供的log紀錄工具，其功能為根據”規則”生成windows上的log。此工具可於官網下載，下載後為一個zip檔，於解壓縮後會看到Sysmon.exe，Sysmon64.exe兩隻程式，接著利用terminal(以系統管理員身分執行)執行如下指令：
 
 sysmon64 -i sysmonconfig-export.xml 
 
