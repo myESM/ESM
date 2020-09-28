@@ -12,7 +12,7 @@
 
 
 下載後為一zip檔案，須先用解壓縮軟體解開，可在解壓後的檔案目錄中看到winlogbeat.exe和winlogbeat.yml等相關檔案，透過在終端機介面中移動到解壓縮後的檔案目錄，然後輸入  
-<font color="red"><b>  winlogbeat.exe -c -e winlogbeat.yml  </b></font>
+<font color="red"><b>  .\winlogbeat.exe -e -c winlogbeat.yml  </b></font>
 指令，系統即開始作動。
 
 
@@ -28,14 +28,17 @@
 
 進入Winlogbeat目錄後，首先編修winlogbeat.yml，編輯後如下 <b>（此範例收錄在上述載點中，也可以根據實際請況進行變更）</b>
 
+	winlogbeat.registry_file: evtx-registry.yml 
+
 	winlogbeat.event_logs:
 	  - name: Security
-
+    	ignore_older: 168h
 	  - name: Microsoft-Windows-Sysmon/Operational
-
+    	ignore_older: 168h
 	  - name: Microsoft-Windows-PowerShell/Operational
-	
-	
+    	ignore_older: 168h
+
+
 	output.elasticsearch:
 	
 	  hosts: ["hostname:9200"]
@@ -45,8 +48,15 @@
 	setup.template.pattern: "winlogbeat-%{+yyyyMMdd}"
 	setup.ilm.enabled: false
 
+	processors:
+	  - add_locale: ~
+
 
 說明：
+
+* winlogbeat.registry_file：紀錄傳送成功的channel的索引位置
+
+* ignore_older：僅傳送多少時間內的資料
 
 * hosts: ["hostname:9200"]：為輸出的ES的位置
 
@@ -58,6 +68,7 @@
 
 * setup.ilm.enabled: false   <font color="red"> (如果不是利用預設index名稱，則需設定) </font>
 
+* add_locale: 增加時區的設定
 
 
 ## 1-2. 註冊Winlogbeat為系統服務，使其開機後可自動執行
