@@ -266,3 +266,17 @@ cat HISTORY.md # 或 more HISTORY.md
 ```
 
 ![images/install_14.png](images/install_14.png)
+
+### 2.8.2 防火牆設定
+
+ESM在運行的階段，需要將告警上傳至雲端，或者進行程式、偵測規則的更新，因此，若在場域中有防火牆的防護，則需要開啟以下幾個網址，以利ESM正常的運作：(階為HTTS，所需之Port為443)
+
+1. https://github.com
+2. https://docker.com
+3. https://hub.docker.com
+4. https://api.esm.secbuzzer.co
+
+
+### 2.8.3 網頁重新導向太多次
+
+若發生網頁「重新導向太多次」的問題，則可以是場域內有設置Proxy，此時請準備場域對外連線的IP，並聯絡ESM工程人員進行白名單的設置
