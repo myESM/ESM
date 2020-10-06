@@ -1,4 +1,12 @@
 # Release History
+# V0.5.9 (2020-09-28)
+- 更新 PacketAnalyze jar 檔
+- 修正 PacketAnalyze log4j 噴錯
+- 修正呼叫 winlog 沒帶時區
+- 修正呼叫 ETA API 的參數錯誤
+- 移除 FluentdCron
+- 暫時移除 Fluentd 收 Log 功能
+
 # V0.5.8 (2020-09-28)
 - 修正 prepare.sh 噴錯
 - 修正 winlogbeat index 不移除問題
