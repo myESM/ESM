@@ -11,11 +11,14 @@ command -v docker >/dev/null 2>&1 || { echo >&2 "[*] 請確認是否有安裝 Do
 command -v docker-compose >/dev/null 2>&1 || { echo >&2 "[*] 請確認是否有安裝 Docker-compose"; exit 1; }
 
 echo "[*] Delete All images"
-docker rmi $(docker images -q)
+docker rmi $(docker images -q) >/dev/null || true
 
 echo "[*] Build & Pull docker images"
-find . -type f -name "docker-compose.yml" -exec docker-compose -f {} --log-level ERROR build \;
-find . -type f -name "docker-compose.yml" -exec docker-compose -f {} --log-level ERROR pull \;
+for path in `find . -type f -name "docker-compose.yml"`
+do
+docker-compose -f $path --log-level ERROR build
+docker-compose -f $path --log-level ERROR pull
+done
 
 echo [*] Packaging all images
 mkdir -p $shell_path'/envimage'
@@ -26,7 +29,7 @@ mkdir -p $shell_path'/ES/grafana_plugins'
 git -C $shell_path'/ES/grafana_plugins/' clone https://github.com/grafana/piechart-panel.git --branch release-$GRAFANA_PIE_CHART_VERSION 
 
 echo [*] Download docker
-wget https://download.docker.com/linux/static/stable/x86_64/docker-$DOCKER_VERSION.tgz -P $shell_path'/envimage/'
+curl -s --fail --show-error -L https://download.docker.com/linux/static/stable/x86_64/docker-$DOCKER_VERSION.tgz -o $shell_path"envimage/docker-$DOCKER_VERSION.tgz"
 
 echo [*] Download docker-compose
-curl -L "https://github.com/docker/compose/releases/download/$COMPOSE_VERSION/docker-compose-Linux-x86_64" -o $shell_path'/envimage/docker-compose'
+curl -s --fail --show-error -L "https://github.com/docker/compose/releases/download/$COMPOSE_VERSION/docker-compose-Linux-x86_64" -o $shell_path'/envimage/docker-compose'

@@ -10,6 +10,7 @@ services:
       - ./Packet_analyze/CICFlowMeter.jar:/CICFlowMeter.jar
       - ./Packet_analyze/libjnetpcap.so:/usr/local/openjdk-11/lib/libjnetpcap.so
       - ./Packet_analyze/libpcap.so.1.9.1:/usr/local/openjdk-11/lib/libpcap.so.0.8
+      - ./Packet_analyze/log4j2.xml:/log4j2.xml
     environment:
       - "ES_IP=localhost"
       - "ES_PORT=19200"
@@ -18,7 +19,7 @@ services:
       - "NETWORK_INTERFACE=$IF_NAME"
       - "WRITE_TO_CSV=FALSE"
       - "BULK_WRITE_LEN=10"
-    command: "java -jar /CICFlowMeter.jar"
+    command: "java -Dlog4j.configurationFile=/log4j2.xml -jar /CICFlowMeter.jar -Xmx3g"
 
   # OMP:
   #   image: csti/omp:v1
