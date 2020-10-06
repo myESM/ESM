@@ -13,23 +13,8 @@ services:
             - 515:515/udp
         volumes:
             - "$FLUENTD_BUFFER_PATH:/fluentd/Buffers"
-            - "./conf:/fluentd/etc"
+            - "./conf/suricata.conf:/fluentd/etc/fluent.conf"
             - "/usr/share/zoneinfo/ROC:/etc/localtime:ro" 
             - "$SURICATA_LOG_PATH:/fluentd/suricata/"
         network_mode: host
-        restart: always
-    cron:
-        image: csti/cron:FluentdCron
-        build:
-            context: "./cron_image/"
-            dockerfile: "Dockerfile"
-        volumes:
-            - "/usr/share/zoneinfo/ROC:/etc/localtime:ro"
-            - "./cron_image/simple-cron:/etc/cron.d/simple-cron"
-            - "./cron_image/docker-entrypoint.sh:/docker-entrypoint.sh"
-            - "$FLUENTD_BUFFER_PATH/Logs/:/Logs/"
-            - "./cron_image/reboot.sh:/script/reboot.sh"
-            - "./cron_image/daily.sh:/script/daily.sh"
-            - "./cron_image/monthly.sh:/script/monthly.sh"
-        network_mode: "host"
         restart: always
