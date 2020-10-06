@@ -5,8 +5,6 @@ services:
         build:
             context: "./fluentd_image/"
             dockerfile: "Dockerfile"
-        depends_on:
-            - cron
         ports:
             - 24224:24224
             - 514:514/udp
