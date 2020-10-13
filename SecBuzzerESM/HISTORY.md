@@ -1,4 +1,9 @@
 # Release History
+
+# V0.6.0 (2020-10-13)
+- 新增每日測試 Suricata rule
+- 修正 Daily.sh 無法移除 malware & winlog
+
 # V0.5.9 (2020-09-28)
 - 更新 PacketAnalyze jar 檔
 - 修正 PacketAnalyze log4j 噴錯
