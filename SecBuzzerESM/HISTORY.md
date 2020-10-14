@@ -1,4 +1,8 @@
 # Release History
+# V0.7.0 (2020-10-14)
+- 調整清除 Cron Log 時間為每月一次
+- 新增 Suricata Checker
+- 優化 Crontab container 大小
 
 # V0.6.0 (2020-10-13)
 - 新增每日測試 Suricata rule
