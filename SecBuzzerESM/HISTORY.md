@@ -1,4 +1,6 @@
 # Release History
+# V0.6.1 (2020-10-15)
+- fluen.conf 新增 pipeline 設置
 
 # V0.6.0 (2020-10-13)
 - 新增每日測試 Suricata rule
