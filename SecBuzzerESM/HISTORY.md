@@ -1,4 +1,7 @@
 # Release History
+# V0.6.2 (2020-10-21)
+- 更新 PacketAnalyze jar 檔
+
 # V0.6.1 (2020-10-15)
 - fluen.conf 新增 pipeline 設置
 
