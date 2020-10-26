@@ -1,4 +1,7 @@
 # Release History
+# V0.7.3 (2020-10-26)
+- 更新 ETA Training
+
 # V0.7.2 (2020-10-26)
 - 更新 PacketAnalyze jar 檔
 
