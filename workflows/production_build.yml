@@ -1,0 +1,33 @@
+name: Production
+on:
+  push:
+    tags:
+    - 'v*'
+
+jobs:
+  production-job:
+    name: Build ESM
+    runs-on: [self-hosted, Linux, X64, production]
+    steps:
+    - name: Clean All
+      uses: AutoModality/action-clean@v1
+
+    - name: Clone
+      uses: actions/checkout@v2
+      with:
+        ref: production
+
+    - uses: olegtarasov/get-tag@v2
+      id: tagName
+    
+    - name: Build
+      run: | 
+        chmod +x SecBuzzerESM/prepare.sh
+        ./SecBuzzerESM/prepare.sh
+
+    - name: Packing
+      run: |
+        echo ${GIT_TAG_NAME} > .build_info
+        mkdir -p /Release/${GIT_TAG_NAME}/
+        tar zcvf SecBuzzerESM.tgz SecBuzzerESM
+        mv SecBuzzerESM.tgz /Release/${GIT_TAG_NAME}/SecBuzzerESM_${GIT_TAG_NAME}.tgz

@@ -17,7 +17,6 @@ services:
       - "/etc/hostname:/hostname:ro"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - ../SecBuzzerESM.env:/.env:ro
-    # command: tail -f /etc/hostname
     networks:
       - esm
     restart: always
