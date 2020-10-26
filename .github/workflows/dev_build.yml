@@ -14,8 +14,10 @@ jobs:
 
     - name: Clean all images
       run: |
-        docker rmi $(docker images -q)
+        docker rmi -f $(docker images -q) | true
+        echo "Dir"
         echo `ls -l`
+        echo "Images"
         echo docker images
 
     - name: Clone
