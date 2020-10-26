@@ -29,7 +29,7 @@ mkdir -p $shell_path'/ES/grafana_plugins'
 git -C $shell_path'/ES/grafana_plugins/' clone https://github.com/grafana/piechart-panel.git --branch release-$GRAFANA_PIE_CHART_VERSION 
 
 echo [*] Download docker
-curl -s --fail --show-error -L https://download.docker.com/linux/static/stable/x86_64/docker-$DOCKER_VERSION.tgz -o $shell_path"envimage/docker-$DOCKER_VERSION.tgz"
+curl -s --fail --show-error -L https://download.docker.com/linux/static/stable/x86_64/docker-$DOCKER_VERSION.tgz -o $shell_path"/envimage/docker-$DOCKER_VERSION.tgz"
 
 echo [*] Download docker-compose
 curl -s --fail --show-error -L "https://github.com/docker/compose/releases/download/$COMPOSE_VERSION/docker-compose-Linux-x86_64" -o $shell_path'/envimage/docker-compose'
