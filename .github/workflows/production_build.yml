@@ -11,6 +11,12 @@ jobs:
     steps:
     - name: Clean All
       uses: AutoModality/action-clean@v1
+      
+    - name: Clean all images
+      run: |
+        docker rmi $(docker images -q)
+        echo `ls -l`
+        echo docker images
 
     - name: Clone
       uses: actions/checkout@v2
@@ -31,3 +37,10 @@ jobs:
         mkdir -p /Release/${GIT_TAG_NAME}/
         tar zcvf SecBuzzerESM.tgz SecBuzzerESM
         mv SecBuzzerESM.tgz /Release/${GIT_TAG_NAME}/SecBuzzerESM_${GIT_TAG_NAME}.tgz
+
+    - name: Clean all file
+      uses: AutoModality/action-clean@v1
+
+    - name: Clean all images
+      run: |
+        docker rmi $(docker images -q)
