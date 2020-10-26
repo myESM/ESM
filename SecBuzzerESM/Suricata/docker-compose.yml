@@ -38,7 +38,7 @@ services:
       ORG_1_CODE: "test"
       ORG_2_CODE: "test"
       ORG_3_CODE: $ORG_3_CODE
-      DEV: "True"
+      DEV: "False"
   
   suricata_checker:
     image: csti/suricata_checker:latest
