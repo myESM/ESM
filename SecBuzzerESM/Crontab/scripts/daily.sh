@@ -1,8 +1,5 @@
 #/bin/bash
 
-# Daily remove cron.log
-echo > /var/log/cron.log
-
 # Auto remove eve-yyyy-mm-dd.json
 rm /suricata_log/eve-`date -d "-7 days" "+%Y-%m-%d"`.json 2>/dev/null
 echo "[*] remove eve-`date -d "-7 days" "+%Y-%m-%d"`.json"

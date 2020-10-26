@@ -2,12 +2,14 @@ FROM ubuntu:18.04
 MAINTAINER CSTI-Chenghan Lin
 
 # Install cron & Python
-RUN apt-get update \
-  && apt-get install -y cron curl rsync
+# RUN apt-get update \
+#   && apt-get install -y cron curl rsync jq
  
 COPY requirement.txt /requirement.txt
 
 RUN set -ex \
+    && apt-get update \
+    && apt-get install --no-install-recommends -y  cron curl rsync jq \
     && apt-get install -y python3-pip python3-dev \
     && cd /usr/local/bin \
     && ln -s /usr/bin/python3 python \
