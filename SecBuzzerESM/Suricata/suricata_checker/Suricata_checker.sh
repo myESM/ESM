@@ -15,25 +15,27 @@ set -euo pipefail
 #   _// \\  //   \\  <<   >>  _// \\,-,>> \\,-.<<   >>   //   \\_                 
 #  (__)(__)(_") ("_)(__) (__)(__)(__)\.)   (_/(__) (__) (__)  (__)                
 
+ESIPPORT=localhost:19200
+
 function pexit {
     # https://stackoverflow.com/a/24597941
-    printf '%s\n' "$1" >&2  ## Send message to stderr. Exclude >&2 if you don't want it that way.
+    echo "$1" >> /var/log/cron.log  ## Send message to stderr. Exclude >&2 if you don't want it that way.
     exit "${2-1}"  ## Return a code specified by $2 or 1 by default.
 }
-echo "[*] `date +"%Y-%m-%d %H:%M"` Exec Suricata checker"
+echo "[*] `date +"%Y-%m-%d %H:%M"` Exec Suricata checker" >> /var/log/cron.log
 
 # if Elasticsearch dead then exit
-curl -s --fail --show-error elasticsearch:9200 >> /dev/null || pexit "Elasticsearch maybe dead :(, Bye" $?
+# curl -s --fail --show-error ${ESIPPORT} >> /dev/null || pexit "Elasticsearch maybe dead :(, Bye" $?
 
 # sending test request!
-curl -s --connect-timeout 0.1 111.122.133.144 >> /dev/null || true
+/usr/bin/tcpreplay -i $IF_NAME /image/suricata.pcap
 
 QDATE=`date +"%Y-%m-%dT%H"`
 INDEXDATE=`date +"%Y-%m"`
 n=0
 until [ "$n" -ge 10 ]
 do
-    QUERY_RESULT=`curl -s 'http://elasticsearch:9200/suricata-'${INDEXDATE}'/_search' \
+    QUERY_RESULT=`curl -s 'http://'${ESIPPORT}'/suricata-'${INDEXDATE}'/_search' \
       -H 'Content-Type: application/json' \
       --data-binary '{"query":{"bool":{"must":[{"range":{"@timestamp":{"gt":"'${QDATE}':00:00.000000000+08:00","lt":"'${QDATE}':59:59.999999999+08:00"}}}],"must_not":[],"should":[]}},"from":0,"size":1,"sort":[],"aggs":{}}' \
       --compressed \
@@ -46,6 +48,5 @@ do
     n=$((n+1)) 
     sleep 60
 done
-echo "[*] `date +"%Y-%m-%d %H:%M"` Suricata is dead, restart suricata"
+echo "[*] `date +"%Y-%m-%d %H:%M"` Suricata is dead, restart suricata" >> /var/log/cron.log
 curl -XPOST --unix-socket /var/run/docker.sock http://localhost/containers/suricata/restart
-

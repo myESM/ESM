@@ -57,10 +57,10 @@ default-log-dir: /var/log/suricata/
 
 # global stats configuration
 stats:
-  enabled: no
+  enabled: yes
   # The interval field (in seconds) controls at what interval
   # the loggers are invoked.
-  interval: 8
+  interval: 300
   # Add decode events as stats.
   #decoder-events: true
   # Decoder event prefix in stats. Has been 'decoder' before, but that leads
@@ -411,12 +411,12 @@ outputs:
 
   # Stats.log contains data from various counters of the Suricata engine.
   - stats:
-      enabled: no
+      enabled: yes
       filename: stats.log
       append: yes       # append to file (yes) or overwrite it (no)
       totals: yes       # stats for all threads merged together
       threads: no       # per thread stats
-      #null-values: yes  # print counters that have value 0
+      null-values: yes  # print counters that have value 0
 
   # a line based alerts log similar to fast.log into syslog
   - syslog:
