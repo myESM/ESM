@@ -1,4 +1,16 @@
 # Release History
+# V0.7.1 (2020-10-26)
+- 新增 Suricata_stats_dumper
+- 獨立 Suricata_Checker (tcpreplay) & 優化 Image 大小
+- 移除舊版 Suricata_checker
+- 新增輸出 suricata stats.log 到 /opt/Logs/Suricata/stats.log
+- Crontab 新增每週移除 stats.log
+
+# V0.7.0 (2020-10-14)
+- 調整清除 Cron Log 時間為每月一次
+- 新增 Suricata Checker
+- 優化 Crontab container 大小
+
 # V0.6.1 (2020-10-15)
 - fluen.conf 新增 pipeline 設置
 
