@@ -9,14 +9,6 @@ jobs:
     name: Build ESM
     runs-on: [self-hosted, Linux, X64, production]
     steps:
-    - name: Clean all images
-      run: |
-        docker rmi -f $(docker images -q)
-        echo "Dir"
-        echo `ls -l`
-        echo "Images"
-        docker images
-
     - name: Clean All
       uses: AutoModality/action-clean@v1
       
