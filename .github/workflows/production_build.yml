@@ -11,6 +11,12 @@ jobs:
     steps:
     - name: Clean All
       uses: AutoModality/action-clean@v1
+      
+    - name: Clean all images
+      run: |
+        docker rmi $(docker images -q)
+        echo `ls -l`
+        echo docker images
 
     - name: Clone
       uses: actions/checkout@v2
