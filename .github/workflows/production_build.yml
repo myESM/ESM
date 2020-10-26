@@ -9,9 +9,6 @@ jobs:
     name: Build ESM
     runs-on: [self-hosted, Linux, X64, production]
     steps:
-    - name: Clean All
-      uses: AutoModality/action-clean@v1
-      
     - name: Clean all images
       run: |
         docker rmi -f $(docker images -q)
@@ -20,6 +17,9 @@ jobs:
         echo "Images"
         docker images
 
+    - name: Clean All
+      uses: AutoModality/action-clean@v1
+      
     - name: Clone
       uses: actions/checkout@v2
       with:
