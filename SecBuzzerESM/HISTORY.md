@@ -1,9 +1,63 @@
 # Release History
+# V0.7.2 (2020-10-26)
+- 更新 PacketAnalyze jar 檔
+
+# V0.7.1 (2020-10-26)
+- 新增 Suricata_stats_dumper
+- 獨立 Suricata_Checker (tcpreplay) & 優化 Image 大小
+- 移除舊版 Suricata_checker
+- 新增輸出 suricata stats.log 到 /opt/Logs/Suricata/stats.log
+- Crontab 新增每週移除 stats.log
+
+# V0.7.0 (2020-10-14)
+- 調整清除 Cron Log 時間為每月一次
+- 新增 Suricata Checker
+- 優化 Crontab container 大小
+
+# V0.6.1 (2020-10-15)
+- fluen.conf 新增 pipeline 設置
+
+# V0.6.0 (2020-10-13)
+- 新增每日測試 Suricata rule
+- 修正 Daily.sh 無法移除 malware & winlog
+
+# V0.5.9 (2020-09-28)
+- 更新 PacketAnalyze jar 檔
+- 修正 PacketAnalyze log4j 噴錯
+- 修正呼叫 winlog 沒帶時區
+- 修正呼叫 ETA API 的參數錯誤
+- 移除 FluentdCron
+- 暫時移除 Fluentd 收 Log 功能
+
+# V0.5.8 (2020-09-28)
+- 修正 prepare.sh 噴錯
+- 修正 winlogbeat index 不移除問題
+
+# V0.5.7 (2020-09-22)
+- 修正 winlog 模組呼叫失敗
+- 優化 prepare.sh 路徑問題
+
+# V0.5.6 (2020-09-17)
+- 修正EsmEdgeApp.jar內runCheckDataForDay的重送資料
+
+# V0.5.5 (2020-09-16)
+- 修正使用 Upgrade_ESM.py 時同版本時跳出錯誤
+- 優化 Upgrade_ESM.py 邏輯, 更新失敗時不會蓋掉版本號
+- 優化 Docker 更新過程, 清除環境變數帶來的 WARNING
+- 優化 Install.sh, 清除環境變數帶來的 WARNING
+
+# V0.5.4 (2020-09-15)
+- 修正 Upgrade_ESM.py 預設的讀取路徑
+
+# V0.5.3 (2020-09-15)
+- 更新WEB/docker-compose.yml
+- 指定時區為台北時間
+
 # V0.5.2 (2020-09-11)
 - 更新EsmEdgeApp.jar
 
 # V0.5.1 (2020-09-11)
-- 修正 Update_ESM.py 版本判斷
+- 修正 Upgrade_ESM.py 版本判斷
 - 增加對版本的防呆機制、若無法讀取版本則提示完整更新
 
 # V0.5.0 (2020-09-10)

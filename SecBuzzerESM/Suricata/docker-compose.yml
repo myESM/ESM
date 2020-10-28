@@ -20,3 +20,38 @@ services:
       - ./suricata/dist/suricata.yaml:/etc/suricata/suricata.yaml
       - "/usr/share/zoneinfo/ROC:/etc/localtime:ro"
       - "./suricata/iprep:/etc/suricata/iprep"
+
+  stats_dumper:
+    image: csti/stats_dumper:latest
+    container_name: suricata_stats_dumper
+    restart: always
+    build:
+      context: "./stats_dumper/"
+      dockerfile: "Dockerfile"    
+    command: "python3 -u /main.py"
+    volumes:
+      - "/etc/hostname:/HOSTNAME:ro"
+      - "./stats_dumper/main.py:/main.py"
+      - "$SURICATA_LOG_PATH:/var/log/suricata"
+    environment:
+      ESM_API: $API_KEY_VALUE
+      ORG_1_CODE: "test"
+      ORG_2_CODE: "test"
+      ORG_3_CODE: $ORG_3_CODE
+      DEV: "True"
+  
+  suricata_checker:
+    image: csti/suricata_checker:latest
+    restart: always
+    container_name: suricata_checker
+    network_mode: host
+    build:
+      context: "./suricata_checker/"
+      dockerfile: "Dockerfile"
+    environment:
+      - IF_NAME=$IF_NAME
+    volumes:
+      - "./suricata_checker:/image"
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "/usr/share/zoneinfo/ROC:/etc/localtime:ro"
+    

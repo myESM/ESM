@@ -11,6 +11,7 @@ services:
       - ./EsmEdgeApp.jar:/EsmEdgeApp.jar
       - ./location.properties:/location.properties
     environment:
+      TZ: Asia/Taipei
       INTERFACE_NAME: $WEB_IF_NAME
       API_KEY_VALUE: $API_KEY_VALUE
       ORG_3_CODE: $ORG_3_CODE
