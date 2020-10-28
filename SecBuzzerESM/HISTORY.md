@@ -1,4 +1,12 @@
 # Release History
+# V0.8.0 (2020-10-28)
+- 修正無移除 winlogbeat Index 
+- 修正 Cron 執行腳本沒輸出 Log
+- 修正 Suricata_Checker 誤判問題
+- 新增 packetbeat
+- 新增 ES pipline for packetbeat
+- 新增每月移除 Sricata_checker Logs
+
 # V0.7.3 (2020-10-26)
 - 更新 ETA Training
 

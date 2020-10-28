@@ -1,0 +1,17 @@
+version: "3.3"
+
+services:
+  cron:
+    image: docker.elastic.co/beats/packetbeat-oss:7.9.3
+    container_name: packetbeat
+    volumes:
+      - "/usr/share/zoneinfo/ROC:/etc/localtime:ro"
+      - "./packetbeat.docker.yml:/usr/share/packetbeat/packetbeat.yml:ro"
+    environment:
+      - IF_NAME=$IF_NAME
+      - ELASTICSEARCH_HOSTS=localhost:19200
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    restart: always
+    network_mode: host

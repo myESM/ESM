@@ -37,9 +37,10 @@ until [ "$n" -ge 10 ]
 do
     QUERY_RESULT=`curl -s 'http://'${ESIPPORT}'/suricata-'${INDEXDATE}'/_search' \
       -H 'Content-Type: application/json' \
-      --data-binary '{"query":{"bool":{"must":[{"range":{"@timestamp":{"gt":"'${QDATE}':00:00.000000000+08:00","lt":"'${QDATE}':59:59.999999999+08:00"}}}],"must_not":[],"should":[]}},"from":0,"size":1,"sort":[],"aggs":{}}' \
+      --data-binary '{"query":{"bool":{"must":[{"term":{"alert.signature_id":"66778899"}},{"range":{"@timestamp":{"gt":"'${QDATE}':00:00.000000000+08:00","lt":"'${QDATE}':59:59.999999999+08:00"}}}],"must_not":[],"should":[]}},"from":0,"size":10,"sort":[],"aggs":{}}' \
       --compressed \
       --insecure | jq '.["hits"]["total"]["value"]'`
+    echo "[*] Try times: $((n+1))" >> /var/log/cron.log
     if [ ${QUERY_RESULT} == 'null' ]
     then 
     QUERY_RESULT=0
