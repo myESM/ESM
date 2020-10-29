@@ -107,10 +107,9 @@ from src.main.windows_rules import windows_remote_management_20B2
 from src.main.windows_rules import create_account_20B3
 
 #loginng setting
-LOG_FILENAME = datetime.now().strftime("output-%Y-%m-%d_%H_%M_%S.log")
+#LOG_FILENAME = datetime.now().strftime("output-%Y-%m-%d_%H_%M_%S.log")
 logging.basicConfig(level=logging.INFO,
-                    format='%(asctime)s - %(levelname)s : %(message)s',
-                    filename=LOG_FILENAME)
+                    format='%(asctime)s - %(levelname)s : %(message)s')
 
 # loading config parameter
 config = configparser.ConfigParser()
