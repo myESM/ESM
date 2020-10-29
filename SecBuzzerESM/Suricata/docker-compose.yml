@@ -51,7 +51,7 @@ services:
     environment:
       - IF_NAME=$IF_NAME
     volumes:
-      - "./suricata_checker:/image"
+      - "./suricata_checker:/image:ro"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "/usr/share/zoneinfo/ROC:/etc/localtime:ro"
     
