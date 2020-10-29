@@ -1,4 +1,7 @@
 # Release History
+# V0.8.1 (2020-10-29)
+- Fix ETA path
+
 # V0.8.0 (2020-10-28)
 - 修正無移除 winlogbeat Index 
 - 修正 Cron 執行腳本沒輸出 Log
