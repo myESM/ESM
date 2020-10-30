@@ -117,7 +117,6 @@ def suricata_output_format():
   """
   Parameters:
     NULL
-
   Returns:
     Suricata output format dictonary
   """
@@ -186,7 +185,6 @@ def user_execution_1A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -198,11 +196,11 @@ def user_execution_1A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
     if result_length > 0:
       for res in result["hits"]["hits"]:
         res = res["_source"]
-        res_hashes = res["winlog"]["event_data"]["Hashes"]
-        # ToDo: virustotal API
-        res_md5 = res_hashes.split(",")[0].split("=")[1]
-        res_sha256 = res_hashes.split(",")[1].split("=")[1]
-        res_imphash = res_hashes.split(",")[2].split("=")[1]
+        # res_hashes = res["winlog"]["event_data"]["Hashes"]
+        # # ToDo: virustotal API
+        # res_md5 = res_hashes.split(",")[0].split("=")[1]
+        # res_sha256 = res_hashes.split(",")[1].split("=")[1]
+        # res_imphash = res_hashes.split(",")[2].split("=")[1]
 
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
@@ -226,7 +224,6 @@ def masquerading_1A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -238,7 +235,7 @@ def masquerading_1A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es
     if result_length > 0:
       for res in result["hits"]["hits"]:
         res = res["_source"]
-        if "\u202e" in res["winlog"]["event_data"]["Image"]:
+        if "\u202e" in res.get("winlog").get("event_data").get("Image"):
           suricata_output = suricata_output_format()
           suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
           suricata_output["alert"]["category"] = TECHNIQUE
@@ -261,7 +258,6 @@ def non_standard_port_1A3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_tim
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -273,7 +269,8 @@ def non_standard_port_1A3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_tim
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if res["winlog"]["event_data"]["DestinationPort"] not in WINDOWS_COMMON_PORT_LIST:
+      if res.get("winlog").get("event_data").get("DestinationPort") not in WINDOWS_COMMON_PORT_LIST:
+      # if res["winlog"]["event_data"]["DestinationPort"] not in WINDOWS_COMMON_PORT_LIST:
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -296,7 +293,6 @@ def command_line_interface_1B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_star
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -329,7 +325,6 @@ def powershell_1B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_e
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -362,7 +357,6 @@ def file_and_directory_discovery_2A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -395,7 +389,6 @@ def automated_collection_2A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -428,7 +421,6 @@ def data_from_local_system_2A3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_star
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -461,7 +453,6 @@ def data_compressed_2A4(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time,
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -494,7 +485,6 @@ def data_staged_2A5(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -505,9 +495,9 @@ def data_staged_2A5(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Compress-Archive" in res["winlog"]["event_data"]["ScriptBlockText"]:
-        if "-DestinationPath" in res["winlog"]["event_data"]["ScriptBlockText"]:
-          if ".zip" in res["winlog"]["event_data"]["ScriptBlockText"]:
+      if "Compress-Archive" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+        if "-DestinationPath" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+          if ".zip" in res.get("winlog").get("event_data").get("ScriptBlockText"):
             suricata_output = suricata_output_format()
             suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
             suricata_output["alert"]["category"] = TECHNIQUE
@@ -530,7 +520,6 @@ def remote_file_copy_3A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -563,7 +552,6 @@ def obfuscated_files_or_information_3A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -596,7 +584,6 @@ def component_object_model_hijacking_3B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDE
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -629,7 +616,6 @@ def bypass_user_accounnt_control_3B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -662,7 +648,6 @@ def commomly_used_port_3B3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_ti
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -674,7 +659,7 @@ def commomly_used_port_3B3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_ti
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if res["winlog"]["event_data"]["DestinationPort"] in WINDOWS_COMMON_PORT_LIST:
+      if res.get("winlog").get("event_data").get("DestinationPort") in WINDOWS_COMMON_PORT_LIST:
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -697,7 +682,6 @@ def standard_application_layer_protocol_3B4(es_conn, ES_INPUT_INDEX, ES_OUTPUT_I
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -730,7 +714,6 @@ def modify_registry_3C1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time,
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -741,7 +724,7 @@ def modify_registry_3C1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time,
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      res_scripts = res["winlog"]["event_data"]["ScriptBlockText"]
+      res_scripts = res.get("winlog").get("event_data").get("ScriptBlockText")
       if "HKCU:\\" in res_scripts or "HKEY_CURRENT_USER" in res_scripts:
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
@@ -765,7 +748,6 @@ def remote_file_copy_4A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -798,7 +780,6 @@ def powershell_4A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_e
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -831,7 +812,6 @@ def decode_files_or_information_4A3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -864,7 +844,6 @@ def process_discovery_4B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_tim
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -897,7 +876,6 @@ def file_deletion_4B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -908,7 +886,7 @@ def file_deletion_4B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "CommandLine" in res["winlog"]["event_data"]:
+      if "CommandLine" in res.get("winlog").get("event_data"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -931,7 +909,6 @@ def file_deletion_4B3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -942,7 +919,7 @@ def file_deletion_4B3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "CommandLine" in res["winlog"]["event_data"]:
+      if "CommandLine" in res.get("winlog").get("event_data"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -965,7 +942,6 @@ def file_deletion_4B4(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -976,7 +952,7 @@ def file_deletion_4B4(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "CommandLine" in res["winlog"]["event_data"]:
+      if "CommandLine" in res.get("winlog").get("event_data"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -999,7 +975,6 @@ def file_and_directory_discovery_4C1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -1032,7 +1007,6 @@ def system_owner_or_user_discovery_4C2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX,
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -1065,7 +1039,6 @@ def system_information_discovery_4C3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -1076,7 +1049,7 @@ def system_information_discovery_4C3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "$env:COMPUTERNAME" in res["winlog"]["event_data"]["ScriptBlockText"]:
+      if "$env:COMPUTERNAME" in res.get("winlog").get("event_data").get("ScriptBlockText"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -1099,7 +1072,6 @@ def system_network_configuration_discovery_4C4(es_conn, ES_INPUT_INDEX, ES_OUTPU
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -1110,7 +1082,7 @@ def system_network_configuration_discovery_4C4(es_conn, ES_INPUT_INDEX, ES_OUTPU
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "$env:USERDOMAIN" in res["winlog"]["event_data"]["ScriptBlockText"]:
+      if "$env:USERDOMAIN" in res.get("winlog").get("event_data").get("ScriptBlockText"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -1133,7 +1105,6 @@ def process_discovery_4C5(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_tim
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -1166,7 +1137,6 @@ def system_information_discovery_4C6(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -1177,7 +1147,7 @@ def system_information_discovery_4C6(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Win32_OperatingSystem" in res["winlog"]["event_data"]["ScriptBlockText"]:
+      if "Win32_OperatingSystem" in res.get("winlog").get("event_data").get("ScriptBlockText"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -1200,7 +1170,6 @@ def security_software_discovery_4C7(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -1211,7 +1180,7 @@ def security_software_discovery_4C7(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "AntiVirusProduct" in res["winlog"]["event_data"]["ScriptBlockText"]:
+      if "AntiVirusProduct" in res.get("winlog").get("event_data").get("ScriptBlockText"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -1234,7 +1203,6 @@ def security_software_discovery_4C8(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -1245,7 +1213,7 @@ def security_software_discovery_4C8(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "FireWallProduct" in res["winlog"]["event_data"]["ScriptBlockText"]:
+      if "FireWallProduct" in res.get("winlog").get("event_data").get("ScriptBlockText"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -1268,7 +1236,6 @@ def permission_groups_discovery_4C9(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -1279,7 +1246,7 @@ def permission_groups_discovery_4C9(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Invoke-NetUserGetGroups" in res["winlog"]["event_data"]["ScriptBlockText"]:
+      if "Invoke-NetUserGetGroups" in res.get("winlog").get("event_data").get("ScriptBlockText"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -1302,7 +1269,6 @@ def execution_through_api_4C10(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_star
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -1313,7 +1279,7 @@ def execution_through_api_4C10(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_star
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Netapi32.dll" in res["winlog"]["event_data"]["ScriptBlockText"]:
+      if "Netapi32.dll" in res.get("winlog").get("event_data").get("ScriptBlockText"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -1336,7 +1302,6 @@ def permission_groups_discovery_4C11(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -1347,7 +1312,7 @@ def permission_groups_discovery_4C11(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Invoke-NetUserGetLocalGroups" in res["winlog"]["event_data"]["ScriptBlockText"]:
+      if "Invoke-NetUserGetLocalGroups" in res.get("winlog").get("event_data").get("ScriptBlockText"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -1370,7 +1335,6 @@ def execution_through_api_4C12(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_star
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -1381,7 +1345,7 @@ def execution_through_api_4C12(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_star
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Netapi32.dll" in res["winlog"]["event_data"]["ScriptBlockText"]:
+      if "Netapi32.dll" in res.get("winlog").get("event_data").get("ScriptBlockText"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -1404,7 +1368,6 @@ def new_service_5A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -1415,7 +1378,7 @@ def new_service_5A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "New-Service" in res["winlog"]["event_data"]["ScriptBlockText"]:
+      if "New-Service" in res.get("winlog").get("event_data").get("ScriptBlockText"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -1438,7 +1401,6 @@ def registry_run_keys_or_startup_folder_5B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_I
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -1449,7 +1411,7 @@ def registry_run_keys_or_startup_folder_5B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_I
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp" in res["winlog"]["event_data"]["TargetFilename"]:
+      if "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp" in res.get("winlog").get("event_data").get("TargetFilename"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -1472,7 +1434,6 @@ def private_keys_6B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -1483,7 +1444,7 @@ def private_keys_6B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if ".pfx" in res["winlog"]["event_data"]["TargetFilename"]:
+      if ".pfx" in res.get("winlog").get("event_data").get("TargetFilename"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -1506,7 +1467,6 @@ def screen_capture_7A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -1517,7 +1477,7 @@ def screen_capture_7A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "CopyFromScreen" in res["winlog"]["event_data"]["ScriptBlockText"]:
+      if "CopyFromScreen" in res.get("winlog").get("event_data").get("ScriptBlockText"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -1540,7 +1500,6 @@ def clipboard_data_7A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -1551,7 +1510,7 @@ def clipboard_data_7A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Get-Clipboard" in res["winlog"]["event_data"]["ScriptBlockText"]:
+      if "Get-Clipboard" in res.get("winlog").get("event_data").get("ScriptBlockText"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -1574,7 +1533,6 @@ def input_capture_7A3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -1585,7 +1543,7 @@ def input_capture_7A3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "GetAsyncKeyState" in res["winlog"]["event_data"]["ScriptBlockText"]:
+      if "GetAsyncKeyState" in res.get("winlog").get("event_data").get("ScriptBlockText"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -1608,7 +1566,6 @@ def data_compressed_7B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time,
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -1619,8 +1576,8 @@ def data_compressed_7B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time,
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Compress-7Zip" in res["winlog"]["event_data"]["ScriptBlockText"]:
-        if ".7z" in res["winlog"]["event_data"]["ScriptBlockText"]:
+      if "Compress-7Zip" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+        if ".7z" in res.get("winlog").get("event_data").get("ScriptBlockText"):
           suricata_output = suricata_output_format()
           suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
           suricata_output["alert"]["category"] = TECHNIQUE
@@ -1643,7 +1600,6 @@ def data_encrypted_7B3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -1654,8 +1610,8 @@ def data_encrypted_7B3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Compress-7Zip" in res["winlog"]["event_data"]["ScriptBlockText"]:
-        if "-Password" in res["winlog"]["event_data"]["ScriptBlockText"]:
+      if "Compress-7Zip" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+        if "-Password" in res.get("winlog").get("event_data").get("ScriptBlockText"):
           suricata_output = suricata_output_format()
           suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
           suricata_output["alert"]["category"] = TECHNIQUE
@@ -1678,7 +1634,6 @@ def remote_system_discovery_8A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_sta
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -1711,7 +1666,6 @@ def windows_remote_management_8A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_s
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -1744,7 +1698,6 @@ def process_discovery_8A3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_tim
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -1755,7 +1708,7 @@ def process_discovery_8A3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_tim
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Get-Process" in res["winlog"]["event_data"]["ScriptBlockText"]:
+      if "Get-Process" in res.get("winlog").get("event_data").get("ScriptBlockText"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -1778,7 +1731,6 @@ def remote_file_copy_8B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -1811,7 +1763,6 @@ def valid_accounts_8C1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -1823,7 +1774,7 @@ def valid_accounts_8C1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      target_user_name = res["winlog"]["event_data"]["TargetUserName"]
+      target_user_name = res.get("winlog").get("event_data").get("TargetUserName")
       if target_user_name not in SYSTEM_DEFAULT_ACCOUNT:
         if not target_user_name.endswith("$"):
           suricata_output = suricata_output_format()
@@ -1848,7 +1799,6 @@ def windows_admin_shares_8C2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -1881,7 +1831,6 @@ def service_execution_8C3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_tim
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -1914,7 +1863,6 @@ def remote_file_copy_9A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -1947,7 +1895,6 @@ def remote_file_copy_9A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -1980,7 +1927,6 @@ def powershell_9B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_e
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -2013,7 +1959,6 @@ def file_and_directory_discovery_9B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -2046,7 +1991,6 @@ def automated_collection_9B3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -2079,7 +2023,6 @@ def data_from_local_system_9B4(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_star
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -2112,7 +2055,6 @@ def data_staged_9B5(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -2123,9 +2065,9 @@ def data_staged_9B5(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Compress-Archive" in res["winlog"]["event_data"]["ScriptBlockText"]:
-        if "-DestinationPath" in res["winlog"]["event_data"]["ScriptBlockText"]:
-          if ".zip" in res["winlog"]["event_data"]["ScriptBlockText"]:
+      if "Compress-Archive" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+        if "-DestinationPath" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+          if ".zip" in res.get("winlog").get("event_data").get("ScriptBlockText"):
             suricata_output = suricata_output_format()
             suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
             suricata_output["alert"]["category"] = TECHNIQUE
@@ -2148,7 +2090,6 @@ def data_encrypted_9B6(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -2159,7 +2100,7 @@ def data_encrypted_9B6(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Rar.exe a" in res["winlog"]["event_data"]["ScriptBlockText"]:
+      if "Rar.exe a" in res.get("winlog").get("event_data").get("ScriptBlockText"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -2182,7 +2123,6 @@ def data_compressed_9B7(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time,
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -2193,7 +2133,7 @@ def data_compressed_9B7(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time,
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Rar.exe" in res["winlog"]["event_data"]["Image"]:
+      if "Rar.exe" in res.get("winlog").get("event_data").get("Image"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -2216,7 +2156,6 @@ def file_deletion_9C1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -2227,7 +2166,7 @@ def file_deletion_9C1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "CommandLine" in res["winlog"]["event_data"]:
+      if "CommandLine" in res.get("winlog").get("event_data"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -2250,7 +2189,6 @@ def file_deletion_9C2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -2261,7 +2199,7 @@ def file_deletion_9C2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "CommandLine" in res["winlog"]["event_data"]:
+      if "CommandLine" in res.get("winlog").get("event_data"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -2284,7 +2222,6 @@ def file_deletion_9C3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -2295,7 +2232,7 @@ def file_deletion_9C3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "CommandLine" in res["winlog"]["event_data"]:
+      if "CommandLine" in res.get("winlog").get("event_data"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -2319,7 +2256,6 @@ def file_deletion_9C4(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -2330,7 +2266,7 @@ def file_deletion_9C4(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "CommandLine" in res["winlog"]["event_data"]:
+      if "CommandLine" in res.get("winlog").get("event_data"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -2353,7 +2289,6 @@ def service_execution_10A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_ti
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -2386,7 +2321,6 @@ def virtualization_evasion_11A3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_sta
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -2419,7 +2353,6 @@ def system_information_discovery_11A4(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, 
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -2430,7 +2363,7 @@ def system_information_discovery_11A4(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, 
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Win32_ComputerSystem" in res["winlog"]["event_data"]["ScriptBlockText"]:
+      if "Win32_ComputerSystem" in res.get("winlog").get("event_data").get("ScriptBlockText"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -2453,7 +2386,6 @@ def peripheral_device_discovery_11A5(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -2486,7 +2418,6 @@ def system_owner_user_discovery_11A6(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -2497,7 +2428,7 @@ def system_owner_user_discovery_11A6(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Win32_ComputerSystem" in res["winlog"]["event_data"]["ScriptBlockText"]:
+      if "Win32_ComputerSystem" in res.get("winlog").get("event_data").get("ScriptBlockText"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -2520,7 +2451,6 @@ def system_network_configuration_discovery_11A7(es_conn, ES_INPUT_INDEX, ES_OUTP
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -2531,7 +2461,7 @@ def system_network_configuration_discovery_11A7(es_conn, ES_INPUT_INDEX, ES_OUTP
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Win32_ComputerSystem" in res["winlog"]["event_data"]["ScriptBlockText"]:
+      if "Win32_ComputerSystem" in res.get("winlog").get("event_data").get("ScriptBlockText"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -2554,7 +2484,6 @@ def process_discovery_11A8(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_ti
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -2587,7 +2516,6 @@ def file_and_directory_discovery_11A9(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, 
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -2620,7 +2548,6 @@ def decode_files_or_information_11A10(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, 
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -2653,7 +2580,6 @@ def powershell_11A12(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -2686,7 +2612,6 @@ def commomly_used_port_11A13(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -2698,7 +2623,7 @@ def commomly_used_port_11A13(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if res["winlog"]["event_data"]["DestinationPort"] in WINDOWS_COMMON_PORT_LIST:
+      if res.get("winlog").get("event_data").get("DestinationPort") in WINDOWS_COMMON_PORT_LIST:
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -2721,7 +2646,6 @@ def standard_application_layer_protocol_11A14(es_conn, ES_INPUT_INDEX, ES_OUTPUT
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -2754,7 +2678,6 @@ def file_and_directory_discovery_12A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, 
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -2787,7 +2710,6 @@ def security_software_discovery_12B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -2820,7 +2742,6 @@ def system_information_discovery_13A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, 
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -2831,7 +2752,7 @@ def system_information_discovery_13A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, 
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "GetComputerNameEx" in res["winlog"]["event_data"]["ScriptBlockText"]:
+      if "GetComputerNameEx" in res.get("winlog").get("event_data").get("ScriptBlockText"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -2854,7 +2775,6 @@ def system_network_configuration_discovery_13B1(es_conn, ES_INPUT_INDEX, ES_OUTP
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -2865,7 +2785,7 @@ def system_network_configuration_discovery_13B1(es_conn, ES_INPUT_INDEX, ES_OUTP
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "NetWkstaGetInfo" in res["winlog"]["event_data"]["ScriptBlockText"]:
+      if "NetWkstaGetInfo" in res.get("winlog").get("event_data").get("ScriptBlockText"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -2888,7 +2808,6 @@ def system_owner_user_discovery_13C1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -2899,7 +2818,7 @@ def system_owner_user_discovery_13C1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "GetUserNameEx" in res["winlog"]["event_data"]["ScriptBlockText"]:
+      if "GetUserNameEx" in res.get("winlog").get("event_data").get("ScriptBlockText"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -2922,7 +2841,6 @@ def process_discovery_13D1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_ti
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -2933,7 +2851,7 @@ def process_discovery_13D1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_ti
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "CreateToolhelp32Snapshot" in res["winlog"]["event_data"]["ScriptBlockText"]:
+      if "CreateToolhelp32Snapshot" in res.get("winlog").get("event_data").get("ScriptBlockText"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -2956,7 +2874,6 @@ def component_object_model_hijacking_14A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_IND
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -2967,7 +2884,7 @@ def component_object_model_hijacking_14A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_IND
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "DelegateExecute" in res["winlog"]["event_data"]["ScriptBlockText"]:
+      if "DelegateExecute" in res.get("winlog").get("event_data").get("ScriptBlockText"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -2990,7 +2907,6 @@ def bypass_user_accounnt_control_14A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, 
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -3023,7 +2939,6 @@ def modify_registry_14A3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -3034,7 +2949,7 @@ def modify_registry_14A3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      res_scripts = res["winlog"]["event_data"]["ScriptBlockText"]
+      res_scripts = res.get("winlog").get("event_data").get("ScriptBlockText")
       if "HKCU:\\" in res_scripts or "HKEY_CURRENT_USER" in res_scripts:
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
@@ -3058,7 +2973,6 @@ def process_discovery_14B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_ti
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -3069,7 +2983,7 @@ def process_discovery_14B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_ti
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Get-Process" in res["winlog"]["event_data"]["ScriptBlockText"]:
+      if "Get-Process" in res.get("winlog").get("event_data").get("ScriptBlockText"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -3092,7 +3006,6 @@ def system_owner_user_discovery_15A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -3103,7 +3016,7 @@ def system_owner_user_discovery_15A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "$env:username" in res["winlog"]["event_data"]["ScriptBlockText"]:
+      if "$env:username" in res.get("winlog").get("event_data").get("ScriptBlockText"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -3126,7 +3039,6 @@ def remote_system_discovery_16A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_st
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -3159,7 +3071,6 @@ def execution_through_api_16B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_star
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -3170,7 +3081,7 @@ def execution_through_api_16B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_star
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Advapi32.dll" in res["winlog"]["event_data"]["ScriptBlockText"]:
+      if "Advapi32.dll" in res.get("winlog").get("event_data").get("ScriptBlockText"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -3193,7 +3104,6 @@ def windows_remote_management_16C1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -3226,7 +3136,6 @@ def valid_accounts_16C2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time,
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -3238,7 +3147,7 @@ def valid_accounts_16C2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time,
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      target_user_name = res["winlog"]["event_data"]["TargetUserName"]
+      target_user_name = res.get("winlog").get("event_data").get("TargetUserName")
       if target_user_name not in SYSTEM_DEFAULT_ACCOUNT:
         if not target_user_name.endswith("$"):
           suricata_output = suricata_output_format()
@@ -3263,7 +3172,6 @@ def email_collection_17A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_tim
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -3274,7 +3182,7 @@ def email_collection_17A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_tim
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      parent_image = res["winlog"]["event_data"]["ParentImage"]
+      parent_image = res.get("winlog").get("event_data").get("ParentImage")
       if "powershell" in parent_image or "svchost" in parent_image:
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
@@ -3298,7 +3206,6 @@ def data_staged_17B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -3331,7 +3238,6 @@ def data_compressed_17C1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -3364,7 +3270,6 @@ def web_service_18A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -3397,11 +3302,10 @@ def rundll32_20A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_en
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
-  TECHNIQUE = "Signed Binary Proxy Execution: Rundll32, T1218.011"
+  TECHNIQUE = "Signed Binary Proxy Execution: Rundll32 - T1218.011"
   query_str = rundll32_20A1_query(es_start_time, es_end_time)
   result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
   result_length = result["hits"]["total"]["value"]
@@ -3430,11 +3334,10 @@ def windows_management_instrumentation_event_subscription_20A2(es_conn, ES_INPUT
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
-  TECHNIQUE = "Event Triggered Execution: Windows Management Instrumentation Event Subscription, T1546.003"
+  TECHNIQUE = "Event Triggered Execution: Windows Management Instrumentation Event Subscription - T1546.003"
   query_str = windows_management_instrumentation_event_subscription_20A2_query(es_start_time, es_end_time)
   result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
   result_length = result["hits"]["total"]["value"]
@@ -3463,7 +3366,6 @@ def pass_the_ticket_20A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -3496,7 +3398,6 @@ def windows_remote_management_20B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
@@ -3529,18 +3430,17 @@ def create_account_20B3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time,
     - ES_OUTPUT_INDEX: elasticsearch output index name
     - es_start_time: elasticsearch range query start time
     - ES_OUes_end_timeTPUT_INDEX: elasticsearch range query end time
-
   Returns:
     True
   """
-  TECHNIQUE = "Create Account, T1136"
+  TECHNIQUE = "Create Account - T1136"
   query_str = create_account_20B3_query(es_start_time, es_end_time)
   result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=1000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "/user" in res["winlog"]["event_data"]["CommandLine"]:
+      if "/user" in res.get("winlog").get("event_data").get("CommandLine"):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
