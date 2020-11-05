@@ -1,4 +1,7 @@
 # Release History
+# V0.7.4 (2020-11-05)
+- Fix RabbitMQ傳輸的中文資訊不為亂碼
+
 # V0.7.3 (2020-10-26)
 - 更新 ETA Training
 
