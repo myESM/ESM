@@ -1,4 +1,7 @@
 # Release History
+# V0.8.2 (2020-11-05)
+- Fix RabbitMQ傳輸的中文資訊不為亂碼
+
 # V0.8.1 (2020-10-29)
 - Fix ETA path
 
