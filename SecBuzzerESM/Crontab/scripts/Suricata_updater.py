@@ -48,9 +48,10 @@ def getApiKey() -> int:
                 else:
                     return None
 
-def tprint(*text):
-    now = datetime.now().strftime("[*] %Y/%m/%d %H:%M:%S ")
-    print(now, ' '.join(str(_) for _ in text))
+old_print = print
+def timestamped_print(*args, **kwargs):
+  old_print("[*]",datetime.now(), os.path.basename(__file__), *args, **kwargs)
+print = timestamped_print
 
 def downloadRulesAndCheck(version:int, path:str='/tmp/rules.tgz'):
     """Download rules file and check md5 hash
@@ -74,7 +75,7 @@ if __name__ == "__main__":
     if esm_api_key:
         header.update({'authorization': esm_api_key})
     else:
-        tprint('ESM API key not found! Bye~')
+        print('ESM API key not found! Bye~')
         sys.exit(1)
     
     try:
@@ -82,11 +83,11 @@ if __name__ == "__main__":
         headers=header, json={'TypeCode': 'it'}).json().get('FileVersion')
         current_rules_version = version_check
     except:
-        tprint('Rule Server Connection fail, Bye!')
+        print('Rule Server Connection fail, Bye!')
         sys.exit(1)
 
     if not current_rules_version: # can't get latest version
-        tprint('Get current rules version fail, Bye~')
+        print('Get current rules version fail, Bye~')
         sys.exit(1)
 
     lv_path = "/tmp/local_rules_version" # local version file path
@@ -97,9 +98,9 @@ if __name__ == "__main__":
         local_rules_version = 0
     
     if current_rules_version != local_rules_version:
-        tprint(f'New version found! rules will update to {current_rules_version}')
+        print(f'New version found! rules will update to {current_rules_version}')
         for i in range(6): 
-            if i: tprint('Rules download fail, Retry',i)  # print retry times
+            if i: print('Rules download fail, Retry',i)  # print retry times
             download_status = downloadRulesAndCheck(current_rules_version)
             if download_status:
                 subprocess.call('mkdir -p /tmp/rules', shell=True)
@@ -107,15 +108,15 @@ if __name__ == "__main__":
                 subprocess.call('chown 1000:1000 /tmp/* -R',shell=True)
                 subprocess.call('rsync -a --delete /tmp/rules /Suricata_rules/',shell=True)
                 subprocess.call('rm -rf /tmp/rules /tmp/rules.tgz',shell=True)
-                tprint('Restarting Suricata')
+                print('Restarting Suricata')
                 time.sleep(3)
                 subprocess.call('curl -XPOST --unix-socket /var/run/docker.sock -H "Content-Type: application/json" http://localhost/containers/suricata/restart',shell=True)
                 subprocess.call('rm /tmp/local_rules_version 2>/dev/null',shell=True)
                 subprocess.call(f'echo {current_rules_version} > /tmp/local_rules_version',shell=True)
-                tprint('Done!')
+                print('Done!')
                 break
             else:
                 continue
         else:
-            tprint('Md5 check fail or file download fail :(')
+            print('Md5 check fail or file download fail :(')
             sys.exit(1)

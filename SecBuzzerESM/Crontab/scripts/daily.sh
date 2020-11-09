@@ -20,5 +20,8 @@ curl -X DELETE "elasticsearch:9200/cic-$cic_remove_date"
 
 winlogbeat_remove_date="$(date -d '-7 days' +%Y%m%d)"
 curl -X DELETE "elasticsearch:9200/winlogbeat-$winlogbeat_remove_date"
+
+packetbeat_remove_date="$(date -d '-7 days' +%Y.%m.%d)"
+curl -X DELETE "elasticsearch:9200/packetbeat-$packetbeat_remove_date"
 echo "[*] Daily check and remove index"
 

@@ -1,4 +1,6 @@
 #!/bin/sh
+set -euo pipefail
+
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
   exit
@@ -63,7 +65,7 @@ ln -s ../SecBuzzerESM.env Suricata/.env 2>/dev/nul
 ln -s ../SecBuzzerESM.env Crontab/.env 2>/dev/nul
 ln -s ../SecBuzzerESM.env WEB/.env 2>/dev/nul
 ln -s ../SecBuzzerESM.env AI/.env 2>/dev/nul
-ln -s ../SecBuzzerESM.env Scan/.env 2>/dev/nul
+ln -s ../SecBuzzerESM.env Packetbeat/.env 2>/dev/nul
 
 API_KEY=`cat SecBuzzerESM.env | grep API_KEY_VALUE | cut -d = -f 2`
 if [ -n "$API_KEY" ]
@@ -85,6 +87,7 @@ mkdir -p /opt/Logs/Fluentd
 mkdir -p /opt/Logs/Buffers
 
 chown 1000 /opt/Logs -R
+chmod go-w ./Packetbeat/packetbeat.docker.yml
 
 rm -rf envimage
-sudo docker network create esm_network 2>/dev/null
+sudo docker network create esm_network 2>/dev/null || true

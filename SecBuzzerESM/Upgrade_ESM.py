@@ -87,9 +87,17 @@ def update():
         # remove all images
         # sys.exit
         # 本次升級需重新設定 SecBuzzerESM.env
+        tprint(f'{bcolors.WARNING}本次升級將會覆蓋 SecBuzzerESM.env, 是否繼續? (y/n)')
+        user_input = input()
+        if user_input.lower() != 'y':
+            sys.exit()
         subprocess.call(f'rsync -a --exclude=HISTORY.md . {ESMPATH}', shell=True)
         subprocess.call('docker rmi -f $(docker images -q) > /dev/null', shell=True)
-        subprocess.call('bash Install.sh', shell=True)
+        ret = subprocess.call('bash Install.sh', shell=True)
+        if ret != 0:
+            tprint(f'{bcolors.FAIL}更新失敗, 請洽 ESM 工程師')
+            sys.exit(1)
+            
         tprint(f'{bcolors.OKGREEN}更新完成')
         subprocess.call(f'rsync -ra HISTORY.md {ESMPATH}', shell=True)
         tprint(f'{bcolors.WARNING}本次升級需重新設定 SecBuzzerESM.env, 設定完畢後執行 Update_Suricata_rules.sh')

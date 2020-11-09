@@ -1,4 +1,13 @@
 # Release History
+# V1.0.0 (2020-11-2)
+- 新增 Packetbeat & Packet_reporter
+- Cron 自動移除 Packetbeat Index
+- 修正 ETA 模組觸發的 Index
+- 調整 diskcheck.py、es_setter.py 輸出 Log 會顯示 Service name
+- 重構 es_setter 架構
+- Upgrade_ESM 新增防呆、檢查機制判斷更新失敗
+- 調整 Install.sh、Offlin_Intall.sh 使 exit code 正常輸出
+
 # V0.8.2 (2020-11-05)
 - Fix RabbitMQ傳輸的中文資訊不為亂碼
 

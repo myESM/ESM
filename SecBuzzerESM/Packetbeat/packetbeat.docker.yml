@@ -6,8 +6,8 @@ packetbeat.flows:
 
 packetbeat.protocols.dns:
   ports: [53]
-  include_authorities: true
-  include_additionals: true
+  include_authorities: false
+  include_additionals: false
 
 packetbeat.protocols.http:
   ports: [80, 5601, 9200, 8080, 8081, 5000, 8002]
@@ -41,3 +41,6 @@ output.elasticsearch:
   username: '${ELASTICSEARCH_USERNAME:}'
   password: '${ELASTICSEARCH_PASSWORD:}'
   pipeline: packetbeat
+  index: packetbeat-%{+yyyy.MM.dd}
+setup.template.name: "packetbeat"
+setup.template.pattern: "packetbeat-*"
