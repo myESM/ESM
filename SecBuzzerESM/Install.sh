@@ -85,6 +85,7 @@ mkdir -p /opt/Logs/Fluentd
 mkdir -p /opt/Logs/Buffers
 
 chown 1000 /opt/Logs -R
+chmod go-w ./Packetbeat/packetbeat.docker.yml
 
 rm -rf envimage
 sudo docker network create esm_network 2>/dev/null

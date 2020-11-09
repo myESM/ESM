@@ -1,4 +1,9 @@
 # Release History
+# V1.0.0 (2020-11-2)
+- 新增 Packetbeat
+- 重構 es_setter 架構
+- Upgrade_ESM 新增防呆
+
 # V0.8.2 (2020-11-05)
 - Fix RabbitMQ傳輸的中文資訊不為亂碼
 
