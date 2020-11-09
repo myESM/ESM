@@ -42,6 +42,7 @@ ln -s ../SecBuzzerESM.env Suricata/.env 2>/dev/nul
 ln -s ../SecBuzzerESM.env Crontab/.env 2>/dev/nul
 ln -s ../SecBuzzerESM.env WEB/.env 2>/dev/nul
 ln -s ../SecBuzzerESM.env AI/.env 2>/dev/nul
+ln -s ../SecBuzzerESM.env Packetbeat/.env 2>/dev/nul
 
 mkdir -p /opt/Logs/ES/volume/es
 mkdir -p /opt/Logs/ES/volume/es1

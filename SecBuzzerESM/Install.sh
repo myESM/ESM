@@ -63,7 +63,7 @@ ln -s ../SecBuzzerESM.env Suricata/.env 2>/dev/nul
 ln -s ../SecBuzzerESM.env Crontab/.env 2>/dev/nul
 ln -s ../SecBuzzerESM.env WEB/.env 2>/dev/nul
 ln -s ../SecBuzzerESM.env AI/.env 2>/dev/nul
-ln -s ../SecBuzzerESM.env Scan/.env 2>/dev/nul
+ln -s ../SecBuzzerESM.env Packetbeat/.env 2>/dev/nul
 
 API_KEY=`cat SecBuzzerESM.env | grep API_KEY_VALUE | cut -d = -f 2`
 if [ -n "$API_KEY" ]

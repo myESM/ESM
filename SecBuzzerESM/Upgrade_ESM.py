@@ -87,6 +87,10 @@ def update():
         # remove all images
         # sys.exit
         # 本次升級需重新設定 SecBuzzerESM.env
+        tprint(f'{bcolors.WARNING}本次升級將會覆蓋 SecBuzzerESM.env, 是否繼續? (y/n)')
+        user_input = input()
+        if user_input.lower() != 'y':
+            sys.exit()
         subprocess.call(f'rsync -a --exclude=HISTORY.md . {ESMPATH}', shell=True)
         subprocess.call('docker rmi -f $(docker images -q) > /dev/null', shell=True)
         subprocess.call('bash Install.sh', shell=True)
