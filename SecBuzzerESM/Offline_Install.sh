@@ -57,4 +57,4 @@ chown 1000 /opt/Logs -R
 chmod go-w ./Packetbeat/packetbeat.docker.yml
 
 gunzip -c ./envimage/SecBuzzerESM.tgz | sudo docker load
-sudo docker network create esm_network 2>/dev/null
+sudo docker network create esm_network 2>/dev/null || true
