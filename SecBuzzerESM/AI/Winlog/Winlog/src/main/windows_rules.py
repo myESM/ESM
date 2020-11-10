@@ -235,7 +235,7 @@ def masquerading_1A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es
     if result_length > 0:
       for res in result["hits"]["hits"]:
         res = res["_source"]
-        if "\u202e" in res.get("winlog").get("event_data").get("Image"):
+        if "\u202e" in res.get("winlog", "").get("event_data", "").get("Image", ""):
           suricata_output = suricata_output_format()
           suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
           suricata_output["alert"]["category"] = TECHNIQUE
@@ -269,7 +269,7 @@ def non_standard_port_1A3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_tim
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if res.get("winlog").get("event_data").get("DestinationPort") not in WINDOWS_COMMON_PORT_LIST:
+      if res.get("winlog", "").get("event_data", "").get("DestinationPort", "") not in WINDOWS_COMMON_PORT_LIST:
       # if res["winlog"]["event_data"]["DestinationPort"] not in WINDOWS_COMMON_PORT_LIST:
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
@@ -495,9 +495,9 @@ def data_staged_2A5(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Compress-Archive" in res.get("winlog").get("event_data").get("ScriptBlockText"):
-        if "-DestinationPath" in res.get("winlog").get("event_data").get("ScriptBlockText"):
-          if ".zip" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+      if "Compress-Archive" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
+        if "-DestinationPath" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
+          if ".zip" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
             suricata_output = suricata_output_format()
             suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
             suricata_output["alert"]["category"] = TECHNIQUE
@@ -659,7 +659,7 @@ def commomly_used_port_3B3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_ti
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if res.get("winlog").get("event_data").get("DestinationPort") in WINDOWS_COMMON_PORT_LIST:
+      if res.get("winlog", "").get("event_data", "").get("DestinationPort", "") in WINDOWS_COMMON_PORT_LIST:
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -724,7 +724,7 @@ def modify_registry_3C1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time,
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      res_scripts = res.get("winlog").get("event_data").get("ScriptBlockText")
+      res_scripts = res.get("winlog", "").get("event_data", "").get("ScriptBlockText", "")
       if "HKCU:\\" in res_scripts or "HKEY_CURRENT_USER" in res_scripts:
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
@@ -886,7 +886,7 @@ def file_deletion_4B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "CommandLine" in res.get("winlog").get("event_data"):
+      if "CommandLine" in res.get("winlog", "").get("event_data", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -919,7 +919,7 @@ def file_deletion_4B3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "CommandLine" in res.get("winlog").get("event_data"):
+      if "CommandLine" in res.get("winlog", "").get("event_data", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -952,7 +952,7 @@ def file_deletion_4B4(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "CommandLine" in res.get("winlog").get("event_data"):
+      if "CommandLine" in res.get("winlog", "").get("event_data", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -1049,7 +1049,7 @@ def system_information_discovery_4C3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "$env:COMPUTERNAME" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+      if "$env:COMPUTERNAME" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -1082,7 +1082,7 @@ def system_network_configuration_discovery_4C4(es_conn, ES_INPUT_INDEX, ES_OUTPU
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "$env:USERDOMAIN" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+      if "$env:USERDOMAIN" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -1147,7 +1147,7 @@ def system_information_discovery_4C6(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Win32_OperatingSystem" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+      if "Win32_OperatingSystem" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -1180,7 +1180,7 @@ def security_software_discovery_4C7(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "AntiVirusProduct" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+      if "AntiVirusProduct" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -1213,7 +1213,7 @@ def security_software_discovery_4C8(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "FireWallProduct" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+      if "FireWallProduct" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -1246,7 +1246,7 @@ def permission_groups_discovery_4C9(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Invoke-NetUserGetGroups" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+      if "Invoke-NetUserGetGroups" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -1279,7 +1279,7 @@ def execution_through_api_4C10(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_star
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Netapi32.dll" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+      if "Netapi32.dll" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -1312,7 +1312,7 @@ def permission_groups_discovery_4C11(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Invoke-NetUserGetLocalGroups" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+      if "Invoke-NetUserGetLocalGroups" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -1345,7 +1345,7 @@ def execution_through_api_4C12(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_star
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Netapi32.dll" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+      if "Netapi32.dll" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -1378,7 +1378,7 @@ def new_service_5A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "New-Service" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+      if "New-Service" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -1411,7 +1411,7 @@ def registry_run_keys_or_startup_folder_5B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_I
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp" in res.get("winlog").get("event_data").get("TargetFilename"):
+      if "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp" in res.get("winlog", "").get("event_data", "").get("TargetFilename", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -1444,7 +1444,7 @@ def private_keys_6B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if ".pfx" in res.get("winlog").get("event_data").get("TargetFilename"):
+      if ".pfx" in res.get("winlog", "").get("event_data", "").get("TargetFilename", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -1477,7 +1477,7 @@ def screen_capture_7A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "CopyFromScreen" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+      if "CopyFromScreen" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -1510,7 +1510,7 @@ def clipboard_data_7A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Get-Clipboard" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+      if "Get-Clipboard" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -1543,7 +1543,7 @@ def input_capture_7A3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "GetAsyncKeyState" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+      if "GetAsyncKeyState" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -1576,8 +1576,8 @@ def data_compressed_7B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time,
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Compress-7Zip" in res.get("winlog").get("event_data").get("ScriptBlockText"):
-        if ".7z" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+      if "Compress-7Zip" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
+        if ".7z" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
           suricata_output = suricata_output_format()
           suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
           suricata_output["alert"]["category"] = TECHNIQUE
@@ -1610,8 +1610,8 @@ def data_encrypted_7B3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Compress-7Zip" in res.get("winlog").get("event_data").get("ScriptBlockText"):
-        if "-Password" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+      if "Compress-7Zip" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
+        if "-Password" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
           suricata_output = suricata_output_format()
           suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
           suricata_output["alert"]["category"] = TECHNIQUE
@@ -1708,7 +1708,7 @@ def process_discovery_8A3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_tim
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Get-Process" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+      if "Get-Process" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -1774,7 +1774,7 @@ def valid_accounts_8C1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      target_user_name = res.get("winlog").get("event_data").get("TargetUserName")
+      target_user_name = res.get("winlog", "").get("event_data", "").get("TargetUserName", "")
       if target_user_name not in SYSTEM_DEFAULT_ACCOUNT:
         if not target_user_name.endswith("$"):
           suricata_output = suricata_output_format()
@@ -2065,9 +2065,9 @@ def data_staged_9B5(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Compress-Archive" in res.get("winlog").get("event_data").get("ScriptBlockText"):
-        if "-DestinationPath" in res.get("winlog").get("event_data").get("ScriptBlockText"):
-          if ".zip" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+      if "Compress-Archive" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
+        if "-DestinationPath" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
+          if ".zip" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
             suricata_output = suricata_output_format()
             suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
             suricata_output["alert"]["category"] = TECHNIQUE
@@ -2100,7 +2100,7 @@ def data_encrypted_9B6(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Rar.exe a" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+      if "Rar.exe a" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -2133,7 +2133,7 @@ def data_compressed_9B7(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time,
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Rar.exe" in res.get("winlog").get("event_data").get("Image"):
+      if "Rar.exe" in res.get("winlog", "").get("event_data", "").get("Image", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -2166,7 +2166,7 @@ def file_deletion_9C1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "CommandLine" in res.get("winlog").get("event_data"):
+      if "CommandLine" in res.get("winlog", "").get("event_data", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -2199,7 +2199,7 @@ def file_deletion_9C2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "CommandLine" in res.get("winlog").get("event_data"):
+      if "CommandLine" in res.get("winlog", "").get("event_data", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -2232,7 +2232,7 @@ def file_deletion_9C3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "CommandLine" in res.get("winlog").get("event_data"):
+      if "CommandLine" in res.get("winlog", "").get("event_data", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -2266,7 +2266,7 @@ def file_deletion_9C4(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "CommandLine" in res.get("winlog").get("event_data"):
+      if "CommandLine" in res.get("winlog", "").get("event_data", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -2363,7 +2363,7 @@ def system_information_discovery_11A4(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, 
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Win32_ComputerSystem" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+      if "Win32_ComputerSystem" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -2428,7 +2428,7 @@ def system_owner_user_discovery_11A6(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Win32_ComputerSystem" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+      if "Win32_ComputerSystem" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -2461,7 +2461,7 @@ def system_network_configuration_discovery_11A7(es_conn, ES_INPUT_INDEX, ES_OUTP
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Win32_ComputerSystem" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+      if "Win32_ComputerSystem" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -2623,7 +2623,7 @@ def commomly_used_port_11A13(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if res.get("winlog").get("event_data").get("DestinationPort") in WINDOWS_COMMON_PORT_LIST:
+      if res.get("winlog", "").get("event_data", "").get("DestinationPort", "") in WINDOWS_COMMON_PORT_LIST:
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -2752,7 +2752,7 @@ def system_information_discovery_13A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, 
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "GetComputerNameEx" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+      if "GetComputerNameEx" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -2785,7 +2785,7 @@ def system_network_configuration_discovery_13B1(es_conn, ES_INPUT_INDEX, ES_OUTP
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "NetWkstaGetInfo" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+      if "NetWkstaGetInfo" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -2818,7 +2818,7 @@ def system_owner_user_discovery_13C1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "GetUserNameEx" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+      if "GetUserNameEx" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -2851,7 +2851,7 @@ def process_discovery_13D1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_ti
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "CreateToolhelp32Snapshot" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+      if "CreateToolhelp32Snapshot" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -2884,7 +2884,7 @@ def component_object_model_hijacking_14A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_IND
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "DelegateExecute" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+      if "DelegateExecute" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -2949,7 +2949,7 @@ def modify_registry_14A3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      res_scripts = res.get("winlog").get("event_data").get("ScriptBlockText")
+      res_scripts = res.get("winlog", "").get("event_data", "").get("ScriptBlockText", "")
       if "HKCU:\\" in res_scripts or "HKEY_CURRENT_USER" in res_scripts:
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
@@ -2983,7 +2983,7 @@ def process_discovery_14B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_ti
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Get-Process" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+      if "Get-Process" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -3016,7 +3016,7 @@ def system_owner_user_discovery_15A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "$env:username" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+      if "$env:username" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -3081,7 +3081,7 @@ def execution_through_api_16B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_star
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "Advapi32.dll" in res.get("winlog").get("event_data").get("ScriptBlockText"):
+      if "Advapi32.dll" in res.get("winlog", "").get("event_data", "").get("ScriptBlockText", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
@@ -3147,7 +3147,7 @@ def valid_accounts_16C2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time,
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      target_user_name = res.get("winlog").get("event_data").get("TargetUserName")
+      target_user_name = res.get("winlog", "").get("event_data", "").get("TargetUserName", "")
       if target_user_name not in SYSTEM_DEFAULT_ACCOUNT:
         if not target_user_name.endswith("$"):
           suricata_output = suricata_output_format()
@@ -3182,7 +3182,7 @@ def email_collection_17A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_tim
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      parent_image = res.get("winlog").get("event_data").get("ParentImage")
+      parent_image = res.get("winlog", "").get("event_data", "").get("ParentImage", "")
       if "powershell" in parent_image or "svchost" in parent_image:
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
@@ -3440,7 +3440,7 @@ def create_account_20B3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time,
   if result_length > 0:
     for res in result["hits"]["hits"]:
       res = res["_source"]
-      if "/user" in res.get("winlog").get("event_data").get("CommandLine"):
+      if "/user" in res.get("winlog", "").get("event_data", "").get("CommandLine", ""):
         suricata_output = suricata_output_format()
         suricata_output["timestamp"] = datetime.now(tz=taiwan_tz).isoformat()
         suricata_output["alert"]["category"] = TECHNIQUE
