@@ -1,14 +1,15 @@
-version: '2'
+version: '3'
 
 services:
   suricata:
-    image: "cstichenghanlin/secbuzzer-suricata:latest"
+    image: "cstichenghanlin/secbuzzer-suricata:6.0.0"
     container_name: suricata
     restart: always
     environment:
     # For ET Pro ruleset replace "OPEN" with your OINKCODE
-     - OINKCODE=OPEN
-     - IFNAME=$IF_NAME
+      OINKCODE: OPEN
+      IFNAME: ${IF_NAME}
+      HOME_NET: ${HOME_NET:-any}
     network_mode: "host"
     cap_add:
      - NET_ADMIN
@@ -34,11 +35,11 @@ services:
       - "./stats_dumper/main.py:/main.py"
       - "$SURICATA_LOG_PATH:/var/log/suricata"
     environment:
-      ESM_API: $API_KEY_VALUE
-      ORG_1_CODE: "test"
-      ORG_2_CODE: "test"
-      ORG_3_CODE: $ORG_3_CODE
-      DEV: "True"
+      ESM_API: ${API_KEY_VALUE}
+      ORG_1_CODE: ${ORG_1_CODE:-test}
+      ORG_2_CODE: ${ORG_2_CODE:-test}
+      ORG_3_CODE: ${ORG_3_CODE}
+      DEV: ${DEV_MODE:-no}
   
   suricata_checker:
     image: csti/suricata_checker:latest

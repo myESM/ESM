@@ -1,4 +1,10 @@
 # Release History
+# V1.1.0 (2020-11-11)
+- 更新 Suricata 6.0.0
+- 更新 ETA & Winlog AI module
+- 新增 DEV_Mode 環境變數
+- 調整部分 Docker-compose.yml 設定, 新增預設值
+
 # V1.0.0 (2020-11-2)
 - 新增 Packetbeat & Packet_reporter
 - Cron 自動移除 Packetbeat Index

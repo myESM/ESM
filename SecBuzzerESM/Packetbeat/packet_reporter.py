@@ -21,8 +21,8 @@ HOMENETS = HOMENET_STR.strip().replace('"', '').replace("'", "").strip('[').stri
 DATE = datetime.utcnow() - timedelta(hours=1)
 print('HOMENETS:', HOMENETS)
 ESM_API = os.getenv("ESM_API")
-ORG_1_CODE = os.getenv("ORG_1_CODE", 'test')
-ORG_2_CODE = os.getenv("ORG_2_CODE", 'test')
+ORG_1_CODE = os.getenv("ORG_1_CODE")
+ORG_2_CODE = os.getenv("ORG_2_CODE")
 ORG_3_CODE = os.getenv("ORG_3_CODE")
 HOSTNAME = None
 HEADER = {'Content-Type': 'application/json', 'authorization': ESM_API}
@@ -58,7 +58,6 @@ def main():
     if str2bool(os.getenv('DEV', 'Null')):
         RMQ_SERVER = "https://test.api.secbuzzer.co"
         WAIT_SEC = 0
-        print("RUNNING WITH DEV MODE")
     else:
         RMQ_SERVER = "https://api.esm.secbuzzer.co"
 
@@ -139,5 +138,7 @@ def main():
     print(resp)
 
 if __name__ == "__main__":
+    if str2bool(os.getenv('DEV', 'Null')):
+        print("RUNNING WITH DEV MODE")
     job = scheduler.add_job(main, 'cron', hour='*/1', timezone=utc)
     scheduler.start()

@@ -64,9 +64,9 @@ RUN    apk -U add \
 #
 # Get and build Suricata
     mkdir -p /opt/builder/ && \
-    wget https://www.openinfosecfoundation.org/download/suricata-5.0.0.tar.gz && \
-    tar xvfz suricata-5.0.0.tar.gz --strip-components=1 -C /opt/builder/ && \
-    rm suricata-5.0.0.tar.gz && \
+    wget https://www.openinfosecfoundation.org/download/suricata-6.0.0.tar.gz && \
+    tar xvfz suricata-*.tar.gz --strip-components=1 -C /opt/builder/ && \
+    rm suricata-*.tar.gz && \
     cd /opt/builder && \
     ./configure \
 	--prefix=/usr \
@@ -134,7 +134,7 @@ RUN    apk -U add \
 #
 # Start suricata
 STOPSIGNAL SIGINT
-CMD SURICATA_CAPTURE_FILTER=$(update.sh $OINKCODE) && exec suricata -v -F $SURICATA_CAPTURE_FILTER -i $IFNAME
+CMD SURICATA_CAPTURE_FILTER=$(update.sh $OINKCODE) && exec suricata -v -F $SURICATA_CAPTURE_FILTER -i $IFNAME --set vars.address-groups.HOME_NET=${HOME_NET}
 
 
 

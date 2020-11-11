@@ -29,11 +29,11 @@ services:
      - "./packet_reporter.py:/main.py"
     environment:
       ESM_API: $API_KEY_VALUE
-      ORG_1_CODE: "test"
-      ORG_2_CODE: "test"
-      ORG_3_CODE: $ORG_3_CODE
-      HOME_NET: $HOME_NET
-      DEV: "True"
+      ORG_1_CODE: ${ORG_1_CODE:-test}
+      ORG_2_CODE: ${ORG_2_CODE:-test}
+      ORG_3_CODE: ${ORG_3_CODE}
+      HOME_NET: ${HOME_NET}
+      DEV: ${DEV_MODE:-no}
     networks:
       - esm
 
