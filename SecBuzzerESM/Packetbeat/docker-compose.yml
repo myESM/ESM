@@ -1,0 +1,43 @@
+version: "3.3"
+
+services:
+  packetbeat:
+    image: docker.elastic.co/beats/packetbeat-oss:7.9.3
+    container_name: packetbeat
+    volumes:
+      - "/usr/share/zoneinfo/ROC:/etc/localtime:ro"
+      - "./packetbeat.docker.yml:/usr/share/packetbeat/packetbeat.yml:ro"
+    environment:
+      - IF_NAME=$IF_NAME
+      - ELASTICSEARCH_HOSTS=localhost:19200
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    restart: always
+    network_mode: host
+
+  packet_reporter:
+    image: csti/packet_reporter:latest #
+    build:
+      context: "./image/"
+      dockerfile: "Dockerfile"    
+    container_name: packet_reporter
+    command: "python3 -u /main.py"
+    volumes:
+     - "/usr/share/zoneinfo/ROC:/etc/localtime:ro"
+     - "/etc/hostname:/HOSTNAME:ro"
+     - "./packet_reporter.py:/main.py"
+    environment:
+      ESM_API: $API_KEY_VALUE
+      ORG_1_CODE: ${ORG_1_CODE:-test}
+      ORG_2_CODE: ${ORG_2_CODE:-test}
+      ORG_3_CODE: ${ORG_3_CODE}
+      HOME_NET: ${HOME_NET}
+      DEV: ${DEV_MODE:-no}
+    networks:
+      - esm
+
+networks:
+  esm:
+    external:
+      name: esm_network

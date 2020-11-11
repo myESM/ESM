@@ -1,6 +1,32 @@
 # Release History
-# V0.7.4 (2020-11-05)
+# V1.1.0 (2020-11-11)
+- 更新 Suricata 6.0.0
+- 更新 ETA & Winlog AI module
+- 新增 DEV_Mode 環境變數
+- 調整部分 Docker-compose.yml 設定, 新增預設值
+
+# V1.0.0 (2020-11-2)
+- 新增 Packetbeat & Packet_reporter
+- Cron 自動移除 Packetbeat Index
+- 修正 ETA 模組觸發的 Index
+- 調整 diskcheck.py、es_setter.py 輸出 Log 會顯示 Service name
+- 重構 es_setter 架構
+- Upgrade_ESM 新增防呆、檢查機制判斷更新失敗
+- 調整 Install.sh、Offlin_Intall.sh 使 exit code 正常輸出
+
+# V0.8.2 (2020-11-05)
 - Fix RabbitMQ傳輸的中文資訊不為亂碼
+
+# V0.8.1 (2020-10-29)
+- Fix ETA path
+
+# V0.8.0 (2020-10-28)
+- 修正無移除 winlogbeat Index 
+- 修正 Cron 執行腳本沒輸出 Log
+- 修正 Suricata_Checker 誤判問題
+- 新增 packetbeat
+- 新增 ES pipline for packetbeat
+- 新增每月移除 Sricata_checker Logs
 
 # V0.7.3 (2020-10-26)
 - 更新 ETA Training

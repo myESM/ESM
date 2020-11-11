@@ -1,10 +1,9 @@
 @monthly root /usr/bin/echo '' > /suricata_log/cron.log
 @weekly root /usr/bin/echo '' > /suricata_log/stats.log
-@daily root /usr/bin/python3 /scripts/diskcheck.py >> /var/log/cron.log
-@reboot root /usr/bin/python3 /scripts/diskcheck.py >> /var/log/cron.log
+@daily root /usr/bin/python3 -u /scripts/diskcheck.py >> /var/log/cron.log
+@reboot root /usr/bin/python3 -u /scripts/diskcheck.py >> /var/log/cron.log
 @daily root /bin/bash /scripts/daily.sh >> /var/log/cron.log
 @hourly root /bin/bash /scripts/hourly.sh >> /var/log/cron.log
-@reboot root /usr/bin/python3 /scripts/es_setter.py >> /var/log/cron.log
-*/10 * * * * root /usr/bin/python3 /scripts/Suricata_updater.py >> /var/log/cron.log
-@hourly root /usr/bin/python3 /scripts/Suricata_updater.py >> /var/log/cron.log
-@monthly root /usr/bin/curl 'http://eta_malware:5000/eta_malware/api/train?edge_index=cic_&alert_index=suricata-&malware_index=malware-20201020'
+@reboot root /usr/bin/python3 -u /scripts/es_setter.py >> /var/log/cron.log
+*/10 * * * * root /usr/bin/python3 -u /scripts/Suricata_updater.py >> /var/log/cron.log
+@hourly root /usr/bin/python3 -u /scripts/Suricata_updater.py >> /var/log/cron.log

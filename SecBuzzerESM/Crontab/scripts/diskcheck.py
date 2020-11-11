@@ -15,9 +15,10 @@ ES_ADR_PORT = f'http://{ES_ADR}:{ES_PORT}'
 DELETE_STANDARD = 85 # 容量滿85%自動移除 Log
 INDEICES_PREFIX = ['winlogbeat', 'cic']
 
-def tprint(*text):
-    now = datetime.now().strftime("[*] %Y/%m/%d %H:%M:%S ")
-    print(now, ' '.join(str(_) for _ in text))
+old_print = print
+def timestamped_print(*args, **kwargs):
+  old_print("[*]",datetime.now(), os.path.basename(__file__), *args, **kwargs)
+print = timestamped_print
 
 def get_es_indices(index_prefix:str = None) -> list:
     """取得所有 index name"""
@@ -60,8 +61,8 @@ def check_disk(counter:int=0):
             check_disk(counter)
             counter += 1
     else:
-        tprint(f'DiskUsed: {disk_used} %\n')
-        if counter: tprint(f'Remove {counter} index')
+        print(f'DiskUsed: {disk_used} %\n')
+        if counter: print(f'Remove {counter} index')
 
 
 def main():

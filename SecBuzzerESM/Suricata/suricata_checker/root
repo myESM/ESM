@@ -1,1 +1,2 @@
+@monthly /bin/echo '' > /var/log/cron.log
 36 12,10 * * * /bin/ash /image/Suricata_checker.sh >> /var/log/cron.log
