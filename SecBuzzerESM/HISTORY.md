@@ -1,4 +1,7 @@
 # Release History
+# V1.1.2 (2020-11-13)
+- 調整 workflows
+
 # V1.1.1 (2020-11-13)
 - 新增 .version 檔案
 

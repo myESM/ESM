@@ -27,7 +27,6 @@ jobs:
 
     - name: Packing
       run: |
-        echo ${GIT_TAG_NAME} > SecBuzzerESM/.version
         mkdir -p /Release/${GIT_TAG_NAME}/
         tar zcvf SecBuzzerESM.tgz SecBuzzerESM
         mv SecBuzzerESM.tgz /Release/${GIT_TAG_NAME}/SecBuzzerESM_${GIT_TAG_NAME}.tgz
