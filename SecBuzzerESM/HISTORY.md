@@ -1,4 +1,7 @@
 # Release History
+# V1.1.1 (2020-11-13)
+- 新增 .version 檔案
+
 # V1.1.0 (2020-11-11)
 - 更新 Suricata 6.0.0
 - 更新 ETA & Winlog AI module
