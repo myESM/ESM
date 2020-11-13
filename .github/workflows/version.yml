@@ -1,0 +1,41 @@
+name: Version commit
+on: 
+  push:
+    branches:
+      - master
+jobs:
+  report:
+    runs-on: [self-hosted, Linux, X64, dev]
+    steps:
+      - uses: AutoModality/action-clean@v1
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: get Version
+        id: tag_version
+        run: |
+          HVer=`awk '$0 ~ /# V/{print $2}' SecBuzzerESM/HISTORY.md | awk 'NR==1'`
+          echo $HVer
+          Ver=`cat SecBuzzerESM/.version`
+          echo $Ver
+          gitVer=`git describe --tags $(git rev-list --tags --max-count=1)`
+          echo ${gitVer} 
+          if [ dev-${HVer} == ${gitVer} ]; then
+            exit 1
+          fi
+          if [ ${HVer} != ${Ver} ]; then
+            echo "::set-output name=new_tag::${HVer}"
+            echo `awk '$0 ~ /# V/{print $2}' SecBuzzerESM/HISTORY.md | awk 'NR==1'` > SecBuzzerESM/.version
+            exit 0
+          fi
+          exit 127
+      - name: Commit report
+        if: ${{ success() }}
+        run: |
+          git config --global user.name 'Version-Robot'
+          git config --global user.email 'chenghanlin@cyber00rn.org'
+          git add SecBuzzerESM/.version
+          git commit -am "${{ steps.tag_version.outputs.new_tag }} - Automated report"
+          git tag -a dev-${{ steps.tag_version.outputs.new_tag }} -m ${{ steps.tag_version.outputs.new_tag }}
+          git push -u origin master --tags
+
