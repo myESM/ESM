@@ -1,4 +1,7 @@
 # Release History
+# V1.1.4 (2020-11-18)
+- 修正 EdgeApp 掛載及環境變數未設定問題
+
 # V1.1.3 (2020-11-17)
 - 更新 EsmEdgeApp.jar 自動判斷是否為 Production
 - 新增 EsmEdgeApp.jar 上傳 ESM Edge 版本號
