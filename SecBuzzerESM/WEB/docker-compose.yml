@@ -10,9 +10,11 @@ services:
     volumes:
       - ./EsmEdgeApp.jar:/EsmEdgeApp.jar
       - ./location.properties:/location.properties
+      - ../.version:/.version:ro
     environment:
       TZ: Asia/Taipei
       INTERFACE_NAME: $WEB_IF_NAME
       API_KEY_VALUE: $API_KEY_VALUE
       ORG_3_CODE: $ORG_3_CODE
+      DEV_MODE: ${DEV_MODE:-no}
     command: "java -jar /EsmEdgeApp.jar" #  -Xmx3g"

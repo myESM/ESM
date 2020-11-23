@@ -5,10 +5,6 @@ services:
         build:
             context: "./fluentd_image/"
             dockerfile: "Dockerfile"
-        ports:
-            - 24224:24224
-            - 514:514/udp
-            - 515:515/udp
         volumes:
             - "$FLUENTD_BUFFER_PATH:/fluentd/Buffers"
             - "./conf/suricata.conf:/fluentd/etc/fluent.conf"

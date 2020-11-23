@@ -7,3 +7,4 @@
 @reboot root /usr/bin/python3 -u /scripts/es_setter.py >> /var/log/cron.log
 */10 * * * * root /usr/bin/python3 -u /scripts/Suricata_updater.py >> /var/log/cron.log
 @hourly root /usr/bin/python3 -u /scripts/Suricata_updater.py >> /var/log/cron.log
+@monthly root /usr/bin/curl 'http://eta_malware:5000/eta_malware/api/train?edge_index=cic-&alert_index=suricata-&malware_index=malware-20201020'

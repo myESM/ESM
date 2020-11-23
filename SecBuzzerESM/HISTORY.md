@@ -1,4 +1,23 @@
 # Release History
+# V1.2.0 (2020-11-23)
+- 修正 Install.sh 腳本失敗
+- 修正 Install.sh 安裝 Docker 邏輯
+- 修正 Crontab container 執行時間錯誤
+- 更新 ETA Malware 程式
+
+# V1.1.4 (2020-11-18)
+- 修正 EdgeApp 掛載及環境變數未設定問題
+
+# V1.1.3 (2020-11-17)
+- 更新 EsmEdgeApp.jar 自動判斷是否為 Production
+- 新增 EsmEdgeApp.jar 上傳 ESM Edge 版本號
+
+# V1.1.2 (2020-11-13)
+- 調整 workflows
+
+# V1.1.1 (2020-11-13)
+- 新增 .version 檔案
+
 # V1.1.0 (2020-11-11)
 - 更新 Suricata 6.0.0
 - 更新 ETA & Winlog AI module
