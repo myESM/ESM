@@ -1,4 +1,7 @@
 # Release History
+# V1.2.1 (2020-11-23)
+- 更新 EsmEdgeApp.jar 初始時印出環境變數DEV_MODE的內容
+
 # V1.2.0 (2020-11-23)
 - 修正 Install.sh 腳本失敗
 - 修正 Install.sh 安裝 Docker 邏輯
