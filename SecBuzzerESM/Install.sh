@@ -19,9 +19,10 @@ rm -rf ES/grafana_plugins
 mkdir -p ES/grafana_plugins
 git -C './ES/grafana_plugins/' clone https://github.com/grafana/piechart-panel.git --branch release-$GRAFANA_PIE_CHART_VERSION 
 
-if [ -f "/usr/bin/docker" ]; then
+if [ -f "/usr/bin/docker" ] && [ -f "/usr/local/bin/docker-compose" ]; then
     echo "[*] Already install docker!"
 else
+    rm -rf ./envimage/
     echo "[*] Download docker"
     wget https://download.docker.com/linux/static/stable/x86_64/docker-$DOCKER_VERSION.tgz -P './envimage/'
     echo "[*] Download docker-compose"
@@ -59,13 +60,13 @@ root hard nofile 655360
 * soft nofile 655360
 * hard nofile 655360' >> /etc/security/limits.conf"
 
-ln -s ../SecBuzzerESM.env ES/.env 2>/dev/nul
-ln -s ../SecBuzzerESM.env Fluentd/.env 2>/dev/nul
-ln -s ../SecBuzzerESM.env Suricata/.env 2>/dev/nul
-ln -s ../SecBuzzerESM.env Crontab/.env 2>/dev/nul
-ln -s ../SecBuzzerESM.env WEB/.env 2>/dev/nul
-ln -s ../SecBuzzerESM.env AI/.env 2>/dev/nul
-ln -s ../SecBuzzerESM.env Packetbeat/.env 2>/dev/nul
+ln -s ../SecBuzzerESM.env ES/.env 2>/dev/null
+ln -s ../SecBuzzerESM.env Fluentd/.env 2>/dev/null
+ln -s ../SecBuzzerESM.env Suricata/.env 2>/dev/null
+ln -s ../SecBuzzerESM.env Crontab/.env 2>/dev/null
+ln -s ../SecBuzzerESM.env WEB/.env 2>/dev/null
+ln -s ../SecBuzzerESM.env AI/.env 2>/dev/null
+ln -s ../SecBuzzerESM.env Packetbeat/.env 2>/dev/null
 
 API_KEY=`cat SecBuzzerESM.env | grep API_KEY_VALUE | cut -d = -f 2`
 if [ -n "$API_KEY" ]

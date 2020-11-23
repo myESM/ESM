@@ -12,11 +12,12 @@ SERVICEFILE=docker.service
 DOCKERDIR=/usr/bin
 DOCKERBIN=docker
 SERVICENAME=docker
+MAINPID='$MAINPID'
 
 tar xvpf ./envimage/docker-*.tgz
 
 echo "##binary : ${DOCKERBIN} copy to ${DOCKERDIR}"
-cp -p ${DOCKERBIN}/* ${DOCKERDIR} >/dev/null 2>&1
+mv ${DOCKERBIN}/* ${DOCKERDIR} >/dev/null 2>&1
 which ${DOCKERBIN}
 
 echo "##systemd service: ${SERVICEFILE}"
@@ -58,9 +59,9 @@ echo "## docker version"
 docker version
 
 echo "## Group add"
-groupadd docker
+groupadd docker >/dev/null 2>&1 || true
 chgrp docker /var/run/docker.sock
-usermod -aG docker ${USER}
+usermod -aG docker ${USER} >/dev/null 2>&1
 
 rm -rf docker
 
