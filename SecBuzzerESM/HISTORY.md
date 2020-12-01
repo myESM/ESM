@@ -1,4 +1,9 @@
 # Release History
+# V1.3.0 (2020-12-01)
+- 重構 Suricata_Stats_Dumper, 修正重啟統計問題
+- 更新 CICFlowMeter.jar 修正 Log 不移除問題
+- 修改 Suricata 輸出 Stats 時間為 30 秒
+
 # V1.2.1 (2020-11-23)
 - 更新 EsmEdgeApp.jar 初始時印出環境變數DEV_MODE的內容
 
