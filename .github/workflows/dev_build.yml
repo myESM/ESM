@@ -1,10 +1,8 @@
 name: Dev
 on:
   push:
-    branches:
-    - master
-    tags:
-    - 'dev-*'
+    paths:
+    - 'SecBuzzerESM/.version'
 
 jobs:
   dev-job:
