@@ -1,4 +1,7 @@
 # Release History
+# V1.3.4 (2020-12-02)
+- 更新 EsmEdgeApp.jar update ES attribute client.transport.sniff to be true
+
 # V1.3.3 (2020-12-02)
 - 調整 workflow
 
