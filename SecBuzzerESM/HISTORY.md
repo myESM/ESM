@@ -1,4 +1,7 @@
 # Release History
+# V1.3.1 (2020-12-02)
+- 更新 ETA-Malware
+
 # V1.3.0 (2020-12-01)
 - 重構 Suricata_Stats_Dumper, 修正重啟統計問題
 - 更新 CICFlowMeter.jar 修正 Log 不移除問題
