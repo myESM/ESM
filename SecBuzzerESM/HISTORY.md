@@ -1,4 +1,7 @@
 # Release History
+# V1.3.2 (2020-12-02)
+- 調整 Suricata_Stats_Dumper 回傳時間為 15 分鐘
+
 # V1.3.1 (2020-12-02)
 - 更新 ETA-Malware
 

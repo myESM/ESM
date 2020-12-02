@@ -147,7 +147,7 @@ def data_sender():
 
 if __name__ == '__main__':
     init()
-    job = scheduler.add_job(data_sender, 'interval', minutes=5)
+    job = scheduler.add_job(data_sender, 'interval', minutes=15)
     scheduler.start()
     main()
     
