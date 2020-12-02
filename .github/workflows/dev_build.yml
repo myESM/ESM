@@ -2,7 +2,7 @@ name: Dev
 on:
   push:
     paths:
-    - 'SecBuzzerESM/.version'
+    - '**/.version'
 
 jobs:
   dev-job:

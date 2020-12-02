@@ -1,4 +1,7 @@
 # Release History
+# V1.3.3 (2020-12-02)
+- 調整 workflow
+
 # V1.3.2 (2020-12-02)
 - 調整 Suricata_Stats_Dumper 回傳時間為 15 分鐘
 
