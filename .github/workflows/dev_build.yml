@@ -1,8 +1,8 @@
 name: Dev
 on:
   push:
-    paths:
-    - '**/.version'
+    tags:
+    - 'dev-*'
 
 jobs:
   dev-job:
