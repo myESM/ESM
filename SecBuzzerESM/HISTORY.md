@@ -1,4 +1,8 @@
 # Release History
+# V1.4.0 (2020-12-03)
+- 修正 packet_reporter 因各式回傳失敗
+- 修正 packet_reporter 噴錯後無法重啟
+
 # V1.3.4 (2020-12-02)
 - 更新 EsmEdgeApp.jar update ES attribute client.transport.sniff to be true
 
