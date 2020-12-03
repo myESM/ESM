@@ -23,6 +23,7 @@ services:
       dockerfile: "Dockerfile"    
     container_name: packet_reporter
     command: "python3 -u /main.py"
+    restart: unless-stopped
     volumes:
      - "/usr/share/zoneinfo/ROC:/etc/localtime:ro"
      - "/etc/hostname:/HOSTNAME:ro"
