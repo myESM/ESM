@@ -74,40 +74,43 @@ def main():
     print('waiting', WAIT_SEC, 'sec')
     time.sleep(WAIT_SEC)
     HOMENETS = [_ for _ in HOMENETS if check_ip_valid(_)]
-    
-    # Get Top 20 Source Port
-    data = '{"query":{"bool":{"must":[{"range":{"@timestamp":{"gt":"'+DATE.strftime('%Y-%m-%dT%H')+':00:00.000Z","lt":"'+DATE.strftime('%Y-%m-%dT%H')+':59:59.999Z"}}}]}},"size":0,"track_total_hits": false,"aggs": {"my_buckets": {"composite": {"size": 99999,"sources": [{"source.port": {"terms": {"field": "source.port"}}}]}}}}'
-    resp = requests.post(f"http://{ESIPPORT}/packetbeat-{DATE.strftime('%Y.%m.%d')}/_search", data=data, headers=HEADER).json()
-    splist = Counter({_['key']['source.port']: _['doc_count'] for _ in resp['aggregations'].get('my_buckets')['buckets']})
-    t20sp = splist.most_common(20)
-    # Total Source Port 
-    totalsp = len(splist)
+    try:
+        # Get Top 20 Source Port
+        data = '{"query":{"bool":{"must":[{"range":{"@timestamp":{"gt":"'+DATE.strftime('%Y-%m-%dT%H')+':00:00.000Z","lt":"'+DATE.strftime('%Y-%m-%dT%H')+':59:59.999Z"}}}]}},"size":0,"track_total_hits": false,"aggs": {"my_buckets": {"composite": {"size": 99999,"sources": [{"source.port": {"terms": {"field": "source.port"}}}]}}}}'
+        resp = requests.post(f"http://{ESIPPORT}/packetbeat-{DATE.strftime('%Y.%m.%d')}/_search", data=data, headers=HEADER).json()
+        splist = Counter({_['key']['source.port']: _['doc_count'] for _ in resp['aggregations'].get('my_buckets')['buckets']})
+        t20sp = [{'port:': _[0], 'count': _[1]} for _ in splist.most_common(20)]
+        # Total Source Port 
+        totalsp = len(splist)
 
-    # Get Top 20 Destination Port
-    data = '{"query":{"bool":{"must":[{"range":{"@timestamp":{"gt":"'+DATE.strftime('%Y-%m-%dT%H')+':00:00.000Z","lt":"'+DATE.strftime('%Y-%m-%dT%H')+':59:59.999Z"}}}]}},"size":0,"track_total_hits": false,"aggs": {"my_buckets": {"composite": {"size": 99999,"sources": [{"destination.port": {"terms": {"field": "destination.port"}}}]}}}}'
-    resp = requests.post(f"http://{ESIPPORT}/packetbeat-{DATE.strftime('%Y.%m.%d')}/_search", data=data, headers=HEADER).json()
-    dplist = Counter({_['key']['destination.port']: _['doc_count'] for _ in resp['aggregations'].get('my_buckets')['buckets']})
-    t20dp = dplist.most_common(20)
-    # Total Destination Port 
-    totaldp = len(dplist)
+        # Get Top 20 Destination Port
+        data = '{"query":{"bool":{"must":[{"range":{"@timestamp":{"gt":"'+DATE.strftime('%Y-%m-%dT%H')+':00:00.000Z","lt":"'+DATE.strftime('%Y-%m-%dT%H')+':59:59.999Z"}}}]}},"size":0,"track_total_hits": false,"aggs": {"my_buckets": {"composite": {"size": 99999,"sources": [{"destination.port": {"terms": {"field": "destination.port"}}}]}}}}'
+        resp = requests.post(f"http://{ESIPPORT}/packetbeat-{DATE.strftime('%Y.%m.%d')}/_search", data=data, headers=HEADER).json()
+        dplist = Counter({_['key']['destination.port']: _['doc_count'] for _ in resp['aggregations'].get('my_buckets')['buckets']})
+        t20dp = [{'port:': _[0], 'count': _[1]} for _ in dplist.most_common(20)]
+        # Total Destination Port 
+        totaldp = len(dplist)
 
-    # Get Top 20 Socure IP
-    data = '{"query":{"bool":{"must":[{"range":{"@timestamp":{"gt":"'+DATE.strftime('%Y-%m-%dT%H')+':00:00.000Z","lt":"'+DATE.strftime('%Y-%m-%dT%H')+':59:59.999Z"}}}]}},"size":0,"track_total_hits": false,"aggs": {"my_buckets": {"composite": {"size": 3000,"sources": [{"source.ip": {"terms": {"field": "source.ip"}}}]}}}}'
-    resp = requests.post(f"http://{ESIPPORT}/packetbeat-{DATE.strftime('%Y.%m.%d')}/_search", data=data, headers=HEADER).json()
-    bip = ['::', '0.0.0.0'] # ip black list
-    siplist = Counter({_['key']['source.ip']: _['doc_count'] for _ in resp['aggregations'].get('my_buckets')['buckets'] if not _['key']['source.ip'] in bip})
-    t20sip = siplist.most_common(20)
-    # Total Source IP 
-    totalsip = len(siplist)
+        # Get Top 20 Socure IP
+        data = '{"query":{"bool":{"must":[{"range":{"@timestamp":{"gt":"'+DATE.strftime('%Y-%m-%dT%H')+':00:00.000Z","lt":"'+DATE.strftime('%Y-%m-%dT%H')+':59:59.999Z"}}}]}},"size":0,"track_total_hits": false,"aggs": {"my_buckets": {"composite": {"size": 3000,"sources": [{"source.ip": {"terms": {"field": "source.ip"}}}]}}}}'
+        resp = requests.post(f"http://{ESIPPORT}/packetbeat-{DATE.strftime('%Y.%m.%d')}/_search", data=data, headers=HEADER).json()
+        bip = ['::', '0.0.0.0'] # ip black list
+        siplist = Counter({_['key']['source.ip']: _['doc_count'] for _ in resp['aggregations'].get('my_buckets')['buckets'] if not _['key']['source.ip'] in bip})
+        t20sip = [{'ip': _[0], 'count': _[1]} for _ in siplist.most_common(20)]
+        # Total Source IP 
+        totalsip = len(siplist)
 
-    # Get Top 20 Destination IP
-    data = '{"query":{"bool":{"must":[{"range":{"@timestamp":{"gt":"'+DATE.strftime('%Y-%m-%dT%H')+':00:00.000Z","lt":"'+DATE.strftime('%Y-%m-%dT%H')+':59:59.999Z"}}}]}},"size":0,"track_total_hits": false,"aggs": {"my_buckets": {"composite": {"size": 99999,"sources": [{"destination.ip": {"terms": {"field": "destination.ip"}}}]}}}}'
-    resp = requests.post(f"http://{ESIPPORT}/packetbeat-{DATE.strftime('%Y.%m.%d')}/_search", data=data, headers=HEADER).json()
-    bip = ['::', '0.0.0.0']
-    diplist = Counter({_['key']['destination.ip']: _['doc_count'] for _ in resp['aggregations'].get('my_buckets')['buckets'] if not _['key']['destination.ip'] in bip})
-    t20dip = diplist.most_common(20)
-    # Total Destination IP
-    totaldip = len(diplist)
+        # Get Top 20 Destination IP
+        data = '{"query":{"bool":{"must":[{"range":{"@timestamp":{"gt":"'+DATE.strftime('%Y-%m-%dT%H')+':00:00.000Z","lt":"'+DATE.strftime('%Y-%m-%dT%H')+':59:59.999Z"}}}]}},"size":0,"track_total_hits": false,"aggs": {"my_buckets": {"composite": {"size": 99999,"sources": [{"destination.ip": {"terms": {"field": "destination.ip"}}}]}}}}'
+        resp = requests.post(f"http://{ESIPPORT}/packetbeat-{DATE.strftime('%Y.%m.%d')}/_search", data=data, headers=HEADER).json()
+        bip = ['::', '0.0.0.0']
+        diplist = Counter({_['key']['destination.ip']: _['doc_count'] for _ in resp['aggregations'].get('my_buckets')['buckets'] if not _['key']['destination.ip'] in bip})
+        t20dip = [{'ip': _[0], 'count': _[1]} for _ in diplist.most_common(20)]
+        # Total Destination IP
+        totaldip = len(diplist)
+    except KeyError as e:
+        print('Error:', e)
+        print('ES connect error')
 
     HOME_IP = [ip for ip in siplist if check_home_ip(ip)]
 
@@ -133,12 +136,12 @@ def main():
     }
     # {"properties":{"Content-Type":"application/json"},"routing_key":"network_statistics","payload":json.dumps(_DATA),"payload_encoding":"string"}
     datas = json.dumps({"properties":{"Content-Type":"application/json"},"routing_key":"Packet_Statistics","payload":json.dumps(_DATA),"payload_encoding":"string"})
-    # print(datas)
+    # print(_DATA)
     resp = requests.post(f"{RMQ_SERVER}/esmapi/exchanges/%2F/amq.default/publish", headers=HEADER, data=datas).json()
     print(resp)
 
 if __name__ == "__main__":
     if str2bool(os.getenv('DEV', 'Null')):
         print("RUNNING WITH DEV MODE")
-    job = scheduler.add_job(main, 'cron', hour='*/1', timezone=utc)
+    job = scheduler.add_job(main, 'interval', hours=1, timezone=utc)
     scheduler.start()
