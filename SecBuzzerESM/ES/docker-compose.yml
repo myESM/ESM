@@ -1,7 +1,7 @@
 version: '2.1'
 services:
     elasticsearch-head:
-        image: dtagdevsec/head:1903
+        image: dtagdevsec/head:2006
         container_name: elasticsearchHead
         ports:
         - 19100:9100

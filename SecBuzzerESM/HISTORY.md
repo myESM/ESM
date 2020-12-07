@@ -1,4 +1,30 @@
 # Release History
+# V1.4.1 (2020-12-07)
+- 更新 ES Head 的版本
+- 修正離線安裝失敗的問題
+- 更新 workflow
+
+# V1.4.0 (2020-12-03)
+- 修正 packet_reporter 因各式回傳失敗
+- 修正 packet_reporter 噴錯後無法重啟
+
+# V1.3.4 (2020-12-02)
+- 更新 EsmEdgeApp.jar update ES attribute client.transport.sniff to be true
+
+# V1.3.3 (2020-12-02)
+- 調整 workflow
+
+# V1.3.2 (2020-12-02)
+- 調整 Suricata_Stats_Dumper 回傳時間為 15 分鐘
+
+# V1.3.1 (2020-12-02)
+- 更新 ETA-Malware
+
+# V1.3.0 (2020-12-01)
+- 重構 Suricata_Stats_Dumper, 修正重啟統計問題
+- 更新 CICFlowMeter.jar 修正 Log 不移除問題
+- 修改 Suricata 輸出 Stats 時間為 30 秒
+
 # V1.2.1 (2020-11-23)
 - 更新 EsmEdgeApp.jar 初始時印出環境變數DEV_MODE的內容
 

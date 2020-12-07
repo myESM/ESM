@@ -39,3 +39,8 @@ jobs:
           git tag -a dev-${{ steps.tag_version.outputs.new_tag }} -m ${{ steps.tag_version.outputs.new_tag }}
           git push -u origin master --tags
 
+      - name: Invoke workflow without inputs
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: Dev
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
