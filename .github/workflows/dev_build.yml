@@ -1,8 +1,5 @@
 name: Dev
-on:
-  push:
-    tags:
-    - 'dev-*'
+on: [workflow_dispatch]
 
 jobs:
   dev-job:

@@ -1,4 +1,9 @@
 # Release History
+# V1.4.1 (2020-12-07)
+- 更新 ES Head 的版本
+- 修正離線安裝失敗的問題
+- 更新 workflow
+
 # V1.4.0 (2020-12-03)
 - 修正 packet_reporter 因各式回傳失敗
 - 修正 packet_reporter 噴錯後無法重啟

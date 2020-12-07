@@ -13,7 +13,7 @@ else
     source install_docker.sh
 fi
 
-sudo mv /etc/sysctl.conf.bak /etc/sysctl.conf 2>/dev/null
+sudo mv /etc/sysctl.conf.bak /etc/sysctl.conf 2>/dev/null || true
 sudo cp -n /etc/sysctl.conf{,.bak}
 sudo sh -c "echo vm.max_map_count=262144 >> /etc/sysctl.conf"
 
@@ -31,7 +31,7 @@ net.ipv4.tcp_tw_reuse = 1
 net.ipv4.ip_local_port_range = 10240 65535' >> /etc/sysctl.conf"
 sudo sysctl -p
 
-sudo mv /etc/security/limits.conf.bak /etc/security/limits.conf 2>/dev/null
+sudo mv /etc/security/limits.conf.bak /etc/security/limits.conf 2>/dev/null || true
 sudo cp -n /etc/security/limits.conf{,.bak}
 sudo sh -c "echo 'root soft nofile 655360
 root hard nofile 655360
