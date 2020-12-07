@@ -78,6 +78,7 @@ class OutputData:
         alert_ip_list = set(ip_list) - set(normal_ip_list)
         self.esOutput(alert_ip_list, test_df, start_time, end_time, nic_name)
 
+        '''
         if len(normal_ip_list) != 0:
             # 正常的IP要處理存進csv
             rel_update = rel_test[rel_test['IP'].isin(normal_ip_list)]
@@ -95,4 +96,4 @@ class OutputData:
         else:
             rel_normal.to_csv('normal_rel.csv', index=False)
             feature_normal.to_csv('normal_feature.csv', index=False)
-
+        '''
