@@ -37,7 +37,7 @@ sudo apt-get install openssh-server
 
 請先下載離線安裝包，並使用自己習慣的傳輸工具將檔案傳輸至Ubuntu OS中，例如：Linux SCP指令、FTP軟體
 
-- 離線安裝包下載：[SecBuzzerESM_V0.7.3](https://myspace.iii.org.tw/d/f/583694458418149826)
+- 離線安裝包下載：[SecBuzzerESM_V1.4.1](https://myspace.iii.org.tw/d/f/591446792451699542)
 
 在此以scp指令為例：(以下為示意圖，若檔案有版本號的話指令請自行調整)
 
