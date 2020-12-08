@@ -21,15 +21,17 @@ services:
       - "BULK_WRITE_LEN=10"
     command: "java -Dlog4j.configurationFile=/log4j2.xml -jar /CICFlowMeter.jar -Xmx3g"
 
-  # OMP:
-  #   image: csti/omp:v1
-  #   build:
-  #     context: "./OMP/"
-  #     dockerfile: "Dockerfile"
-  #   restart: always
-  #   volumes:
-  #   - "./OMP/code/:/usr/src/omp/code/"
-  #   - "./OMP/data/:/usr/src/omp/code/data/"
+  OMP:
+    image: csti/omp:v2
+    build:
+      context: "./OMP/"
+      dockerfile: "Dockerfile"
+    restart: unless-stopped
+    volumes:
+      - "./OMP/GCN_Autoencoder:/OMP/"
+    networks:
+      - esm
+    command: "python /OMP/main.py"
 
   Winlog:
     image: csti/winlog:v1.2

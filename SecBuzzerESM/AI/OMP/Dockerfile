@@ -1,17 +1,21 @@
-FROM python:3.7-slim
+FROM python:3.8.5-slim
 
-# 建立資料夾; -p 建立子目錄
-RUN mkdir -p /usr/omp/code
-COPY ./code /usr/omp/code
-RUN pip install --no-cache-dir -r /usr/omp/code/requirements.txt
-
-# 指定docker image 進入點
-WORKDIR /usr/omp/code
+RUN pip install --no-cache-dir \
+                pandas==1.1.1 \
+                numpy==1.15.4 \
+                scipy==1.1.0 \
+                tensorflow==1.14.0 \
+                Keras==2.2.4 \
+                matplotlib==3.3.0 \
+                scikit-learn==0.20.1 \
+                elasticsearch==6.3.0 \
+                networkx==2.4 \
+                flask==1.1.2
 
 # 設定時區
 ENV TZ=Asia/Taipei
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-# RUN python3 main.py
-CMD ["python3", "api.py"]
+# Sleeeeeeeeep
+CMD ["sleep infinity"]
 
