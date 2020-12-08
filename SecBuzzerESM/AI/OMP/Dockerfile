@@ -14,3 +14,4 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # RUN python3 main.py
 CMD ["python3", "api.py"]
+
