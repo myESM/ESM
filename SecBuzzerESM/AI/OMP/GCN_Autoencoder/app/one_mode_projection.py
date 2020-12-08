@@ -53,7 +53,7 @@ class OneModeProjection:
         # ax.scatter(np.array(imgs_test)[:, 0], np.array(imgs_test)[:, 1], np.array(imgs_test)[:, 2], c='b')
         # ax.scatter(encoded_imgs_test[0][0], encoded_imgs_test[0][1], encoded_imgs_test[0][2], c='r', marker='*')
 
-        plt.show()
+        # plt.show()
 
 
     def oneClassSVM(self, encoded_imgs_test):
