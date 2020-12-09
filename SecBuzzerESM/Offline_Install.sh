@@ -1,6 +1,6 @@
 #!/bin/sh
 set -euo pipefail
-
+# set -ex # for debug
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
   exit
@@ -38,13 +38,13 @@ root hard nofile 655360
 * soft nofile 655360
 * hard nofile 655360' >> /etc/security/limits.conf"
 
-ln -s ../SecBuzzerESM.env ES/.env 2>/dev/nul
-ln -s ../SecBuzzerESM.env Fluentd/.env 2>/dev/nul
-ln -s ../SecBuzzerESM.env Suricata/.env 2>/dev/nul
-ln -s ../SecBuzzerESM.env Crontab/.env 2>/dev/nul
-ln -s ../SecBuzzerESM.env WEB/.env 2>/dev/nul
-ln -s ../SecBuzzerESM.env AI/.env 2>/dev/nul
-ln -s ../SecBuzzerESM.env Packetbeat/.env 2>/dev/nul
+ln -s ../SecBuzzerESM.env ES/.env 2>/dev/null || true
+ln -s ../SecBuzzerESM.env Fluentd/.env 2>/dev/null || true
+ln -s ../SecBuzzerESM.env Suricata/.env 2>/dev/null || true
+ln -s ../SecBuzzerESM.env Crontab/.env 2>/dev/null || true
+ln -s ../SecBuzzerESM.env WEB/.env 2>/dev/null || true
+ln -s ../SecBuzzerESM.env AI/.env 2>/dev/null || true
+ln -s ../SecBuzzerESM.env Packetbeat/.env 2>/dev/null || true
 
 mkdir -p /opt/Logs/ES/volume/es
 mkdir -p /opt/Logs/ES/volume/es1

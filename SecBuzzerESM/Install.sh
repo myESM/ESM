@@ -1,6 +1,6 @@
 #!/bin/sh
 set -euo pipefail
-
+# set -ex # for debug
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
   exit
@@ -35,7 +35,7 @@ echo "[*] Build & Pull docker images"
 find . -type f -name "docker-compose.yml" -exec docker-compose -f {} --log-level ERROR build \;
 find . -type f -name "docker-compose.yml" -exec docker-compose -f {} --log-level ERROR pull \;
 
-sudo mv /etc/sysctl.conf.bak /etc/sysctl.conf 2>/dev/null
+sudo mv /etc/sysctl.conf.bak /etc/sysctl.conf 2>/dev/null || true
 sudo cp -n /etc/sysctl.conf{,.bak}
 sudo sh -c "echo vm.max_map_count=262144 >> /etc/sysctl.conf"
 
@@ -53,20 +53,20 @@ net.ipv4.tcp_tw_reuse = 1
 net.ipv4.ip_local_port_range = 10240 65535' >> /etc/sysctl.conf"
 sudo sysctl -p
 
-sudo mv /etc/security/limits.conf.bak /etc/security/limits.conf 2>/dev/null
+sudo mv /etc/security/limits.conf.bak /etc/security/limits.conf 2>/dev/null || true
 sudo cp -n /etc/security/limits.conf{,.bak}
 sudo sh -c "echo 'root soft nofile 655360
 root hard nofile 655360
 * soft nofile 655360
 * hard nofile 655360' >> /etc/security/limits.conf"
 
-ln -s ../SecBuzzerESM.env ES/.env 2>/dev/null
-ln -s ../SecBuzzerESM.env Fluentd/.env 2>/dev/null
-ln -s ../SecBuzzerESM.env Suricata/.env 2>/dev/null
-ln -s ../SecBuzzerESM.env Crontab/.env 2>/dev/null
-ln -s ../SecBuzzerESM.env WEB/.env 2>/dev/null
-ln -s ../SecBuzzerESM.env AI/.env 2>/dev/null
-ln -s ../SecBuzzerESM.env Packetbeat/.env 2>/dev/null
+ln -s ../SecBuzzerESM.env ES/.env 2>/dev/null || true
+ln -s ../SecBuzzerESM.env Fluentd/.env 2>/dev/null || true
+ln -s ../SecBuzzerESM.env Suricata/.env 2>/dev/null || true
+ln -s ../SecBuzzerESM.env Crontab/.env 2>/dev/null || true
+ln -s ../SecBuzzerESM.env WEB/.env 2>/dev/null || true
+ln -s ../SecBuzzerESM.env AI/.env 2>/dev/null || true
+ln -s ../SecBuzzerESM.env Packetbeat/.env 2>/dev/null || true
 
 API_KEY=`cat SecBuzzerESM.env | grep API_KEY_VALUE | cut -d = -f 2`
 if [ -n "$API_KEY" ]
@@ -92,3 +92,4 @@ chmod go-w ./Packetbeat/packetbeat.docker.yml
 
 rm -rf envimage
 sudo docker network create esm_network 2>/dev/null || true
+echo "Done!"
