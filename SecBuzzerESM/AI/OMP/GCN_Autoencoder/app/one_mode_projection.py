@@ -70,6 +70,7 @@ class OneModeProjection:
             print('ValueError')
             print('Automatic retraining')
             ve_flag = True
+            time.sleep(5)
             return [], ve_flag
         else:
             ve_flag = False
@@ -148,12 +149,22 @@ class OneModeProjection:
             PATIENCE = 30
             es_callback = EarlyStopping(monitor='loss', patience=PATIENCE)
 
-            # training
-            autoencoder.fit(graph, A_, 
-                            # sample_weight=train_mask,
-                            epochs=500,
-                            batch_size=A.shape[0],
-                            shuffle=False, callbacks=[es_callback])
+            te_flag = True
+            while(te_flag):
+                try:
+                    # training
+                    autoencoder.fit(graph, A_, 
+                                    # sample_weight=train_mask,
+                                    epochs=500,
+                                    batch_size=A.shape[0],
+                                    shuffle=False, callbacks=[es_callback])
+                except TypeError:
+                    print('TypeError')
+                    print('Automatic retraining')
+                    te_flag = True
+                    time.sleep(5)
+                else:
+                    te_flag = False
 
             # plotting
             encoded_imgs_test = encoder.predict(graph_test, batch_size=A_test.shape[0])
@@ -161,10 +172,7 @@ class OneModeProjection:
             # self.visualize(encoded_imgs_test)
             outlier_list, ve_flag = self.oneClassSVM(encoded_imgs_test, ve_flag)
 
-            if ve_flag:
-                time.sleep(5)
-
-
+                
         normal_ip = []
         print('suspicious ip: ')
         for i in range(len(outlier_list)):
