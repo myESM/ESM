@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import time
 from scipy import sparse
 from scipy.sparse import csgraph
 import networkx as nx
@@ -56,17 +57,24 @@ class OneModeProjection:
         # plt.show()
 
 
-    def oneClassSVM(self, encoded_imgs_test):
+    def oneClassSVM(self, encoded_imgs_test, ve_flag):
         
         encoded_imgs_list = encoded_imgs_test.tolist()
         print(encoded_imgs_list)
-
-        # clf = OneClassSVM(gamma='auto', nu=self.nu).fit(encoded_imgs_list)
-        clf = EllipticEnvelope(contamination=self.nu).fit(np.array(encoded_imgs_list))   
-        print('test: ', clf.predict(encoded_imgs_list))
-
-        return clf.predict(encoded_imgs_list)
-
+ 
+        try:
+            # clf = OneClassSVM(gamma='auto', nu=self.nu).fit(encoded_imgs_list)
+            clf = EllipticEnvelope(contamination=self.nu).fit(np.array(encoded_imgs_list))   
+            print('test: ', clf.predict(encoded_imgs_list))
+        except ValueError:
+            print('ValueError')
+            print('Automatic retraining')
+            ve_flag = True
+            return [], ve_flag
+        else:
+            ve_flag = False
+            return clf.predict(encoded_imgs_list), ve_flag
+        
         '''
         c = 0.01
         for _ in range(99):
@@ -107,7 +115,7 @@ class OneModeProjection:
         A_test_ = preprocess_adj(A_test, SYM_NORM)
         graph_test = [X_test, A_test_]
 
-        np.random.seed(6)
+        np.random.seed(2)
 
         G = [Input(shape=(None, None), batch_shape=(None, None), sparse=True)]
         X_in = Input(shape=(X.shape[1],))
@@ -124,31 +132,38 @@ class OneModeProjection:
         # D = Dropout(0.5)(D)
         O = GraphConvolution(A.shape[0], support, activation='relu')([D]+G)
 
-        # compile model
-        autoencoder = Model(input=[X_in]+G, output=O)
+        ve_flag = True
+        while(ve_flag):
 
-        # construct the encoder model for plotting
-        encoder = Model(input=[X_in]+G, output=Y)
+            # compile model
+            autoencoder = Model(input=[X_in]+G, output=O)
 
-        # compile autoencoder
-        autoencoder.compile(loss='categorical_crossentropy', optimizer=Adam(lr=0.01))
+            # construct the encoder model for plotting
+            encoder = Model(input=[X_in]+G, output=Y)
 
-        from keras.callbacks import EarlyStopping
-        PATIENCE = 30
-        es_callback = EarlyStopping(monitor='loss', patience=PATIENCE)
+            # compile autoencoder
+            autoencoder.compile(loss='categorical_crossentropy', optimizer=Adam(lr=0.01))
 
-        # training
-        autoencoder.fit(graph, A_, 
-                        # sample_weight=train_mask,
-                        epochs=500,
-                        batch_size=A.shape[0],
-                        shuffle=False, callbacks=[es_callback])
+            from keras.callbacks import EarlyStopping
+            PATIENCE = 30
+            es_callback = EarlyStopping(monitor='loss', patience=PATIENCE)
 
-        # plotting
-        encoded_imgs_test = encoder.predict(graph_test, batch_size=A_test.shape[0])
+            # training
+            autoencoder.fit(graph, A_, 
+                            # sample_weight=train_mask,
+                            epochs=500,
+                            batch_size=A.shape[0],
+                            shuffle=False, callbacks=[es_callback])
 
-        # self.visualize(encoded_imgs_test)
-        outlier_list = self.oneClassSVM(encoded_imgs_test)
+            # plotting
+            encoded_imgs_test = encoder.predict(graph_test, batch_size=A_test.shape[0])
+
+            # self.visualize(encoded_imgs_test)
+            outlier_list, ve_flag = self.oneClassSVM(encoded_imgs_test, ve_flag)
+
+            if ve_flag:
+                time.sleep(5)
+
 
         normal_ip = []
         print('suspicious ip: ')
