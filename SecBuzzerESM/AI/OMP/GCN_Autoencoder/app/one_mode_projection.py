@@ -14,6 +14,7 @@ from keras.regularizers import l2
 from keras.optimizers import Adam
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+from keras import backend as K
 
 from sklearn.svm import OneClassSVM
 from sklearn.covariance import EllipticEnvelope
@@ -98,6 +99,9 @@ class OneModeProjection:
 
     def run(self, dict_train, dict_test, feature_train, feature_test, ip_list):
 
+        np.random.seed(2)
+        K.clear_session()
+
         train_smatrix = self.getOMPSimilarityMatrix(dict_train, ip_list)
         test_smatrix = self.getOMPSimilarityMatrix(dict_test, ip_list)
 
@@ -115,8 +119,6 @@ class OneModeProjection:
 
         A_test_ = preprocess_adj(A_test, SYM_NORM)
         graph_test = [X_test, A_test_]
-
-        np.random.seed(2)
 
         G = [Input(shape=(None, None), batch_shape=(None, None), sparse=True)]
         X_in = Input(shape=(X.shape[1],))
@@ -137,10 +139,10 @@ class OneModeProjection:
         while(ve_flag):
 
             # compile model
-            autoencoder = Model(input=[X_in]+G, output=O)
+            autoencoder = Model(inputs=[X_in]+G, outputs=O)
 
             # construct the encoder model for plotting
-            encoder = Model(input=[X_in]+G, output=Y)
+            encoder = Model(inputs=[X_in]+G, outputs=Y)
 
             # compile autoencoder
             autoencoder.compile(loss='categorical_crossentropy', optimizer=Adam(lr=0.01))
@@ -149,22 +151,12 @@ class OneModeProjection:
             PATIENCE = 30
             es_callback = EarlyStopping(monitor='loss', patience=PATIENCE)
 
-            te_flag = True
-            while(te_flag):
-                try:
-                    # training
-                    autoencoder.fit(graph, A_, 
-                                    # sample_weight=train_mask,
-                                    epochs=500,
-                                    batch_size=A.shape[0],
-                                    shuffle=False, callbacks=[es_callback])
-                except TypeError:
-                    print('TypeError')
-                    print('Automatic retraining')
-                    te_flag = True
-                    time.sleep(5)
-                else:
-                    te_flag = False
+            # training
+            autoencoder.fit(graph, A_, 
+                            # sample_weight=train_mask,
+                            epochs=500,
+                            batch_size=A.shape[0],
+                            shuffle=False, callbacks=[es_callback])
 
             # plotting
             encoded_imgs_test = encoder.predict(graph_test, batch_size=A_test.shape[0])

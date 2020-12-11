@@ -26,12 +26,14 @@ services:
     build:
       context: "./OMP/"
       dockerfile: "Dockerfile"
+    container_name: OMP
     restart: unless-stopped
     volumes:
-      - "./OMP/GCN_Autoencoder:/OMP/"
+      - "./OMP/GCN_Autoencoder/:/OMP/"
     networks:
       - esm
-    command: "python /OMP/main.py"
+    command: "python api.py"
+    # command: "sleep infinity"
 
   Winlog:
     image: csti/winlog:v1.2

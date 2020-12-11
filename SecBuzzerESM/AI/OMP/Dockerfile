@@ -1,4 +1,4 @@
-FROM python:3.8.5-slim
+FROM python:3.7-slim
 
 RUN pip install --no-cache-dir \
                 pandas==1.1.1 \
@@ -15,6 +15,8 @@ RUN pip install --no-cache-dir \
 # 設定時區
 ENV TZ=Asia/Taipei
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+WORKDIR /OMP
 
 # Sleeeeeeeeep
 CMD ["sleep infinity"]
