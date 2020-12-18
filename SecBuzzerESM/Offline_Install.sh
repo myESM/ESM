@@ -6,6 +6,21 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
+get_script_dir () {
+     SOURCE="${BASH_SOURCE[0]}"
+     # While $SOURCE is a symlink, resolve it
+     while [ -h "$SOURCE" ]; do
+          DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+          SOURCE="$( readlink "$SOURCE" )"
+          # If $SOURCE was a relative symlink (so no "/" as prefix, need to resolve it relative to the symlink base directory
+          [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+     done
+     DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+     echo "$DIR"
+}
+
+BASEDIR=$(get_script_dir)
+
 if [ -f "/usr/bin/docker" ]; then
     echo "[*] Already install docker!"
 else
@@ -38,13 +53,7 @@ root hard nofile 655360
 * soft nofile 655360
 * hard nofile 655360' >> /etc/security/limits.conf"
 
-ln -s ../SecBuzzerESM.env ES/.env 2>/dev/null || true
-ln -s ../SecBuzzerESM.env Fluentd/.env 2>/dev/null || true
-ln -s ../SecBuzzerESM.env Suricata/.env 2>/dev/null || true
-ln -s ../SecBuzzerESM.env Crontab/.env 2>/dev/null || true
-ln -s ../SecBuzzerESM.env WEB/.env 2>/dev/null || true
-ln -s ../SecBuzzerESM.env AI/.env 2>/dev/null || true
-ln -s ../SecBuzzerESM.env Packetbeat/.env 2>/dev/null || true
+find $BASEDIR -maxdepth 1 -mindepth 1 -type d -exec ln -s ../SecBuzzerESM.env {}/.env \; 2>/dev/null || true
 
 mkdir -p /opt/Logs/ES/volume/es
 mkdir -p /opt/Logs/ES/volume/es1
@@ -54,7 +63,7 @@ mkdir -p /opt/Logs/Fluentd
 mkdir -p /opt/Logs/Buffers
 
 chown 1000 /opt/Logs -R
-chmod go-w ./Packetbeat/packetbeat.docker.yml
+chmod go-w $BASEDIR/Packetbeat/packetbeat.docker.yml
 
-gunzip -c ./envimage/SecBuzzerESM.tgz | sudo docker load
+gunzip -c $BASEDIR/envimage/SecBuzzerESM.tgz | sudo docker load
 sudo docker network create esm_network 2>/dev/null || true

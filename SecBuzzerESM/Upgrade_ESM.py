@@ -70,7 +70,7 @@ def init():
 
 def update():
     cache = '' if args.cache else '--no-cache'
-    if lastest_ver == prev_ver:
+    if lastest_ver == prev_ver and not FULL_UPGRADE:
         tprint(f'{bcolors.OKGREEN}已經是最新版了')
         sys.exit()
 
@@ -92,7 +92,9 @@ def update():
         if user_input.lower() != 'y':
             sys.exit()
         subprocess.call(f'rsync -a --exclude=HISTORY.md . {ESMPATH}', shell=True)
-        subprocess.call('docker rmi -f $(docker images -q) > /dev/null', shell=True)
+        subprocess.call('docker rmi -f $(docker images -q)', shell=True)
+        subprocess.call('docker system prune -f', shell=True)
+        subprocess.call(f'rm -rf {ESMPATH}/*/.env', shell=True)
         ret = subprocess.call('bash Install.sh', shell=True)
         if ret != 0:
             tprint(f'{bcolors.FAIL}更新失敗, 請洽 ESM 工程師')
