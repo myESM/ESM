@@ -7,6 +7,21 @@ fi
 # Get docker-ce binary from: https://download.docker.com/linux/static/stable/x86_64/
 # eg: wget https://download.docker.com/linux/static/stable/x86_64/docker-17.09.0-ce.tgz
 
+get_script_dir () {
+     SOURCE="${BASH_SOURCE[0]}"
+     # While $SOURCE is a symlink, resolve it
+     while [ -h "$SOURCE" ]; do
+          DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+          SOURCE="$( readlink "$SOURCE" )"
+          # If $SOURCE was a relative symlink (so no "/" as prefix, need to resolve it relative to the symlink base directory
+          [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+     done
+     DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+     echo "$DIR"
+}
+BASEDIR=$(get_script_dir)
+
+
 SYSTEMDDIR=/lib/systemd/system
 SERVICEFILE=docker.service
 DOCKERDIR=/usr/bin
@@ -14,7 +29,7 @@ DOCKERBIN=docker
 SERVICENAME=docker
 MAINPID='$MAINPID'
 
-tar xvpf ./envimage/docker-*.tgz
+tar xvpf $BASEDIR/envimage/docker-*.tgz
 
 echo "##binary : ${DOCKERBIN} copy to ${DOCKERDIR}"
 mv ${DOCKERBIN}/* ${DOCKERDIR} >/dev/null 2>&1
@@ -66,5 +81,5 @@ usermod -aG docker ${USER} >/dev/null 2>&1
 rm -rf docker
 
 echo "## install docker-compose "
-cp ./envimage/docker-compose /usr/local/bin/
+cp $BASEDIR/envimage/docker-compose /usr/local/bin/
 chmod +x /usr/local/bin/docker-compose
