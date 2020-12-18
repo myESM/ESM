@@ -13,27 +13,41 @@ GRAFANA_PIE_CHART_VERSION=1.5.0
 sudo apt update
 sudo apt install -y curl
 
+get_script_dir () {
+     SOURCE="${BASH_SOURCE[0]}"
+     # While $SOURCE is a symlink, resolve it
+     while [ -h "$SOURCE" ]; do
+          DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+          SOURCE="$( readlink "$SOURCE" )"
+          # If $SOURCE was a relative symlink (so no "/" as prefix, need to resolve it relative to the symlink base directory
+          [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+     done
+     DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+     echo "$DIR"
+}
+
+BASEDIR=$(get_script_dir)
 
 echo "[*] Download grafana plugin"
-rm -rf ES/grafana_plugins
-mkdir -p ES/grafana_plugins
-git -C './ES/grafana_plugins/' clone https://github.com/grafana/piechart-panel.git --branch release-$GRAFANA_PIE_CHART_VERSION 
+rm -rf $BASEDIR/ES/grafana_plugins
+mkdir -p $BASEDIR/ES/grafana_plugins
+git -C $BASEDIR/ES/grafana_plugins/ clone https://github.com/grafana/piechart-panel.git --branch release-$GRAFANA_PIE_CHART_VERSION 
 
 if [ -f "/usr/bin/docker" ] && [ -f "/usr/local/bin/docker-compose" ]; then
     echo "[*] Already install docker!"
 else
-    rm -rf ./envimage/
+    rm -rf $BASEDIR/envimage/
     echo "[*] Download docker"
-    wget https://download.docker.com/linux/static/stable/x86_64/docker-$DOCKER_VERSION.tgz -P './envimage/'
+    wget https://download.docker.com/linux/static/stable/x86_64/docker-$DOCKER_VERSION.tgz -P "$BASEDIR/envimage/"
     echo "[*] Download docker-compose"
-    curl -L "https://github.com/docker/compose/releases/download/$COMPOSE_VERSION/docker-compose-Linux-x86_64" -o ./envimage/docker-compose
+    curl -L "https://github.com/docker/compose/releases/download/$COMPOSE_VERSION/docker-compose-Linux-x86_64" -o $BASEDIR/envimage/docker-compose
     echo "[*] Install docker & docker-compose"
-    source install_docker.sh
+    source $BASEDIR/install_docker.sh
 fi
 
 echo "[*] Build & Pull docker images"
-find . -type f -name "docker-compose.yml" -exec docker-compose -f {} --log-level ERROR build \;
-find . -type f -name "docker-compose.yml" -exec docker-compose -f {} --log-level ERROR pull \;
+find $BASEDIR -type f -name "docker-compose.yml" -exec docker-compose -f {} --log-level ERROR build \;
+find $BASEDIR -type f -name "docker-compose.yml" -exec docker-compose -f {} --log-level ERROR pull \;
 
 sudo mv /etc/sysctl.conf.bak /etc/sysctl.conf 2>/dev/null || true
 sudo cp -n /etc/sysctl.conf{,.bak}
@@ -60,15 +74,9 @@ root hard nofile 655360
 * soft nofile 655360
 * hard nofile 655360' >> /etc/security/limits.conf"
 
-ln -s ../SecBuzzerESM.env ES/.env 2>/dev/null || true
-ln -s ../SecBuzzerESM.env Fluentd/.env 2>/dev/null || true
-ln -s ../SecBuzzerESM.env Suricata/.env 2>/dev/null || true
-ln -s ../SecBuzzerESM.env Crontab/.env 2>/dev/null || true
-ln -s ../SecBuzzerESM.env WEB/.env 2>/dev/null || true
-ln -s ../SecBuzzerESM.env AI/.env 2>/dev/null || true
-ln -s ../SecBuzzerESM.env Packetbeat/.env 2>/dev/null || true
+find $BASEDIR -maxdepth 1 -mindepth 1 -type d -exec ln -s ../SecBuzzerESM.env {}/.env \; 2>/dev/null || true
 
-API_KEY=`cat SecBuzzerESM.env | grep API_KEY_VALUE | cut -d = -f 2`
+API_KEY=`cat $BASEDIR/SecBuzzerESM.env | grep API_KEY_VALUE | cut -d = -f 2`
 if [ -n "$API_KEY" ]
 then
 mkdir -p tmp/rules
@@ -88,7 +96,7 @@ mkdir -p /opt/Logs/Fluentd
 mkdir -p /opt/Logs/Buffers
 
 chown 1000 /opt/Logs -R
-chmod go-w ./Packetbeat/packetbeat.docker.yml
+chmod go-w $BASEDIR/Packetbeat/packetbeat.docker.yml
 
 rm -rf envimage
 sudo docker network create esm_network 2>/dev/null || true

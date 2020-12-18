@@ -79,7 +79,7 @@ def main():
         data = '{"query":{"bool":{"must":[{"range":{"@timestamp":{"gt":"'+DATE.strftime('%Y-%m-%dT%H')+':00:00.000Z","lt":"'+DATE.strftime('%Y-%m-%dT%H')+':59:59.999Z"}}}]}},"size":0,"track_total_hits": false,"aggs": {"my_buckets": {"composite": {"size": 99999,"sources": [{"source.port": {"terms": {"field": "source.port"}}}]}}}}'
         resp = requests.post(f"http://{ESIPPORT}/packetbeat-{DATE.strftime('%Y.%m.%d')}/_search", data=data, headers=HEADER).json()
         splist = Counter({_['key']['source.port']: _['doc_count'] for _ in resp['aggregations'].get('my_buckets')['buckets']})
-        t20sp = [{'port:': _[0], 'count': _[1]} for _ in splist.most_common(20)]
+        t20sp = [{'port': _[0], 'count': _[1]} for _ in splist.most_common(20)]
         # Total Source Port 
         totalsp = len(splist)
 
@@ -87,7 +87,7 @@ def main():
         data = '{"query":{"bool":{"must":[{"range":{"@timestamp":{"gt":"'+DATE.strftime('%Y-%m-%dT%H')+':00:00.000Z","lt":"'+DATE.strftime('%Y-%m-%dT%H')+':59:59.999Z"}}}]}},"size":0,"track_total_hits": false,"aggs": {"my_buckets": {"composite": {"size": 99999,"sources": [{"destination.port": {"terms": {"field": "destination.port"}}}]}}}}'
         resp = requests.post(f"http://{ESIPPORT}/packetbeat-{DATE.strftime('%Y.%m.%d')}/_search", data=data, headers=HEADER).json()
         dplist = Counter({_['key']['destination.port']: _['doc_count'] for _ in resp['aggregations'].get('my_buckets')['buckets']})
-        t20dp = [{'port:': _[0], 'count': _[1]} for _ in dplist.most_common(20)]
+        t20dp = [{'port': _[0], 'count': _[1]} for _ in dplist.most_common(20)]
         # Total Destination Port 
         totaldp = len(dplist)
 
