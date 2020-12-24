@@ -18,6 +18,7 @@ from keras import backend as K
 
 from sklearn.svm import OneClassSVM
 from sklearn.covariance import EllipticEnvelope
+from keras import backend as K
 
 
 class OneModeProjection:
@@ -61,12 +62,12 @@ class OneModeProjection:
     def oneClassSVM(self, encoded_imgs_test, ve_flag):
         
         encoded_imgs_list = encoded_imgs_test.tolist()
-        print(encoded_imgs_list)
+        print(encoded_imgs_list, flush=True)
  
         try:
             # clf = OneClassSVM(gamma='auto', nu=self.nu).fit(encoded_imgs_list)
             clf = EllipticEnvelope(contamination=self.nu).fit(np.array(encoded_imgs_list))   
-            print('test: ', clf.predict(encoded_imgs_list))
+            print('test: ', clf.predict(encoded_imgs_list), flush=True)
         except ValueError:
             print('ValueError')
             print('Automatic retraining')
@@ -166,10 +167,10 @@ class OneModeProjection:
 
                 
         normal_ip = []
-        print('suspicious ip: ')
+        print('suspicious ip: ', flush=True)
         for i in range(len(outlier_list)):
             if outlier_list[i] == -1:
-                print(ip_list[i])
+                print(ip_list[i], flush=True)
             else:
                 normal_ip.append(ip_list[i])
 
