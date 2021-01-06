@@ -1,4 +1,8 @@
 # Release History
+# V1.5.1 (2021-01-06)
+- :tada: Happy New Year! :tada:
+- 修正 Packet_Reporter 傳送重複資料
+
 # V1.5.0 (2020-12-18)
 - 優化線上安裝&離線安裝腳本
 - 修正更新腳本無法重新安裝
