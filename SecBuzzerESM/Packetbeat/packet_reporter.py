@@ -18,7 +18,7 @@ ESIPPORT = 'elasticsearch:9200'
 HOMENET_STR = os.getenv("HOME_NET")
 WAIT_SEC = random.randint(1,30)
 HOMENETS = HOMENET_STR.strip().replace('"', '').replace("'", "").strip('[').strip(']').split(',')
-DATE = datetime.utcnow() - timedelta(hours=1)
+
 print('HOMENETS:', HOMENETS)
 ESM_API = os.getenv("ESM_API")
 ORG_1_CODE = os.getenv("ORG_1_CODE")
@@ -74,6 +74,7 @@ def main():
     print('waiting', WAIT_SEC, 'sec')
     time.sleep(WAIT_SEC)
     HOMENETS = [_ for _ in HOMENETS if check_ip_valid(_)]
+    DATE = datetime.utcnow() - timedelta(hours=1)
     try:
         # Get Top 20 Source Port
         data = '{"query":{"bool":{"must":[{"range":{"@timestamp":{"gt":"'+DATE.strftime('%Y-%m-%dT%H')+':00:00.000Z","lt":"'+DATE.strftime('%Y-%m-%dT%H')+':59:59.999Z"}}}]}},"size":0,"track_total_hits": false,"aggs": {"my_buckets": {"composite": {"size": 99999,"sources": [{"source.port": {"terms": {"field": "source.port"}}}]}}}}'
