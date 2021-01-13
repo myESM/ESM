@@ -41,18 +41,18 @@ services:
       - esm
     restart: always
 
-  ETA_Attack:
-    image: csti/eta:latest
-    build:
-      context: "./ETA/"
-      dockerfile: "Dockerfile"
-    container_name: eta_attack
-    volumes:
-      - "./ETA/ETA-ATTACK/:/ETA-ATTACK/"
-    command: "python /ETA-ATTACK/eta_attack_api.py"
-    networks:
-      - esm
-    restart: always 
+  # ETA_Attack:
+  #   image: csti/eta:latest
+  #   build:
+  #     context: "./ETA/"
+  #     dockerfile: "Dockerfile"
+  #   container_name: eta_attack
+  #   volumes:
+  #     - "./ETA/ETA-ATTACK/:/ETA-ATTACK/"
+  #   command: "python /ETA-ATTACK/eta_attack_api.py"
+  #   networks:
+  #     - esm
+  #   restart: always 
 
   ETA_Malware:
     image: csti/eta:latest

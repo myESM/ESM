@@ -1,4 +1,8 @@
 # Release History
+# V1.5.2 (2021-01-13)
+- 關閉 ETA-Attack AI Module
+- 新增 vnstat 安裝包, 在 Tools 目錄下
+
 # V1.5.1 (2021-01-06)
 - :tada: Happy New Year! :tada:
 - 修正 Packet_Reporter 傳送重複資料
