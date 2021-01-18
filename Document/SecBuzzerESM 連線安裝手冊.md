@@ -99,6 +99,7 @@ FLUENTD_BUFFER_PATH=/opt/Logs/Buffers
 # === Suricata ===
 SURICATA_LOG_PATH=/opt/Logs/Suricata
 IF_NAME=
+HOME_NET=
 # === Grafana ===
 GF_SMTP=false
 GF_SMTP_HOST=smtp.gmail.com:465
@@ -109,6 +110,8 @@ GF_SMTP_PASSWORD=
 WEB_IF_NAME=
 API_KEY_VALUE=
 ORG_3_CODE=
+# === DEV ===
+DEV_MODE=True (該參數只會出現在開發版)
 ```
 
 編輯完成後輸入 `Ctrl+X` 存檔 (以`nano`編輯器為例)
@@ -151,6 +154,16 @@ Suricata 當偵測到告警時，會將告警資料輸出至 eve.json 存放，�
 Suricata 監控的網卡，即透過該網卡來監控網路流量，進而偵測異常行為，因每位使用者的環境不同，所以網卡Interface會相異，`此欄位必需修改`
 
 >註：取得網卡Interface的方法請參閱 2.4 節之說明
+
+- HOME_NET
+
+設定監控的IP或網段，每個IP、網段可使用逗號區隔，支援的格式與範例如下：
+
+```
+HOME_NET=10.0.0.1,192.168.0.1/24,172.16.1.1/24
+```
+
+>註：每個IP或網段間不要空格、亦不需加雙引號或單引號
 
 ---
 
@@ -199,6 +212,11 @@ SMTP 密碼
 
 ![images/install_05.png](images/install_05.png)
 
+### 2.5.6 DEV
+
+- DEV_MODE=True
+
+用來標識開發版與正式版之參數，目前此參數只會出現在開發版
 
 ## 2.6 安裝 SecBuzzerESM
 
@@ -266,3 +284,17 @@ cat HISTORY.md # 或 more HISTORY.md
 ```
 
 ![images/install_14.png](images/install_14.png)
+
+### 2.8.2 防火牆設定
+
+ESM在運行的階段，需要將告警上傳至雲端，或者進行程式、偵測規則的更新，因此，若在場域中有防火牆的防護，則需要開啟以下幾個網址，以利ESM正常的運作：(階為HTTS，所需之Port為443)
+
+1. https://github.com
+2. https://docker.com
+3. https://hub.docker.com
+4. https://api.esm.secbuzzer.co
+
+
+### 2.8.3 網頁重新導向太多次
+
+若發生網頁「重新導向太多次」的問題，則可以是場域內有設置Proxy，此時請準備場域對外連線的IP，並聯絡ESM工程人員進行白名單的設置
