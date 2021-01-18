@@ -212,6 +212,8 @@ SMTP 密碼
 
 ![images/install_05.png](images/install_05.png)
 
+---
+
 ### 2.5.6 DEV
 
 - DEV_MODE=True
