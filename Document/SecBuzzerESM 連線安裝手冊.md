@@ -267,8 +267,8 @@ docker ps -a
 
 可以透過連線至Elasticsearch(ES)的方式，來確認ES是否正常運作
 
-- 連線至ES Head(查看ES狀態的工具)：http://your_ip/19100
-- 再由ES Head連線至ES查看：http://your_ip/19200
+- 連線至ES Head(查看ES狀態的工具)：http://your_ip:19100
+- 再由ES Head連線至ES查看：http://your_ip:19200
 
 如下圖所示：
 
