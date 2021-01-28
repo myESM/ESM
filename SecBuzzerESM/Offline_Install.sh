@@ -30,20 +30,23 @@ fi
 
 sudo mv /etc/sysctl.conf.bak /etc/sysctl.conf 2>/dev/null || true
 sudo cp -n /etc/sysctl.conf{,.bak}
-sudo sh -c "echo vm.max_map_count=262144 >> /etc/sysctl.conf"
 
-sudo sysctl -w vm.max_map_count=262144
-
-sudo sh -c "echo 'net.core.somaxconn = 1024
+sudo sh -c "echo 'vm.max_map_count=262144
+net.core.somaxconn = 1024
 net.core.netdev_max_backlog = 5000
 net.core.rmem_max = 16777216
 net.core.wmem_max = 16777216
 net.ipv4.tcp_wmem = 4096 12582912 16777216
 net.ipv4.tcp_rmem = 4096 12582912 16777216
+
 net.ipv4.tcp_max_syn_backlog = 8096
 net.ipv4.tcp_slow_start_after_idle = 0
 net.ipv4.tcp_tw_reuse = 1
+net.ipv4.udp_mem = 4096 12582912 16777216
+net.ipv4.udp_rmem_min = 16384
+net.ipv4.udp_wmem_min = 16384
 net.ipv4.ip_local_port_range = 10240 65535' >> /etc/sysctl.conf"
+
 sudo sysctl -p
 
 sudo mv /etc/security/limits.conf.bak /etc/security/limits.conf 2>/dev/null || true
@@ -65,5 +68,11 @@ mkdir -p /opt/Logs/Buffers
 chown 1000 /opt/Logs -R
 chmod go-w $BASEDIR/Packetbeat/packetbeat.docker.yml
 
+echo "Disable Swap"
+swapoff -a
+sed -i 's/.*swap.*/#&/' /etc/fstab
+
 gunzip -c $BASEDIR/envimage/SecBuzzerESM.tgz | sudo docker load
 sudo docker network create esm_network 2>/dev/null || true
+
+echo "Done!"

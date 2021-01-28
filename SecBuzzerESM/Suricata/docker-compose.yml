@@ -5,12 +5,8 @@ services:
     image: "cstichenghanlin/secbuzzer-suricata:6.0.0"
     container_name: suricata
     restart: always
-    environment:
-    # For ET Pro ruleset replace "OPEN" with your OINKCODE
-      OINKCODE: OPEN
-      IFNAME: ${IF_NAME}
-      HOME_NET: ${HOME_NET:-any}
     network_mode: "host"
+    command: ["/usr/bin/suricata", "-v",  "-i", "${IF_NAME}", "--set", "vars.address-groups.HOME_NET=${HOME_NET:-any}", "-c", "/etc/suricata/suricata.yaml"]
     cap_add:
      - NET_ADMIN
      - SYS_NICE
