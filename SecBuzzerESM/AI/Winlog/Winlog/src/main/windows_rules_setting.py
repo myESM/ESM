@@ -165,8 +165,8 @@ def command_line_interface_1B1_query(es_start_time, es_end_time):
           }
         },
         {
-          "match": {
-            "winlog.event_data.Image": "C:\Windows\System32\cmd.exe"
+          "wildcard": {
+            "winlog.event_data.Image": "*cmd.exe*"
           }
         },
         {
