@@ -25,3 +25,17 @@ packetbeat_remove_date="$(date -d '-7 days' +%Y.%m.%d)"
 curl -X DELETE "elasticsearch:9200/packetbeat-$packetbeat_remove_date"
 echo "[*] Daily check and remove index"
 
+lm_remove_date="$(date -d '-184 day' +%Y-%m-%d)"
+curl -X DELETE "elasticsearch:9200/lm-$lm_remove_date"
+
+find /Logs/ -type f -ctime +3 | xargs tar zcvf `date +'%Y-%m-%d'`.tgz --remove-files
+find /Logs/ -type d -empty -delete
+mv `date +'%Y-%m-%d'`.tgz /LogsCompress
+
+chgrp 1000 /LogsCompress/*
+chown 1000 /LogsCompress/*
+
+#rm -f /LogsCompress/`date +'%Y-%m-%d' -d '-397 days'`.tgz
+
+echo [*] `date +'%Y-%m-%d'` exec RAW log compress >> /var/log/cron.log
+#echo [*] `date +'%Y-%m-%d'` Delete `date +'%Y-%m-%d' -d '-397 days'`.tgz  >> /var/log/cron.loga

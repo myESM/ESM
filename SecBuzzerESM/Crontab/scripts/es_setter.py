@@ -58,7 +58,22 @@ reqs = {
     "persistent": {
       "search.max_buckets": 100000
     }
-  }"""
+  }""",
+  "http://elasticsearch:9200/_template/lm-":"""
+  {
+        "index_patterns": ["lm-*"],
+        "settings":{
+          "number_of_replicas": 0
+        },
+        "mappings": {
+            "properties": {
+                "timestamp": {
+                    "type": "text"
+                }
+            }
+        }
+  }
+  """
 }
 
 old_print = print
