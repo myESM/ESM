@@ -1,5 +1,9 @@
 # Release History
 # V1.5.4 (2021-02-25)
+- 修改 compose.sh, 不啟動 AI 模組
+- 調整 prepare.sh, 避免新版 Docker 無法壓縮離線安裝包 (已測試在 Docker 20.10.3)
+
+# V1.5.4 (2021-02-25)
 - Fluentd 啟用 Syslog 與 CEF Log Parser 功能
 - 新增 ES Template 指定 lm index timestamp 欄位為 text 格式
 - 新增自動刪除半年前 lm index
