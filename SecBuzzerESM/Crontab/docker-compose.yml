@@ -8,7 +8,7 @@ services:
       context: "./docker_image/"
       dockerfile: "Dockerfile"
     volumes:
-      - "$FLUENTD_LOG_PATH:/fluentd_log"
+      #- "$FLUENTD_LOG_PATH:/fluentd_log"
       - "$ES_VOLUME_PATH:/es_volume"
       - "$SURICATA_LOG_PATH:/suricata_log"
       - "../Suricata/suricata/rules:/Suricata_rules/rules"
@@ -17,6 +17,8 @@ services:
       - "/etc/hostname:/hostname:ro"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - ../SecBuzzerESM.env:/.env:ro
+      - "$FLUENTD_BUFFER_PATH/Logs/:/Logs/"
+      - "$FLUENTD_LOG_PATH:/LogsCompress"
     networks:
       - esm
     restart: always

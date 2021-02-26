@@ -22,7 +22,7 @@ done
 
 echo [*] Packaging all images
 mkdir -p $shell_path'/envimage'
-docker save $(docker images | sed '1d' | awk '{print $1 ":" $2 }') | gzip > $shell_path'/envimage/SecBuzzerESM.tgz'
+docker save $(docker images --format '{{.Repository}}:{{.Tag}}' --filter "dangling=false" | grep -v none)  | gzip > $shell_path'/envimage/SecBuzzerESM.tgz'
 
 echo [*] Download grafana plugin
 mkdir -p $shell_path'/ES/grafana_plugins'

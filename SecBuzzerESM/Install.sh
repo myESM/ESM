@@ -51,19 +51,21 @@ find $BASEDIR -type f -name "docker-compose.yml" -exec docker-compose -f {} --lo
 
 sudo mv /etc/sysctl.conf.bak /etc/sysctl.conf 2>/dev/null || true
 sudo cp -n /etc/sysctl.conf{,.bak}
-sudo sh -c "echo vm.max_map_count=262144 >> /etc/sysctl.conf"
 
-sudo sysctl -w vm.max_map_count=262144
-
-sudo sh -c "echo 'net.core.somaxconn = 1024
+sudo sh -c "echo 'vm.max_map_count=262144
+net.core.somaxconn = 1024
 net.core.netdev_max_backlog = 5000
 net.core.rmem_max = 16777216
 net.core.wmem_max = 16777216
 net.ipv4.tcp_wmem = 4096 12582912 16777216
 net.ipv4.tcp_rmem = 4096 12582912 16777216
+
 net.ipv4.tcp_max_syn_backlog = 8096
 net.ipv4.tcp_slow_start_after_idle = 0
 net.ipv4.tcp_tw_reuse = 1
+net.ipv4.udp_mem = 4096 12582912 16777216
+net.ipv4.udp_rmem_min = 16384
+net.ipv4.udp_wmem_min = 16384
 net.ipv4.ip_local_port_range = 10240 65535' >> /etc/sysctl.conf"
 sudo sysctl -p
 
@@ -83,7 +85,7 @@ mkdir -p tmp/rules
 current_rules_version=`curl -X POST "https://api.esm.secbuzzer.co/esmapi/web/file/fileVersion" -d "{'TypeCode': 'it'}" -H "Content-Type: application/json" -H "accept: */*" -H "authorization: $API_KEY" | cut -d : -f 2 | cut -d \" -f 2`
 curl -o rules.tgz "https://api.esm.secbuzzer.co/esmapi/web/file/download/it/$current_rules_version" -H "accept: */*" -H "authorization: $API_KEY"
 tar zxvf rules.tgz -C tmp/rules
-sudo chown 1000:1000 /tmp/* -R
+sudo chown 1000:1000 tmp/* -R
 sudo rsync -r --delete tmp/rules/ Suricata/suricata/rules/
 rm -rf tmp rules.tgz
 else
@@ -100,4 +102,9 @@ chmod go-w $BASEDIR/Packetbeat/packetbeat.docker.yml
 
 rm -rf envimage
 sudo docker network create esm_network 2>/dev/null || true
+
+echo "Disable Swap"
+swapoff -a
+sed -i 's/.*swap.*/#&/' /etc/fstab
+
 echo "Done!"
