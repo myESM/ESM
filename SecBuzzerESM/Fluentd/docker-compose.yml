@@ -7,7 +7,7 @@ services:
             dockerfile: "Dockerfile"
         volumes:
             - "$FLUENTD_BUFFER_PATH:/fluentd/Buffers"
-            - "./conf/fluent.conf:/fluentd/etc/fluent.conf"
+            - "./conf/suricata.conf:/fluentd/etc/fluent.conf"
             - "/usr/share/zoneinfo/ROC:/etc/localtime:ro" 
             - "$SURICATA_LOG_PATH:/fluentd/suricata/"
         network_mode: host
