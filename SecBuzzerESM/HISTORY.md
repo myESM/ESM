@@ -1,4 +1,8 @@
-# Release History
+# Release Histor
+# V1.5.6 (2021-03-02)
+- Fluentd 停用 Syslog 與 CEF Log Parser 功能
+- fluent.conf 移除多餘 x 字元
+
 # V1.5.5 (2021-02-26)
 - 修改 compose.sh, 不啟動 AI 模組
 - 調整 prepare.sh, 避免新版 Docker 無法壓縮離線安裝包 (已測試在 Docker 20.10.3)
