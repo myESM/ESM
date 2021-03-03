@@ -304,7 +304,7 @@ ESM在運行的階段，需要將告警上傳至雲端，或者進行程式、�
 2. https://docker.com
 3. https://hub.docker.com
 4. https://api.esm.secbuzzer.co
-
+5. ntp.ubuntu.com:123/UDP (Network Time Protocol)
 
 ### 2.8.3 網頁重新導向太多次
 
