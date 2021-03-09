@@ -1,4 +1,7 @@
 # Release Histor
+# V1.5.7 (2021-03-09)
+- 設定 FluentD Tail read_from_head 參數為 True
+
 # V1.5.6 (2021-03-02)
 - Fluentd 停用 Syslog 與 CEF Log Parser 功能
 - fluent.conf 移除多餘 x 字元
