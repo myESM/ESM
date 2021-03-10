@@ -1,4 +1,8 @@
 # Release Histor
+# V1.5.8 (2021-03-10)
+- EsmEdgeApp.jar重新上傳
+- EsmEdgeApp.jar update ES attribute client.transport.sniff to be true
+
 # V1.5.7 (2021-03-09)
 - 設定 FluentD Tail read_from_head 參數為 True
 
