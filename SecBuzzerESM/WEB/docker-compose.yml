@@ -4,7 +4,7 @@ services:
   edgeapp:
     image: openjdk:11.0.8-jre
     container_name: client_tomcat
-    restart: always
+    restart: unless-stopped
     network_mode: "host"
     #tty: "true"
     volumes:

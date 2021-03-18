@@ -7,6 +7,10 @@ MAINTAINER CSTI-Chenghan Lin
  
 COPY requirement.txt /requirement.txt
 
+ENV TINI_VERSION v0.19.0
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+RUN chmod +x /tini
+
 RUN set -ex \
     && apt-get update \
     && apt-get install --no-install-recommends -y  cron curl rsync jq \
@@ -33,6 +37,7 @@ RUN touch /var/log/cron.log
 # RUN (crontab -l ; echo "@daily python /script/diskcheck.py >> /var/log/cron.log") | crontab
 
 # Run the command on container startup
+ENTRYPOINT ["/tini", "--"]
 
 CMD echo "Starting" && echo "Continuing" && (cron) \
  && echo "Tailing..." && : >> /var/log/cron.log && tail -f /var/log/cron.log

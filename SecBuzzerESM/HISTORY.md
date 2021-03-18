@@ -1,4 +1,10 @@
 # Release Histor
+# V1.6.0 (2021-03-18)
+- 使用 tini 優化 Container 關閉速度
+- 新增 vnstat Service 
+- Container 重啟策略改為 unless-stopped
+- 修正 Upgrade_ESM.py 大版本更新時 .env 消失
+
 # V1.5.8 (2021-03-10)
 - EsmEdgeApp.jar重新上傳
 - EsmEdgeApp.jar update ES attribute client.transport.sniff to be true
