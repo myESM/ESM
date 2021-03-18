@@ -11,4 +11,4 @@ services:
             - "/usr/share/zoneinfo/ROC:/etc/localtime:ro" 
             - "$SURICATA_LOG_PATH:/fluentd/suricata/"
         network_mode: host
-        restart: always
+        restart: unless-stopped

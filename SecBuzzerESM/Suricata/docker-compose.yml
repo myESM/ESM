@@ -4,7 +4,7 @@ services:
   suricata:
     image: "cstichenghanlin/secbuzzer-suricata:6.0.0"
     container_name: suricata
-    restart: always
+    restart: unless-stopped
     network_mode: "host"
     command: ["/usr/bin/suricata", "-v",  "-i", "${IF_NAME}", "--set", "vars.address-groups.HOME_NET=${HOME_NET:-any}", "-c", "/etc/suricata/suricata.yaml"]
     cap_add:
@@ -21,7 +21,7 @@ services:
   stats_dumper:
     image: csti/stats_dumper:latest
     container_name: suricata_stats_dumper
-    restart: always
+    restart: unless-stopped
     build:
       context: "./stats_dumper/"
       dockerfile: "Dockerfile"    
@@ -39,7 +39,7 @@ services:
   
   suricata_checker:
     image: csti/suricata_checker:latest
-    restart: always
+    restart: unless-stopped
     container_name: suricata_checker
     network_mode: host
     build:
@@ -51,4 +51,24 @@ services:
       - "./suricata_checker:/image:ro"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "/usr/share/zoneinfo/ROC:/etc/localtime:ro"
-    
+  
+  vnstat:
+    image: csti/vnstat:v1
+    restart: unless-stopped
+    container_name: vnstat
+    build:
+      context: "./vnstat/"
+      dockerfile: "Dockerfile"
+    network_mode: host
+    command: ['python3', '-u', '/main.py']
+    environment:
+      ESM_API: ${API_KEY_VALUE}
+      ORG_1_CODE: ${ORG_1_CODE:-TEST}
+      ORG_2_CODE: ${ORG_2_CODE:-TEST}
+      ORG_3_CODE: ${ORG_3_CODE}
+      IF_NAME: $IF_NAME
+      DEV: ${DEV_MODE:-no}
+      TZ: UTC
+    volumes:
+      - "/etc/hostname:/HOSTNAME:ro"
+      - "./vnstat/main.py:/main.py"

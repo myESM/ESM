@@ -21,7 +21,7 @@ services:
       - "$FLUENTD_LOG_PATH:/LogsCompress"
     networks:
       - esm
-    restart: always
+    restart: unless-stopped
 
 networks:
   esm:

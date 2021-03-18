@@ -99,7 +99,7 @@ def update():
         if ret != 0:
             tprint(f'{bcolors.FAIL}更新失敗, 請洽 ESM 工程師')
             sys.exit(1)
-            
+        subprocess.call(f'find {ESMPATH} -maxdepth 1 -mindepth 1 -type d -exec ln -s ../SecBuzzerESM.env ' + '{}/.env \; 2>/dev/null || true', shell=True)
         tprint(f'{bcolors.OKGREEN}更新完成')
         subprocess.call(f'rsync -ra HISTORY.md {ESMPATH}', shell=True)
         tprint(f'{bcolors.WARNING}本次升級需重新設定 SecBuzzerESM.env, 設定完畢後執行 Update_Suricata_rules.sh')
