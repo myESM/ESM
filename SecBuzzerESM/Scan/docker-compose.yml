@@ -1,0 +1,22 @@
+version: '3'
+services:
+    schedule:
+        image: esmsecbuzzer/nmapandflowscan:1.0.0
+        network_mode : "host"
+        # command: "bash -c 'while :; do sleep 60; done'"
+        environment:
+            - ES_IP=localhost
+            - ES_PORT=19200
+            - ORG1CODE=01
+            - ORG2CODE=02
+            - ORG3CODE=$ORG_3_CODE
+        #FLOW SCAN PARAMETER
+            - FLOWSCAN_SCHED_PERIOD=1
+            - INTERFACE=$IF_NAME
+            - FLOWSCAN_SOURCEIP=$FLOWSCAN_SOURCEIP
+            - FLOWSCAN_DESTIP=$FLOWSCAN_DESTIP
+            - PACKETCOUNT=1000
+            - TOTALCOUNT=$FLOWSCAN_TOTALCOUNT
+        #NMAP SCAN PARAMETER 
+            - NMAPSCAN_SCHED_PERIOD=1
+            - NMAPSCAN_IP=$NMAPSCAN_IP

@@ -1,4 +1,7 @@
 # Release Histor
+# V1.7.0 (2021-03-19)
+- 新增資產盤點
+
 # V1.6.0 (2021-03-18)
 - 使用 tini 優化 Container 關閉速度
 - 新增 vnstat Service 
