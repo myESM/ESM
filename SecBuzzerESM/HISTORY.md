@@ -1,4 +1,7 @@
 # Release Histor
+# V2.0.1 (2021-03-25)
+- EsmEdgeApp.jar整合資產盤點 (nmap & flowscan)
+
 # V2.0.0 (2021-03-24)
 - 整合資產盤點 (nmap & flowscan)
 - 更新 ETA-Malware
