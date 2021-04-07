@@ -1,4 +1,7 @@
 # Release Histor
+# V2.0.2 (2021-04-06)
+- 關閉 Suricata_dumper Service
+
 # V2.0.1 (2021-03-25)
 - EsmEdgeApp.jar整合資產盤點 (nmap & flowscan)
 

@@ -18,24 +18,24 @@ services:
       - "/usr/share/zoneinfo/ROC:/etc/localtime:ro"
       - "./suricata/iprep:/etc/suricata/iprep"
 
-  stats_dumper:
-    image: csti/stats_dumper:latest
-    container_name: suricata_stats_dumper
-    restart: unless-stopped
-    build:
-      context: "./stats_dumper/"
-      dockerfile: "Dockerfile"    
-    command: "python3 -u /main.py"
-    volumes:
-      - "/etc/hostname:/HOSTNAME:ro"
-      - "./stats_dumper/main.py:/main.py"
-      - "$SURICATA_LOG_PATH:/var/log/suricata"
-    environment:
-      ESM_API: ${API_KEY_VALUE}
-      ORG_1_CODE: ${ORG_1_CODE:-TEST}
-      ORG_2_CODE: ${ORG_2_CODE:-TEST}
-      ORG_3_CODE: ${ORG_3_CODE}
-      DEV: ${DEV_MODE:-no}
+  # stats_dumper:
+  #   image: csti/stats_dumper:latest
+  #   container_name: suricata_stats_dumper
+  #   restart: unless-stopped
+  #   build:
+  #     context: "./stats_dumper/"
+  #     dockerfile: "Dockerfile"    
+  #   command: "python3 -u /main.py"
+  #   volumes:
+  #     - "/etc/hostname:/HOSTNAME:ro"
+  #     - "./stats_dumper/main.py:/main.py"
+  #     - "$SURICATA_LOG_PATH:/var/log/suricata"
+  #   environment:
+  #     ESM_API: ${API_KEY_VALUE}
+  #     ORG_1_CODE: ${ORG_1_CODE:-TEST}
+  #     ORG_2_CODE: ${ORG_2_CODE:-TEST}
+  #     ORG_3_CODE: ${ORG_3_CODE}
+  #     DEV: ${DEV_MODE:-no}
   
   suricata_checker:
     image: csti/suricata_checker:latest
