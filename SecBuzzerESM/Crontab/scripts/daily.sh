@@ -23,6 +23,12 @@ curl -X DELETE "elasticsearch:9200/winlogbeat-$winlogbeat_remove_date"
 
 packetbeat_remove_date="$(date -d '-7 days' +%Y.%m.%d)"
 curl -X DELETE "elasticsearch:9200/packetbeat-$packetbeat_remove_date"
+
+flowscan_remove_date="$(date -d '-6 month' +%Y-%m)"
+curl -X DELETE "elasticsearch:9200/flowscan-$flowscan_remove_date"
+
+nmapscan_remove_date="$(date -d '-6 month' +%Y-%m)"
+curl -X DELETE "elasticsearch:9200/nmap-$nmapscan_remove_date"
 echo "[*] Daily check and remove index"
 
 lm_remove_date="$(date -d '-184 day' +%Y-%m-%d)"

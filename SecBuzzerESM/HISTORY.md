@@ -1,4 +1,17 @@
 # Release Histor
+# V2.0.2 (2021-04-06)
+- 關閉 Suricata_dumper Service
+
+# V2.0.1 (2021-03-25)
+- EsmEdgeApp.jar整合資產盤點 (nmap & flowscan)
+
+# V2.0.0 (2021-03-24)
+- 整合資產盤點 (nmap & flowscan)
+- 更新 ETA-Malware
+
+# V1.7.0 (2021-03-19)
+- 新增資產盤點
+
 # V1.6.0 (2021-03-18)
 - 使用 tini 優化 Container 關閉速度
 - 新增 vnstat Service 
