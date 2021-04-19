@@ -174,6 +174,7 @@ def suricata_output_format():
   suricata_fields["module"] = "Winlog"
   suricata_fields["dump_status"] = "0"
   suricata_fields["ingest_timestamp"] = ""
+  suricata_fields["ticket"] = "0"
   suricata_fields["@timestamp"] = ""
   return suricata_fields
 
