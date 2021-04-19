@@ -1,4 +1,7 @@
 # Release Histor
+# V2.0.3 (2021-04-19)
+- 更新 AI module
+
 # V2.0.2 (2021-04-06)
 - 關閉 Suricata_dumper Service
 
