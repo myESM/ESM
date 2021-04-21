@@ -1,4 +1,7 @@
 # Release Histor
+# V2.0.4 (2021-04-21)
+- EsmEdgeApp.jar的ES client連線版本升級到7.6.0
+
 # V2.0.3 (2021-04-19)
 - 更新 AI module
 
