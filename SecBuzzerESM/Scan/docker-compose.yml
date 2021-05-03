@@ -1,7 +1,7 @@
 version: '3'
 services:
     schedule:
-        image: esmsecbuzzer/nmapandflowscan:1.0.1
+        image: esmsecbuzzer/nmapandflowscan:1.0.3
         restart: unless-stopped
         network_mode : "host"
         # command: "bash -c 'while :; do sleep 60; done'"

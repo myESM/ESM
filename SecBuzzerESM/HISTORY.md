@@ -1,4 +1,6 @@
 # Release Histor
+# V2.0.5 (2021-05-03)
+- 更新資產盤點版本 v1.0.3
 # V2.0.4 (2021-04-21)
 - EsmEdgeApp.jar的ES client連線版本升級到7.6.0
 
