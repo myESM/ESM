@@ -42,7 +42,7 @@
 	output.elasticsearch:
 	
 	  hosts: ["hostname:9200"]
-	  index: "winlogbeat-%{+yyyyMMdd}"
+	  index: "winlogbeat-%{+yyyy.MM.dd}"
 	
 	setup.template.name: "winlogbeat-%{+yyyy.MM.dd}"
 	setup.template.pattern: "winlogbeat-%{+yyyy.MM.dd}"
