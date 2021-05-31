@@ -42,10 +42,10 @@
 	output.elasticsearch:
 	
 	  hosts: ["hostname:9200"]
-	  index: "winlogbeat-%{+yyyyMMdd}"
+	  index: "winlogbeat-%{+yyyy.MM.dd}"
 	
-	setup.template.name: "winlogbeat-%{+yyyyMMdd}"
-	setup.template.pattern: "winlogbeat-%{+yyyyMMdd}"
+	setup.template.name: "winlogbeat-%{+yyyy.MM.dd}"
+	setup.template.pattern: "winlogbeat-%{+yyyy.MM.dd}"
 	setup.ilm.enabled: false
 
 	processors:
@@ -60,11 +60,11 @@
 
 * hosts: ["hostname:9200"]：為輸出的ES的位置
 
-* index: "winlogbeat-%{+yyyyMMdd}"：index 的名稱，%{+yyyyMMdd}為以“日期”為變數，當成索引的產出，產出的索引名稱如“winlogbeat-20200901”
+* index: "winlogbeat-%{+yyyy.MM.dd}"：index 的名稱，%{+yyyy.MM.dd}為以“日期”為變數，當成索引的產出，產出的索引名稱如“winlogbeat-20200901”
 
-* setup.template.name: "winlogbeat-%{+yyyyMMdd}"   <font color="red">(如果不是利用預設index名稱，則需設定)</font>
+* setup.template.name: "winlogbeat-%{+yyyy.MM.dd}"   <font color="red">(如果不是利用預設index名稱，則需設定)</font>
 
-* setup.template.pattern: "winlogbeat-%{+yyyyMMdd}" <font color="red">(如果不是利用預設index名稱，則需設定) </font>
+* setup.template.pattern: "winlogbeat-%{+yyyy.MM.dd}" <font color="red">(如果不是利用預設index名稱，則需設定) </font>
 
 * setup.ilm.enabled: false   <font color="red"> (如果不是利用預設index名稱，則需設定) </font>
 
