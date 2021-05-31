@@ -1,52 +1,63 @@
+# -*- coding: utf-8 -*-
+
 import docker
-import psutil
 import os
-from pathlib import Path
+import json
+import requests
+from datetime import datetime
 from pprint import pprint
-
-# from colorama import Fore, init
-# from terminaltables import AsciiTable
+ESM_API = os.getenv("ESM_API")
+ORG_1_CODE = os.getenv("ORG_1_CODE")
+ORG_2_CODE = os.getenv("ORG_2_CODE")
+ORG_3_CODE = os.getenv("ORG_3_CODE")
+HOSTNAME = None
+RMQ_SERVER = None
+HEADER = {'Content-Type': 'application/json', 'authorization': ESM_API}
 client = docker.DockerClient(base_url='unix://var/run/docker.sock')
-# docker_table_data = [[], []]
-# for _ in client.containers.list(all=True):
-#     docker_table_data[0].append(_.name)
-#     docker_table_data[1].append(f"{Fore.GREEN if 'run' in _.status else Fore.RED}{_.status}{Fore.RESET}")
-# docker_table=AsciiTable(docker_table_data)
-# print(docker_table.table)
-def bytes2human(n):
-    # http://code.activestate.com/recipes/578019
-    # >>> bytes2human(10000)
-    # '9.8K'
-    # >>> bytes2human(100001221)
-    # '95.4M'
-    symbols = ('K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y')
-    prefix = {}
-    for i, s in enumerate(symbols):
-        prefix[s] = 1 << (i + 1) * 10
-    for s in reversed(symbols):
-        if n >= prefix[s]:
-            value = float(n) / prefix[s]
-            return '%.1f%s' % (value, s)
-    return "%sB" % n
 
-data = {}
+old_print = print
+def timestamped_print(*args, **kwargs):
+  old_print("[*]",datetime.now(), os.path.basename(__file__), *args, **kwargs)
+print = timestamped_print
 
-mem_info = psutil.virtual_memory()
-mem = {
-    'total': bytes2human(mem_info.total),
-    'available': bytes2human(mem_info.available),
-    'percent': mem_info.percent}
+def str2bool(v):
+    return v.lower() in ("yes", "true", "t", "1")
 
-es_directory = Path('/es_volume/')
-es_dir_size = bytes2human(sum(f.stat().st_size for f in es_directory.glob('**/*') if f.is_file()))
-fluentd_directory = Path('/fluentd_log/')
-fluentd_dir_size = bytes2human(sum(f.stat().st_size for f in fluentd_directory.glob('**/*') if f.is_file()))
+def init():
+    global HOSTNAME
+    global RMQ_SERVER
+    
+    if str2bool(os.getenv('DEV', 'Null')):
+        RMQ_SERVER = "https://test.api.secbuzzer.co"
+        print("RUNNING WITH DEV MODE")
+    else:
+        RMQ_SERVER = "https://api.esm.secbuzzer.co"
+    if not HOSTNAME:
+        with open('/hostname', 'r') as f:
+            HOSTNAME = f.readline().strip()
 
-data['mem'] = mem
-data['containers'] = {container.name: container.status for container in client.containers.list(all=True)}
-data['log_size'] = {
-    'es_dir_size': es_dir_size,
-    'fluentd_dir_size': fluentd_dir_size 
-}
-pprint(data)
+    queue_stats = requests.get(f"{RMQ_SERVER}/esmapi/queues/%2F/Service_Info", headers=HEADER).json()
+    # print(queue_stats)
+    if queue_stats.get('error'):
+        print('Creating RMQ queue...')
+        requests.put(f"{RMQ_SERVER}/esmapi/queues/%2F/Service_Info", headers=HEADER)
+        print('Creating RMQ queue success')
 
+def main():
+    # pprint(client.df())
+    _DATA = {
+        "ORG_1_CODE": ORG_1_CODE,
+        "ORG_2_CODE": ORG_2_CODE,
+        "ORG_3_CODE": ORG_3_CODE,
+        "HOSTNAME": HOSTNAME
+    }
+    # pprint(client.df())
+    _DATA.update(client.df())
+    # pprint(_DATA)
+    _DATA = json.dumps(_DATA)
+    datas = json.dumps({"properties":{"Content-Type":"application/json"},"routing_key":"Service_Info","payload":_DATA,"payload_encoding":"string"})
+    resp = requests.post(f"{RMQ_SERVER}/esmapi/exchanges/%2F/amq.default/publish", headers=HEADER, data=datas).json()
+    print(resp)
+if __name__ == "__main__":
+    init()
+    main()

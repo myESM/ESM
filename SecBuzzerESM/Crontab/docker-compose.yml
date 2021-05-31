@@ -19,6 +19,12 @@ services:
       - ../SecBuzzerESM.env:/.env:ro
       - "$FLUENTD_BUFFER_PATH/Logs/:/Logs/"
       - "$FLUENTD_LOG_PATH:/LogsCompress"
+    environment:
+      ESM_API: ${API_KEY_VALUE:-NONE}
+      ORG_1_CODE: ${ORG_1_CODE:-TEST}
+      ORG_2_CODE: ${ORG_2_CODE:-TEST}
+      ORG_3_CODE: ${ORG_3_CODE:-NONE}
+      DEV: ${DEV_MODE:-no}
     networks:
       - esm
     restart: unless-stopped

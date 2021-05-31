@@ -9,4 +9,6 @@ CMD mkdir -p /cron && cp /image/root /cron/ && chmod 0644 /cron \
 
 ENTRYPOINT ["/sbin/tini", "--"]
 
-CMD "sleep" "infinity"
+# CMD "sleep" "infinity"
+CMD mkdir -p /cron && cp /image/root /cron/ && chmod 0644 /cron \
+  && crond -b -c /cron && touch /var/log/cron.log && tail -F /var/log/cron.log
