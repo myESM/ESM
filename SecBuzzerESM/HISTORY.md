@@ -1,4 +1,7 @@
 # Release Histor
+# V2.0.7 (2021-05-27)
+- 調整 Crontab 運行 Ｗinlogbeat AI 模組讀取 Index 名稱
+
 # V2.0.6 (2021-05-12)
 - EsmEdgeApp.jar的ES連線訊息更新
 
