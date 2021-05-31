@@ -1,4 +1,8 @@
 # Release Histor
+# V2.1.1 (2021-05-31)
+- 修復 suricata_checker 不執行問題
+- 重寫 servicecheck.py
+- 修復 CI 版本錯亂
 # V2.0.7 (2021-05-27)
 - 調整 Crontab 運行 Ｗinlogbeat AI 模組讀取 Index 名稱
 
