@@ -1,4 +1,7 @@
 # Release Histor
+# V2.2.0 (2021-05-31)
+- 修復 Cronjob 不執行問題
+
 # V2.1.1 (2021-05-31)
 - 修復 suricata_checker 不執行問題
 - 重寫 servicecheck.py
