@@ -6,13 +6,11 @@ import json
 import requests
 from datetime import datetime
 from pprint import pprint
-ESM_API = os.getenv("ESM_API")
-ORG_1_CODE = os.getenv("ORG_1_CODE")
-ORG_2_CODE = os.getenv("ORG_2_CODE")
-ORG_3_CODE = os.getenv("ORG_3_CODE")
+
 HOSTNAME = None
 RMQ_SERVER = None
-HEADER = {'Content-Type': 'application/json', 'authorization': ESM_API}
+CONFIG = None
+HEADER = None
 client = docker.DockerClient(base_url='unix://var/run/docker.sock')
 
 old_print = print
@@ -20,14 +18,17 @@ def timestamped_print(*args, **kwargs):
   old_print("[*]",datetime.now(), os.path.basename(__file__), *args, **kwargs)
 print = timestamped_print
 
-def str2bool(v):
-    return v.lower() in ("yes", "true", "t", "1")
-
 def init():
     global HOSTNAME
     global RMQ_SERVER
-    
-    if str2bool(os.getenv('DEV', 'Null')):
+    global CONFIG
+    global HEADER
+    with open('/.env') as f: # Read and init the SecBuzzerESM.env
+        CONFIG = {line.split('=')[0]:line.split('=')[1].strip() for line in f.readlines() if not line.startswith('#')}
+
+    HEADER = {'Content-Type': 'application/json', 'authorization': CONFIG.get("API_KEY_VALUE", "")}
+
+    if CONFIG.get('DEV_MODE'):
         RMQ_SERVER = "https://test.api.secbuzzer.co"
         print("RUNNING WITH DEV MODE")
     else:
@@ -46,9 +47,9 @@ def init():
 def main():
     # pprint(client.df())
     _DATA = {
-        "ORG_1_CODE": ORG_1_CODE,
-        "ORG_2_CODE": ORG_2_CODE,
-        "ORG_3_CODE": ORG_3_CODE,
+        "ORG_1_CODE": CONFIG.get("ORG_1_CODE", 'TEST'),
+        "ORG_2_CODE": CONFIG.get("ORG_2_CODE", 'TEST'),
+        "ORG_3_CODE": CONFIG.get("ORG_3_CODE", ''),
         "HOSTNAME": HOSTNAME
     }
     # pprint(client.df())

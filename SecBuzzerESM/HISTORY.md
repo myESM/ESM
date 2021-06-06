@@ -1,4 +1,8 @@
 # Release Histor
+# V2.3.0 (2021-06-05)
+- 修復 servicecheck.py 無法讀取環境變數
+- 修正 servicecheck 執行的時間
+
 # V2.2.0 (2021-05-31)
 - 修復 Cronjob 不執行問題
 
