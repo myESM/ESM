@@ -1,4 +1,8 @@
 # Release Histor
+# V2.3.1 (2021-06-15)
+- 移除compose.sh內的AI模組註解
+- 新增文件: SecBuzzerESM 連線安裝手冊.md
+
 # V2.3.0 (2021-06-05)
 - 修復 servicecheck.py 無法讀取環境變數
 - 修正 servicecheck 執行的時間
