@@ -60,3 +60,22 @@
 
 # 3. 設定 Winlogbeat SSL
 
+下一步，我們需要為執行 Winlogbeat 的主機設定 SSL。 
+
+首先將證書複製到執行 Winlogbeat 的主機上，然後使用正確的許可權建立證書目錄。您需要同時複製 Winlogbeat 證書和 CA 證書。
+
+在 winlogbeat 資料夾 (有 winlogbeat.yml 檔跟 winlogbeat.exe 檔的) 中建立 certs 資料夾，並在 certs 資料夾中新增 ca 資料夾，將步驟「1. 產生 CA」所產生的 ca.crt 檔放在 ca 資料夾中、將 winlogbeat.crt 檔和 winlogbeat.key 檔放在 certs 資料夾中。
+
+檔案目錄結構示意如下：
+
+    winlogbeat 資料夾
+    |-- certs 資料夾
+    |   |-- ca 資料夾
+    |   |   |-- ca.crt
+    |   |-- winlogbeat.crt
+    |   |-- winlogbeat.key
+    |-- winlogbeat.yml
+    |-- winlogbeat.exe
+    |-- ...其他 winlogbeat 相關檔案和資料夾
+
+
