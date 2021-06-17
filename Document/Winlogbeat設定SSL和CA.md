@@ -78,4 +78,16 @@
     |-- winlogbeat.exe
     |-- ...其他 winlogbeat 相關檔案和資料夾
 
+接下來，我們需要將更改新增到 winlogbeat.yml。首先，我們的 Elasticsearch 設定。
 
+    # Elastic Output
+    output.elasticsearch.protocol: https
+    output.elasticsearch.ssl.certificate: "certs/winlogbeat.crt"
+    output.elasticsearch.ssl.key: "certs/winlogbeat.key"
+    output.elasticsearch.ssl.certificate_authorities: ["certs/ca/ca.crt"]
+
+然後啟動或是重新啟動 Winlogbeat。
+
+    winlogbeat.exe -e -c winlogbeat.yml
+
+檢查 Winlogbeat 是否可以連線到 Elasticsearch。 一切都應該是正常的狀態。
