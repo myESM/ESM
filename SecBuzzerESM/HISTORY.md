@@ -1,4 +1,7 @@
 # Release Histor
+# V2.3.2 (2021-06-21)
+- 更新文件: Winlogbeat設定SSL和CA.md
+
 # V2.3.1 (2021-06-15)
 - 移除compose.sh內的AI模組註解
 - 新增文件: SecBuzzerESM 連線安裝手冊.md
