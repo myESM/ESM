@@ -9,7 +9,7 @@
 - OS：Ubuntu 18.04.4 UP Server 英文版
 - CPU：2.0 GHz 64-bit processor, dual core (or two virtual CPUs)
 - MEM：10G UP
-- HDD：20G ~ 30G UP
+- HDD：80G UP
 
 場域測試：
 
@@ -110,8 +110,13 @@ GF_SMTP_PASSWORD=
 WEB_IF_NAME=
 API_KEY_VALUE=
 ORG_3_CODE=
+# === Flow Scan & NMAP Scan ===
+FLOWSCAN_SOURCEIP=
+FLOWSCAN_DESTIP=
+FLOWSCAN_TOTALCOUNT=1000
+NMAPSCAN_IP=
 # === DEV ===
-DEV_MODE=True (該參數只會出現在開發版)
+DEV_MODE=True (該參數只會出現在開發版，正式版假如有的話也請移去)
 ```
 
 編輯完成後輸入 `Ctrl+X` 存檔 (以`nano`編輯器為例)
@@ -214,11 +219,37 @@ SMTP 密碼
 
 ---
 
-### 2.5.6 DEV
+### 2.5.6 Flow Scan & NMAP Scan
+
+- FLOWSCAN_SOURCEIP
+
+流量掃描下，欲撈取的來源IP資料，假如要撈取IP: 192.168.70.24下的整個70網段資料，就放: 192.168.70.0/24
+
+程式碼內預設192.168.70.0/24，若IP與該組織網段設定不一樣會抓不到對應的資料，也就無法產生欲撈取的來源IP資料
+
+- FLOWSCAN_DESTIP
+
+流量掃描下，欲撈取的目的地IP資料，假如要撈取IP: 192.168.70.24下的整個70網段資料，就放: 192.168.70.0/24
+
+程式碼內預設192.168.70.0/24，若IP與該組織網段設定不一樣會抓不到對應的資料，也就無法產生欲撈取的來源IP資料
+
+- FLOWSCAN_TOTALCOUNT
+
+流量掃描下，欲撈取的總數目，預設是1000筆
+
+- NMAPSCAN_IP
+
+NMAP掃描下，欲撈取的IP資料，假如要撈取IP: 192.168.70.24下的整個70網段資料，就放: 192.168.70.0/24
+
+程式碼內預設192.168.70.2，若IP與該組織網段設定不一樣會抓不到對應的資料，也就無法產生欲撈取的IP資料
+
+---
+
+### 2.5.7 DEV
 
 - DEV_MODE=True
 
-用來標識開發版與正式版之參數，目前此參數只會出現在開發版
+用來標識開發版與正式版之參數，目前此參數只會出現在開發版，如果要連線正式版的話請移去此參數
 
 ## 2.6 安裝 SecBuzzerESM
 
