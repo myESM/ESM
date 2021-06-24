@@ -128,6 +128,8 @@ def winlog_rule_based(es_index, es_start_time, es_end_time):
 
   es_connector = ElasticsearchConnector(ES_HOST, ES_PORT)
   ES_INPUT_INDEX = es_index
+  es_connector.es.indices.put_settings(index=ES_INPUT_INDEX,
+                        body={'index':{'max_result_window':500000}})
 
   user_execution_1A1(es_connector, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time)
   masquerading_1A2(es_connector, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_end_time)
