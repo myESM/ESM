@@ -1,4 +1,7 @@
-# Release Histor
+# Release History
+# V2.3.3 (2021-06-24)
+- 更新 winlog模組的es query資料量上限
+
 # V2.3.2 (2021-06-21)
 - 更新文件: Winlogbeat設定SSL和CA.md
 
