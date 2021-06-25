@@ -1,4 +1,7 @@
 # Release History
+# V2.3.4 (2021-06-25)
+- 再次更新 winlog模組的es query資料量上限
+
 # V2.3.3 (2021-06-24)
 - 更新 winlog模組的es query資料量上限
 
