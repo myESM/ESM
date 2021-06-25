@@ -192,7 +192,7 @@ def user_execution_1A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
   TECHNIQUE = "User Execution - T1204"
   query_list = user_execution_1A1_query(es_start_time, es_end_time)
   for query_str in query_list:
-    result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+    result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
     result_length = result["hits"]["total"]["value"]
     if result_length > 0:
       for res in result["hits"]["hits"]:
@@ -231,7 +231,7 @@ def masquerading_1A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es
   TECHNIQUE = "Masquerading - T1036"
   query_list = masquerading_1A2_query(es_start_time, es_end_time)
   for query_str in query_list:
-    result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+    result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
     result_length = result["hits"]["total"]["value"]
     if result_length > 0:
       for res in result["hits"]["hits"]:
@@ -265,7 +265,7 @@ def non_standard_port_1A3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_tim
   TECHNIQUE = "Non-Standard Port - T1571"
   WINDOWS_COMMON_PORT_LIST = ["20", "21", "22","23", "25", "50", "51", "53", "67", "68", "69", "80", "110", "119", "123", "135", "136", "137", "138", "139", "143", "161", "162", "389", "443", "3389", "5985"]
   query_str = non_standard_port_1A3_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -299,7 +299,7 @@ def command_line_interface_1B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_star
   """
   TECHNIQUE = "Command and Scripting Interpreter: Windows Command Shell - T1059.003"
   query_str = command_line_interface_1B1_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -331,7 +331,7 @@ def powershell_1B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_e
   """
   TECHNIQUE = "Command and Scripting Interpreter: PowerShell - T1059.001"
   query_str = powershell_1B2_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -363,7 +363,7 @@ def file_and_directory_discovery_2A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
   """
   TECHNIQUE = "File and Directory Discovery - T1083"
   query_str = file_and_directory_discovery_2A1_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -395,7 +395,7 @@ def automated_collection_2A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_
   """
   TECHNIQUE = "Automated Collection - T1119"
   query_str = automated_collection_2A2_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -427,7 +427,7 @@ def data_from_local_system_2A3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_star
   """
   TECHNIQUE = "Data from Local System - T1005"
   query_str = data_from_local_system_2A3_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -459,7 +459,7 @@ def data_compressed_2A4(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time,
   """
   TECHNIQUE = "Archive Collected Data - T1560"
   query_str = data_compressed_2A4_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -491,7 +491,7 @@ def data_staged_2A5(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_
   """
   TECHNIQUE = "Data Staged - T1074"
   query_str = data_staged_2A5_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -526,7 +526,7 @@ def remote_file_copy_3A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time
   """
   TECHNIQUE = "Ingress Tool Transfer - T1105"
   query_str = remote_file_copy_3A1_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -558,7 +558,7 @@ def obfuscated_files_or_information_3A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX
   """
   TECHNIQUE = "Obfuscated Files or Information - T1027"
   query_str = obfuscated_files_or_information_3A2_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -590,7 +590,7 @@ def component_object_model_hijacking_3B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDE
   """
   TECHNIQUE = "Event Triggered Execution: Component Object Model Hijacking - T1546.015"
   query_str = component_object_model_hijacking_3B1_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -622,7 +622,7 @@ def bypass_user_accounnt_control_3B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
   """
   TECHNIQUE = "Abuse Elevation Control Mechanism: Bypass User Access Control - T1548.002"
   query_str = bypass_user_accounnt_control_3B2_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -655,7 +655,7 @@ def commomly_used_port_3B3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_ti
   TECHNIQUE = "Commonly Used Port - T1436"
   WINDOWS_COMMON_PORT_LIST = ["20", "21", "22","23", "25", "50", "51", "53", "67", "68", "69", "80", "110", "119", "123", "135", "136", "137", "138", "139", "143", "161", "162", "389", "443", "3389", "5985"]
   query_str = commomly_used_port_3B3_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -688,7 +688,7 @@ def standard_application_layer_protocol_3B4(es_conn, ES_INPUT_INDEX, ES_OUTPUT_I
   """
   TECHNIQUE = "Application Layer Protocol - T1071"
   query_str = standard_application_layer_protocol_3B4_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -720,7 +720,7 @@ def modify_registry_3C1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time,
   """
   TECHNIQUE = "Modify Registry - T1112"
   query_str = modify_registry_3C1_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -754,7 +754,7 @@ def remote_file_copy_4A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time
   """
   TECHNIQUE = "Ingress Tool Transfer - T1105"
   query_str = remote_file_copy_4A1_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -786,7 +786,7 @@ def powershell_4A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_e
   """
   TECHNIQUE = "Command and Scripting Interpreter: PowerShell - T1059.001"
   query_str = powershell_4A2_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -818,7 +818,7 @@ def decode_files_or_information_4A3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es
   """
   TECHNIQUE = "Deobfuscate/Decode Files or Information - T1140"
   query_str = decode_files_or_information_4A3_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -850,7 +850,7 @@ def process_discovery_4B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_tim
   """
   TECHNIQUE = "Process Discovery - T1057"
   query_str = process_discovery_4B1_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -882,7 +882,7 @@ def file_deletion_4B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
   """
   TECHNIQUE = "Indicator Removal on Host: File Deletion - T1070.004"
   query_str = file_deletion_4B2_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -915,7 +915,7 @@ def file_deletion_4B3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
   """
   TECHNIQUE = "Indicator Removal on Host: File Deletion - T1070.004"
   query_str = file_deletion_4B3_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -948,7 +948,7 @@ def file_deletion_4B4(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
   """
   TECHNIQUE = "Indicator Removal on Host: File Deletion - T1070.004"
   query_str = file_deletion_4B4_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -981,7 +981,7 @@ def file_and_directory_discovery_4C1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
   """
   TECHNIQUE = "File and Directory Discovery - T1083"
   query_str = file_and_directory_discovery_2A1_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -1013,7 +1013,7 @@ def system_owner_or_user_discovery_4C2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX,
   """
   TECHNIQUE = "System Owner/User Discovery - T1033"
   query_str = system_owner_or_user_discovery_4C2_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -1045,7 +1045,7 @@ def system_information_discovery_4C3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
   """
   TECHNIQUE = "System Information Discovery - T1082"
   query_str = system_information_discovery_4C3_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -1078,7 +1078,7 @@ def system_network_configuration_discovery_4C4(es_conn, ES_INPUT_INDEX, ES_OUTPU
   """
   TECHNIQUE = "System Network Configuration Discovery - T1016"
   query_str = system_network_configuration_discovery_4C4_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -1111,7 +1111,7 @@ def process_discovery_4C5(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_tim
   """
   TECHNIQUE = "Process Discovery - T1057"
   query_str = process_discovery_4C5_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -1143,7 +1143,7 @@ def system_information_discovery_4C6(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
   """
   TECHNIQUE = "System Information Discovery - T1802"
   query_str = system_information_discovery_4C6_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -1176,7 +1176,7 @@ def security_software_discovery_4C7(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es
   """
   TECHNIQUE = "Software Discovery: Security Software Discovery - T1518.001"
   query_str = security_software_discovery_4C7_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -1209,7 +1209,7 @@ def security_software_discovery_4C8(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es
   """
   TECHNIQUE = "Software Discovery: Security Software Discovery - T1518.001"
   query_str = security_software_discovery_4C8_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -1242,7 +1242,7 @@ def permission_groups_discovery_4C9(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es
   """
   TECHNIQUE = "Permission Groups Discovery - T1069"
   query_str = permission_groups_discovery_4C9_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -1275,7 +1275,7 @@ def execution_through_api_4C10(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_star
   """
   TECHNIQUE = "Native API - T1106"
   query_str = execution_through_api_4C10_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -1308,7 +1308,7 @@ def permission_groups_discovery_4C11(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
   """
   TECHNIQUE = "Permission Groups Discovery - T1069"
   query_str = permission_groups_discovery_4C11_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -1341,7 +1341,7 @@ def execution_through_api_4C12(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_star
   """
   TECHNIQUE = "Native API - T1106"
   query_str = execution_through_api_4C12_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -1374,7 +1374,7 @@ def new_service_5A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_
   """
   TECHNIQUE = "Create or Modify System Process: Windows Service - T1543.003"
   query_str = new_service_5A1_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -1407,7 +1407,7 @@ def registry_run_keys_or_startup_folder_5B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_I
   """
   TECHNIQUE = "Boot or Logon Autostart Execution: Registry Run Keys / Startup Folder - T1547.001"
   query_str = registry_run_keys_or_startup_folder_5B1_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -1440,7 +1440,7 @@ def private_keys_6B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es
   """
   TECHNIQUE = "Unsecured Credentials: Private Keys - T1552.004"
   query_str = private_keys_6B1_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -1473,7 +1473,7 @@ def screen_capture_7A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
   """
   TECHNIQUE = "Screen Capture - T1113"
   query_str = screen_capture_7A1_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -1506,7 +1506,7 @@ def clipboard_data_7A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
   """
   TECHNIQUE = "Clipboard Data - T1115"
   query_str = clipboard_data_7A2_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -1539,7 +1539,7 @@ def input_capture_7A3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
   """
   TECHNIQUE = "Input Capture - T1056"
   query_str = input_capture_7A3_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -1572,7 +1572,7 @@ def data_compressed_7B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time,
   """
   TECHNIQUE = "Archive Collected Data - T1560"
   query_str = data_compressed_7B2_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -1606,7 +1606,7 @@ def data_encrypted_7B3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
   """
   TECHNIQUE = "Archive Collected Data - T1560"
   query_str = data_encrypted_7B3_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -1640,7 +1640,7 @@ def remote_system_discovery_8A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_sta
   """
   TECHNIQUE = "Remote System Discovery - T1018"
   query_str = remote_system_discovery_8A1_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -1672,7 +1672,7 @@ def windows_remote_management_8A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_s
   """
   TECHNIQUE = "Remote Services: Windows Remote Management - T1021.006"
   query_str = windows_remote_management_8A2_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -1704,7 +1704,7 @@ def process_discovery_8A3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_tim
   """
   TECHNIQUE = "Process Discovery - T1057"
   query_str = process_discovery_8A3_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -1737,7 +1737,7 @@ def remote_file_copy_8B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time
   """
   TECHNIQUE = "Ingress Tool Transfer - T1105"
   query_str = remote_file_copy_8B1_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -1770,7 +1770,7 @@ def valid_accounts_8C1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
   TECHNIQUE = "Valid Accounts - T1078"
   query_str = valid_accounts_8C1_query(es_start_time, es_end_time)
   SYSTEM_DEFAULT_ACCOUNT = ["SYSTEM", "LOCAL SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE", "UMFD-0", "UMFD-1", "DWM-1"]
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -1805,7 +1805,7 @@ def windows_admin_shares_8C2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_
   """
   TECHNIQUE = "Remote Services: SMB/Windows Admin Shares - T1021.002"
   query_str = windows_admin_shares_8C2_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -1837,7 +1837,7 @@ def service_execution_8C3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_tim
   """
   TECHNIQUE = "System Services: Service Execution - T1569.002"
   query_str = service_execution_8C3_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -1869,7 +1869,7 @@ def remote_file_copy_9A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time
   """
   TECHNIQUE = "Ingress Tool Transfer - T1105"
   query_str = remote_file_copy_9A1_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -1901,7 +1901,7 @@ def remote_file_copy_9A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time
   """
   TECHNIQUE = "Ingress Tool Transfer - T1105"
   query_str = remote_file_copy_9A2_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -1933,7 +1933,7 @@ def powershell_9B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_e
   """
   TECHNIQUE = "Command and Scripting Interpreter: PowerShell - T1059.001"
   query_str = powershell_9B1_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -1965,7 +1965,7 @@ def file_and_directory_discovery_9B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
   """
   TECHNIQUE = "File and Directory Discovery - T1083"
   query_str = file_and_directory_discovery_9B2_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -1997,7 +1997,7 @@ def automated_collection_9B3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_
   """
   TECHNIQUE = "Automated Collection - T1119"
   query_str = automated_collection_9B3_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -2029,7 +2029,7 @@ def data_from_local_system_9B4(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_star
   """
   TECHNIQUE = "Data from Local System - T1005"
   query_str = data_from_local_system_9B4_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -2061,7 +2061,7 @@ def data_staged_9B5(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_
   """
   TECHNIQUE = "Data Staged - T1074"
   query_str = data_staged_9B5_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -2096,7 +2096,7 @@ def data_encrypted_9B6(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, 
   """
   TECHNIQUE = "Archive Collected Data - T1560"
   query_str = data_encrypted_9B6_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -2129,7 +2129,7 @@ def data_compressed_9B7(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time,
   """
   TECHNIQUE = "Archive Collected Data - T1560"
   query_str = data_compressed_9B7_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -2162,7 +2162,7 @@ def file_deletion_9C1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
   """
   TECHNIQUE = "Indicator Removal on Host: File Deletion - T1070.004"
   query_str = file_deletion_9C1_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -2195,7 +2195,7 @@ def file_deletion_9C2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
   """
   TECHNIQUE = "Indicator Removal on Host: File Deletion - T1070.004"
   query_str = file_deletion_9C2_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -2228,7 +2228,7 @@ def file_deletion_9C3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
   """
   TECHNIQUE = "Indicator Removal on Host: File Deletion - T1070.004"
   query_str = file_deletion_9C3_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -2262,7 +2262,7 @@ def file_deletion_9C4(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, e
   """
   TECHNIQUE = "Indicator Removal on Host: File Deletion - T1070.004"
   query_str = file_deletion_9C4_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -2295,7 +2295,7 @@ def service_execution_10A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_ti
   """
   TECHNIQUE = "System Services: Service Execution - T1569.002"
   query_str = service_execution_10A1_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -2327,7 +2327,7 @@ def virtualization_evasion_11A3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_sta
   """
   TECHNIQUE = "Virtualization/Sandbox Evasion - T1497"
   query_str = virtualization_evasion_11A3_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -2359,7 +2359,7 @@ def system_information_discovery_11A4(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, 
   """
   TECHNIQUE = "System Information Discovery - T1082"
   query_str = system_information_discovery_11A4_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -2392,7 +2392,7 @@ def peripheral_device_discovery_11A5(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
   """
   TECHNIQUE = "Peripheral Device Discovery - T1120"
   query_str = peripheral_device_discovery_11A5_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -2424,7 +2424,7 @@ def system_owner_user_discovery_11A6(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
   """
   TECHNIQUE = "System Owner/User Discovery - T1033"
   query_str = system_owner_user_discovery_11A6_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -2457,7 +2457,7 @@ def system_network_configuration_discovery_11A7(es_conn, ES_INPUT_INDEX, ES_OUTP
   """
   TECHNIQUE = "System Network Configuration Discovery - T1016"
   query_str = system_network_configuration_discovery_11A7_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -2490,7 +2490,7 @@ def process_discovery_11A8(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_ti
   """
   TECHNIQUE = "Process Discovery - T1057"
   query_str = process_discovery_11A8_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -2522,7 +2522,7 @@ def file_and_directory_discovery_11A9(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, 
   """
   TECHNIQUE = "File and Directory Discovery - T1083"
   query_str = file_and_directory_discovery_11A9_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -2554,7 +2554,7 @@ def decode_files_or_information_11A10(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, 
   """
   TECHNIQUE = "Deobfuscate/Decode Files or Information - T1140"
   query_str = decode_files_or_information_11A10_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -2586,7 +2586,7 @@ def powershell_11A12(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es
   """
   TECHNIQUE = "Command and Scripting Interpreter: PowerShell - T1059.001"
   query_str = powershell_11A12_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -2619,7 +2619,7 @@ def commomly_used_port_11A13(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_
   TECHNIQUE = "Commonly Used Port - T1436"
   WINDOWS_COMMON_PORT_LIST = ["443"]
   query_str = commomly_used_port_11A13_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -2652,7 +2652,7 @@ def standard_application_layer_protocol_11A14(es_conn, ES_INPUT_INDEX, ES_OUTPUT
   """
   TECHNIQUE = "Application Layer Protocol - T1071"
   query_str = standard_application_layer_protocol_11A14_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -2684,7 +2684,7 @@ def file_and_directory_discovery_12A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, 
   """
   TECHNIQUE = "File and Directory Discovery - T1083"
   query_str = file_and_directory_discovery_12A1_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -2716,7 +2716,7 @@ def security_software_discovery_12B1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
   """
   TECHNIQUE = "Software Discovery: Security Software Discovery - T1518.001"
   query_str = security_software_discovery_12B1_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -2748,7 +2748,7 @@ def system_information_discovery_13A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, 
   """
   TECHNIQUE = "System Information Discovery - T1082"
   query_str = system_information_discovery_13A1_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -2781,7 +2781,7 @@ def system_network_configuration_discovery_13B1(es_conn, ES_INPUT_INDEX, ES_OUTP
   """
   TECHNIQUE = "System Network Configuration Discovery - T1016"
   query_str = system_network_configuration_discovery_13B1_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -2814,7 +2814,7 @@ def system_owner_user_discovery_13C1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
   """
   TECHNIQUE = "System Owner/User Discovery - T1033"
   query_str = system_owner_user_discovery_13C1_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -2847,7 +2847,7 @@ def process_discovery_13D1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_ti
   """
   TECHNIQUE = "Process Discovery - T1057"
   query_str = process_discovery_13D1_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -2880,7 +2880,7 @@ def component_object_model_hijacking_14A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_IND
   """
   TECHNIQUE = "Event Triggered Execution: Component Object Model Hijacking - T1546.015"
   query_str = component_object_model_hijacking_14A1_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -2913,7 +2913,7 @@ def bypass_user_accounnt_control_14A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, 
   """
   TECHNIQUE = "Abuse Elevation Control Mechanism: Bypass User Access Control - T1548.002"
   query_str = bypass_user_accounnt_control_14A2_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -2945,7 +2945,7 @@ def modify_registry_14A3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time
   """
   TECHNIQUE = "Modify Registry - T1112"
   query_str = modify_registry_14A3_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -2979,7 +2979,7 @@ def process_discovery_14B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_ti
   """
   TECHNIQUE = "Process Discovery - T1057"
   query_str = process_discovery_14B2_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -3012,7 +3012,7 @@ def system_owner_user_discovery_15A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, e
   """
   TECHNIQUE = "System Owner/User Discovery - T1033"
   query_str = system_owner_user_discovery_15A1_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -3045,7 +3045,7 @@ def remote_system_discovery_16A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_st
   """
   TECHNIQUE = "Remote System Discovery - T1018"
   query_str = remote_system_discovery_16A1_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -3077,7 +3077,7 @@ def execution_through_api_16B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_star
   """
   TECHNIQUE = "Native API - T1106"
   query_str = execution_through_api_16B2_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -3110,7 +3110,7 @@ def windows_remote_management_16C1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_
   """
   TECHNIQUE = "Remote Services: Windows Remote Management - T1021.006"
   query_str = windows_remote_management_16C1_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -3143,7 +3143,7 @@ def valid_accounts_16C2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time,
   TECHNIQUE = "Valid Accounts - T1078"
   query_str = valid_accounts_16C2_query(es_start_time, es_end_time)
   SYSTEM_DEFAULT_ACCOUNT = ["SYSTEM", "LOCAL SYSTEM", "LOCAL SERVICE", "NETWORK SERVICE", "UMFD-0", "UMFD-1", "DWM-1"]
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -3178,7 +3178,7 @@ def email_collection_17A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_tim
   """
   TECHNIQUE = "Email Collection - T1114"
   query_str = email_collection_17A1_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -3212,7 +3212,7 @@ def data_staged_17B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es
   """
   TECHNIQUE = "Data Staged - T1074"
   query_str = data_staged_17B2_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -3244,7 +3244,7 @@ def data_compressed_17C1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time
   """
   TECHNIQUE = "Archive Collected Data - T1560"
   query_str = data_compressed_17C1_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -3276,7 +3276,7 @@ def web_service_18A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es
   """
   TECHNIQUE = "Web Service - T1102"
   query_str = web_service_18A1_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -3308,7 +3308,7 @@ def rundll32_20A1(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time, es_en
   """
   TECHNIQUE = "Signed Binary Proxy Execution: Rundll32 - T1218.011"
   query_str = rundll32_20A1_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -3340,7 +3340,7 @@ def windows_management_instrumentation_event_subscription_20A2(es_conn, ES_INPUT
   """
   TECHNIQUE = "Event Triggered Execution: Windows Management Instrumentation Event Subscription - T1546.003"
   query_str = windows_management_instrumentation_event_subscription_20A2_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -3372,7 +3372,7 @@ def pass_the_ticket_20A2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time
   """
   TECHNIQUE = "Use Alternate Authentication Material: Pass the Ticket - T1550.003"
   query_str = pass_the_ticket_20A2_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -3404,7 +3404,7 @@ def windows_remote_management_20B2(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_
   """
   TECHNIQUE = "Remote Services: Windows Remote Management - T1021.006"
   query_str = windows_remote_management_20B2_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
@@ -3436,7 +3436,7 @@ def create_account_20B3(es_conn, ES_INPUT_INDEX, ES_OUTPUT_INDEX, es_start_time,
   """
   TECHNIQUE = "Create Account - T1136"
   query_str = create_account_20B3_query(es_start_time, es_end_time)
-  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=500000)
+  result = es_conn.es.search(index=ES_INPUT_INDEX, body=query_str, from_=0, size=20000)
   result_length = result["hits"]["total"]["value"]
   if result_length > 0:
     for res in result["hits"]["hits"]:
