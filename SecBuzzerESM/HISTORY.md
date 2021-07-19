@@ -1,4 +1,7 @@
 # Release History
+# V2.4.0 (2021-07-19)
+- 更新雲端API的連結到cyber.cstilab.co
+
 # V2.3.4 (2021-06-25)
 - 再次更新 winlog模組的es query資料量上限
 

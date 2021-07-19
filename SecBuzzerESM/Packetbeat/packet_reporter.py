@@ -56,10 +56,10 @@ def main():
     global Counter
 
     if str2bool(os.getenv('DEV', 'Null')):
-        RMQ_SERVER = "https://test.api.secbuzzer.co"
+        RMQ_SERVER = "https://api.esm.cyber.cstilab.co"
         WAIT_SEC = 0
     else:
-        RMQ_SERVER = "https://api.esm.secbuzzer.co"
+        RMQ_SERVER = "https://api.esm.cyber.cstilab.co"
 
     queue_stats = requests.get(f"{RMQ_SERVER}/esmapi/queues/%2F/Packet_Statistics", headers=HEADER).json()
     # print(queue_stats)

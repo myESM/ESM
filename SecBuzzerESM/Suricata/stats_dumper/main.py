@@ -60,10 +60,10 @@ def init():
     global RMQ_SERVER
     global HOSTNAME
     if str2bool(os.getenv('DEV')):
-        RMQ_SERVER = "https://test.api.secbuzzer.co"
+        RMQ_SERVER = "https://api.esm.cyber.cstilab.co"
         print("RUNNING WITH DEV MODE")
     else:
-        RMQ_SERVER = "https://api.esm.secbuzzer.co"
+        RMQ_SERVER = "https://api.esm.cyber.cstilab.co"
 
     with open('/HOSTNAME', 'r') as f:
         HOSTNAME = f.readline().strip()

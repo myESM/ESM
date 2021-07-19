@@ -29,10 +29,10 @@ def init():
     HEADER = {'Content-Type': 'application/json', 'authorization': CONFIG.get("API_KEY_VALUE", "")}
 
     if CONFIG.get('DEV_MODE'):
-        RMQ_SERVER = "https://test.api.secbuzzer.co"
+        RMQ_SERVER = "https://api.esm.cyber.cstilab.co"
         print("RUNNING WITH DEV MODE")
     else:
-        RMQ_SERVER = "https://api.esm.secbuzzer.co"
+        RMQ_SERVER = "https://api.esm.cyber.cstilab.co"
     if not HOSTNAME:
         with open('/hostname', 'r') as f:
             HOSTNAME = f.readline().strip()
