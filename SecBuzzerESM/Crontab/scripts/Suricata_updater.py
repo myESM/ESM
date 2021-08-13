@@ -10,7 +10,7 @@ import random
 import sys
 from datetime import datetime
 
-esm_srv_url = 'https://test.api.secbuzzer.co'
+esm_srv_url = 'https://api.esm.cyber.cstilab.co'
 
 esm_api_key = None
 local_rules_version = None

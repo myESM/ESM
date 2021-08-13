@@ -1,4 +1,7 @@
 # Release History
+# V2.4.1 (2021-08-13)
+- 更新雲端API的連結到cyber.cstilab.co
+
 # V2.4.0 (2021-07-19)
 - 更新雲端API的連結到cyber.cstilab.co
 
