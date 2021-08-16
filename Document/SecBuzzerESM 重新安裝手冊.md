@@ -8,6 +8,8 @@ sudo su
 
 # 1. 關閉現行所有的docker container
 ```bash
+cd /etc/SecBuzzerESM
+./compose.sh down
 docker kill $(docker ps -q)
 docker rm $(docker ps -a -q)
 ```
@@ -16,6 +18,24 @@ docker rm $(docker ps -a -q)
 ```bash
 docker rmi $(docker images -q)
 ```
+## 2.1 Error: image is referenced in multiple repositories
+
+刪除映象，會報錯
+
+![images/re_install_01.png](images/re_install_01.png)
+
+檢視映象，仔細觀察，發現f8ab12e03d53這個映象id指向了兩個repository，因此無法刪除
+
+![images/re_install_02.png](images/re_install_02.png)
+
+刪除時可以用repository和tag的方式來刪除
+
+![images/re_install_03.png](images/re_install_03.png)
+
+再次檢視映象，1.0.8的就被刪除了
+
+![images/re_install_04.png](images/re_install_04.png)
+
 
 # 3. 將docker與docker-compose清掉
 ```bash
