@@ -1,4 +1,7 @@
 # Release History
+# V2.4.4 (2021-08-19)
+- test version
+
 # V2.4.3 (2021-08-19)
 - update Fluentd/fluentd_image/Dockerfile
 
