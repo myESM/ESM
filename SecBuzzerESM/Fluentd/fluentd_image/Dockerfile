@@ -6,6 +6,7 @@ USER root
 RUN apk add --no-cache --update --virtual .build-deps \
         sudo build-base ruby-dev \
  # cutomize following instruction as you wish
+ && sudo gem install elasticsearch -v 7.6.0 \
  && sudo gem install fluent-plugin-elasticsearch \
                      fluent-plugin-rewrite-tag-filter \
                      fluent-plugin-newsyslog \
