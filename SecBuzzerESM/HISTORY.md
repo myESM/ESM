@@ -1,4 +1,7 @@
 # Release History
+# V2.4.7 (2021-10-22)
+- 關閉AI模組的東西
+
 # V2.4.6 (2021-10-12)
 - 當ES Client發生官方說的連線異常時自動關閉EsmEdgeApp.jar
 - 改寫EsmEdgeApp.jar裡半夜的重送方式
