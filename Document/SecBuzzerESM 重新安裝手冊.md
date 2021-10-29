@@ -36,6 +36,10 @@ docker rmi $(docker images -q)
 
 ![images/re_install_04.png](images/re_install_04.png)
 
+或是直接一點
+docker image prune -a
+一口氣強制清掉
+
 
 # 3. 將docker與docker-compose清掉
 ```bash
