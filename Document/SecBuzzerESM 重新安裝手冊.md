@@ -37,7 +37,9 @@ docker rmi $(docker images -q)
 ![images/re_install_04.png](images/re_install_04.png)
 
 或是直接一點
+```bash
 docker image prune -a
+```
 一口氣強制清掉
 
 
@@ -45,6 +47,15 @@ docker image prune -a
 ```bash
 rm /usr/bin/docker*
 rm /usr/local/bin/docker-compose
+```
+
+## 3.1 額外參考
+https://askubuntu.com/questions/935569/how-to-completely-uninstall-docker
+```bash
+sudo rm -rf /var/lib/docker /etc/docker
+sudo rm /etc/apparmor.d/docker
+sudo groupdel docker
+sudo rm -rf /var/run/docker.sock
 ```
 
 # 4. 備份env
